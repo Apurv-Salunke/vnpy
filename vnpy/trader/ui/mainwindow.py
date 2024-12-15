@@ -44,7 +44,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.main_engine: MainEngine = main_engine
         self.event_engine: EventEngine = event_engine
 
-        self.window_title: str = _("VeighNa Trader 社区版 - {}   [{}]").format(vnpy.__version__, TRADER_DIR)
+        self.window_title: str = _("VeighNa Trader Community Edition - {}   [{}]").format(vnpy.__version__, TRADER_DIR)
 
         self.widgets: Dict[str, QtWidgets.QWidget] = {}
         self.monitors: Dict[str, BaseMonitor] = {}
@@ -62,28 +62,28 @@ class MainWindow(QtWidgets.QMainWindow):
     def init_dock(self) -> None:
         """"""
         self.trading_widget, trading_dock = self.create_dock(
-            TradingWidget, _("交易"), QtCore.Qt.DockWidgetArea.LeftDockWidgetArea
+            TradingWidget, _("Trading"), QtCore.Qt.DockWidgetArea.LeftDockWidgetArea
         )
         tick_widget, tick_dock = self.create_dock(
-            TickMonitor, _("行情"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
+            TickMonitor, _("Market"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
         )
         order_widget, order_dock = self.create_dock(
-            OrderMonitor, _("委托"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
+            OrderMonitor, _("Orders"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
         )
         active_widget, active_dock = self.create_dock(
-            ActiveOrderMonitor, _("活动"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
+            ActiveOrderMonitor, _("Active"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
         )
         trade_widget, trade_dock = self.create_dock(
-            TradeMonitor, _("成交"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
+            TradeMonitor, _("Trades"), QtCore.Qt.DockWidgetArea.RightDockWidgetArea
         )
         log_widget, log_dock = self.create_dock(
-            LogMonitor, _("日志"), QtCore.Qt.DockWidgetArea.BottomDockWidgetArea
+            LogMonitor, _("Logs"), QtCore.Qt.DockWidgetArea.BottomDockWidgetArea
         )
         account_widget, account_dock = self.create_dock(
-            AccountMonitor, _("资金"), QtCore.Qt.DockWidgetArea.BottomDockWidgetArea
+            AccountMonitor, _("Accounts"), QtCore.Qt.DockWidgetArea.BottomDockWidgetArea
         )
         position_widget, position_dock = self.create_dock(
-            PositionMonitor, _("持仓"), QtCore.Qt.DockWidgetArea.BottomDockWidgetArea
+            PositionMonitor, _("Positions"), QtCore.Qt.DockWidgetArea.BottomDockWidgetArea
         )
 
         self.tabifyDockWidget(active_dock, order_dock)
@@ -99,14 +99,14 @@ class MainWindow(QtWidgets.QMainWindow):
         bar.setNativeMenuBar(False)     # for mac and linux
 
         # System menu
-        sys_menu: QtWidgets.QMenu = bar.addMenu(_("系统"))
+        sys_menu: QtWidgets.QMenu = bar.addMenu(_("System"))
 
         gateway_names: list = self.main_engine.get_all_gateway_names()
         for name in gateway_names:
             func: Callable = partial(self.connect, name)
             self.add_action(
                 sys_menu,
-                _("连接{}").format(name),
+                _("Connect {}").format(name),
                 get_icon_path(__file__, "connect.ico"),
                 func
             )
@@ -115,13 +115,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.add_action(
             sys_menu,
-            _("退出"),
+            _("Exit"),
             get_icon_path(__file__, "exit.ico"),
             self.close
         )
 
         # App menu
-        app_menu: QtWidgets.QMenu = bar.addMenu(_("功能"))
+        app_menu: QtWidgets.QMenu = bar.addMenu(_("Applications"))
 
         all_apps: List[BaseApp] = self.main_engine.get_all_apps()
         for app in all_apps:
@@ -133,16 +133,16 @@ class MainWindow(QtWidgets.QMainWindow):
             self.add_action(app_menu, app.display_name, app.icon_name, func, True)
 
         # Global setting editor
-        action: QtGui.QAction = QtGui.QAction(_("配置"), self)
+        action: QtGui.QAction = QtGui.QAction(_("Settings"), self)
         action.triggered.connect(self.edit_global_setting)
         bar.addAction(action)
 
         # Help menu
-        help_menu: QtWidgets.QMenu = bar.addMenu(_("帮助"))
+        help_menu: QtWidgets.QMenu = bar.addMenu(_("Help"))
 
         self.add_action(
             help_menu,
-            _("查询合约"),
+            _("Query Contracts"),
             get_icon_path(__file__, "contract.ico"),
             partial(self.open_widget, ContractManager, "contract"),
             True
@@ -150,21 +150,21 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.add_action(
             help_menu,
-            _("还原窗口"),
+            _("Restore Window"),
             get_icon_path(__file__, "restore.ico"),
             self.restore_window_setting
         )
 
         self.add_action(
             help_menu,
-            _("测试邮件"),
+            _("Test Email"),
             get_icon_path(__file__, "email.ico"),
             self.send_test_email
         )
 
         self.add_action(
             help_menu,
-            _("社区论坛"),
+            _("Community Forum"),
             get_icon_path(__file__, "forum.ico"),
             self.open_forum,
             True
@@ -172,7 +172,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.add_action(
             help_menu,
-            _("关于"),
+            _("About"),
             get_icon_path(__file__, "about.ico"),
             partial(self.open_widget, AboutDialog, "about"),
         )
@@ -180,7 +180,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def init_toolbar(self) -> None:
         """"""
         self.toolbar: QtWidgets.QToolBar = QtWidgets.QToolBar(self)
-        self.toolbar.setObjectName(_("工具栏"))
+        self.toolbar.setObjectName(_("Toolbar"))
         self.toolbar.setFloatable(False)
         self.toolbar.setMovable(False)
 
@@ -247,8 +247,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         reply = QtWidgets.QMessageBox.question(
             self,
-            _("退出"),
-            _("确认退出？"),
+            _("Exit"),
+            _("Confirm exit?"),
             QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
             QtWidgets.QMessageBox.StandardButton.No,
         )

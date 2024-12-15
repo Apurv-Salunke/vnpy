@@ -70,9 +70,11 @@ class EventEngine:
         to all types.
         """
         if event.type in self._handlers:
+            print(f"Processing {event.type}...| {self._handlers[event.type]}")
             [handler(event) for handler in self._handlers[event.type]]
 
         if self._general_handlers:
+            print("Processing general events...")
             [handler(event) for handler in self._general_handlers]
 
     def _run_timer(self) -> None:

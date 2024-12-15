@@ -1,143 +1,156 @@
-# SpreadTrading - 多合约价差套利模块
+# SpreadTrading - Multi-Contract Spread Trading Module
 
-## 功能简介
+## Function Introduction
 
-SpreadTrading是用于**多合约价差套利**的功能模块，用户可以通过其UI界面操作来便捷创建灵活的价差合约、完成手动交易和自动交易等任务。
+SpreadTrading is a module for **multi-contract spread trading**. Users can use its UI interface to easily create flexible spread contracts, complete manual trading and automatic trading tasks.
 
+## Load and Start
 
-## 加载启动
+### VeighNa Station Load
 
-### VeighNa Station加载
+After starting and logging in to VeighNa Station, click the 【Trading】 button, and check the 【SpreadTrading】 option in the 【Application Module】 column in the configuration dialog.
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【SpreadTrading】。
+### Script Load
 
-### 脚本加载
-
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_spreadtrading import SpreadTradingApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(SpreadTradingApp)
 ```
 
-
-## 启动模块
+## Start the Module
 
 <span id="jump">
 
-对于用户自行开发的策略，需要放到VeighNa Trader运行时目录下的**strategies**目录中，才能被识别加载。具体的运行时目录路径，可以在VeighNa Trader主界面顶部的标题栏查看。
+For strategies developed by users, they need to be placed in the **strategies** directory under the runtime directory of VeighNa Trader to be recognized and loaded. The specific runtime directory path can be viewed in the title bar at the top of the main interface of VeighNa Trader.
 
-对于在Windows上默认安装的用户来说，放置策略的strategies目录路径通常为：
+For users who are default installed on Windows, the path to the strategies directory is usually:
 
 ```bash
     C:\Users\Administrator\strategies
 ```
 
-其中Administrator为当前登录Windows的系统用户名。
+Where Administrator is the system username of the currently logged in Windows.
 
 </span>
 
-在启动模块之前，请先连接交易接口（连接方法详见基本使用篇的连接接口部分）。看到VeighNa Trader主界面【日志】栏输出“合约信息查询成功”之后再启动模块（**如果在合约信息查询成功之前打开模块，可能会导致价差的价格跳动取值为零，进而在委托成交之后引发底层报错**），如下图所示：
+Before starting the module, please connect to the trading interface (the connection method is detailed in the basic usage section of the connection interface). After seeing the output of "Contract information query successful" in the VeighNa Trader main interface 【Log】 column, start the module (**If the module is opened before the successful query of contract information, it may cause the spread price to jump to zero, which may cause a bottom-level error after the order is executed**), as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_strategy/1.png)
 
-请注意，IB接口因为登录时无法自动获取所有的合约信息，只有在用户手动订阅行情时才能获取。因此需要在主界面上先手动订阅合约行情，再启动模块。
+Please note that the IB interface cannot automatically obtain all contract information when logging in, and can only obtain it when the user manually subscribes to market data. Therefore, you need to manually subscribe to the contract market data on the main interface first, and then start the module.
 
-成功连接交易接口后，在菜单栏中点击【功能】-> 【价差交易】，或者点击左侧按钮栏的图标：
+After successfully connecting to the trading interface, click on the 【Function】-> 【Spread Trading】 in the menu bar, or click on the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/1.png)
 
-即可进入价差交易模块的UI界面，如下图所示：
+You can enter the UI interface of the spread trading module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/2.png)
 
+## Create Spread Contracts
 
-## 创建价差合约
+### Query Contracts
 
-### 查询合约
+Before creating a spread contract, users can use the 【Query Contracts】 function to find contracts that can be used to form a spread (**does not support exchange arbitrage contracts**):
 
-在创建价差合约前，用户可以通过【查询合约】功能，寻找可以组成价差的合约（**不支持交易所套利合约**）：
-
-- 在VeighNa Trader菜单栏中点击【帮助】-> 【查询合约】按钮，弹出合约查询界面，如下图所示：
+- Click the 【Help】-> 【Query Contracts】 button in the VeighNa Trader menu bar to pop up the contract query interface, as shown in the figure below:
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/3.png)
-- 在界面中找到可用于组成价差交易的合约；
-- 本文档以豆油期货的跨期套利来展示，即交易y2205.DCE（豆油期货22年5月到期合约）和y2209.DCE（豆油期货22年9月到期合约）。
+- Find the contracts that can be used to form a spread in the interface;
+- This document is based on the example of soybean oil futures spread arbitrage, that is, trading y2205.DCE (soybean oil futures May 22 contract) and y2209.DCE (soybean oil futures September 22 contract).
 
-### 构建价差合约
+### Build Spread Contracts
 
-在价差交易的界面左侧，点击【价差创建】按钮，弹出创建价差界面，如下图所示：
+On the left side of the spread trading interface, click the 【Spread Creation】 button to pop up the spread creation interface, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/4.png)
 
-价差交易模块支持灵活的价差计算公式（例如A/B、A-B*C等），同时允许引入不参与交易的定价腿，满足复杂境内外套利价差需要考虑汇率和税率等因素的需求。在创建价差合约时，需要配置相关参数，各参数要求如下：
+The spread trading module supports flexible spread calculation formulas (such as A/B, A-B*C, etc.), and also allows the introduction of non-trading pricing legs, meeting the needs of complex domestic and foreign arbitrage spreads that need to consider factors such as exchange rates and tax rates. When creating a spread contract, you need to configure the relevant parameters, the requirements of each parameter are as follows:
 
-- 价差名称
-  - 用户定义的价差合约名称；
-  - 价差名称不能重名；
-- 主动腿代码
-  - 价差盘口价格满足条件时，先发出的那条腿的本地代码。
-  - 格式为vt_symbol（合约代码 + 交易所名称）；
-  - 必须是下面的腿选项中的一项；
-- 最小交易量
-  - 最小交易手数；
-- 价格公式
-  - 价差合约的计算公式；
-  - 支持任何Python内置数学函数；
-  - 注意其中的变量只能是A、B、C、D、E（不需要都用）；
-- 【A、B、C、D、E】
-  - 包含构建价差合约的主动腿与被动腿，也可以引入不参与交易的定价腿，由合约代码、交易方向、交易乘数组成：
-    - 合约代码为公式中的变量所对应的合约本地代码（vt_symbol）；
-    - 一般来说，价差交易原则上是主动腿完成交易后，立刻用被动腿进行对冲，故主动腿一般选择较为不活跃的合约，价格乘数和交易乘数均为正；被动腿一般选择较为活跃的合约，价格乘数和交易乘数均为负；
-    - 不用的变量留空即可；
+- Spread Name
+  - User-defined spread contract name;
+  - The spread name cannot be duplicated;
+- Active Leg Code
+  - The local code of the leg that is sent out first when the spread price meets the conditions.
+  - The format is vt_symbol (contract code + exchange name);
+  - Must be one of the leg options below;
+- Minimum Trading Volume
+  - Minimum trading volume;
+- Price Formula
+  - The calculation formula of the spread contract;
+  - Supports any Python built-in mathematical functions;
+  - Note that the variables in it can only be A, B, C, D, E (not all are needed);
+- 【A, B, C, D, E】
+  - Contains the active leg and the passive leg used to build the spread contract, and can also introduce non-trading pricing legs, composed of contract code, trading direction, and trading multiplier:
+    - The contract code is the local code (vt_symbol) corresponding to the variable in the formula;
+- Spread Name
+  - User-defined spread contract name;
+  - The spread name cannot be duplicated;
+- Active Leg Code
+  - The local code of the leg that is sent out first when the spread price meets the conditions.
+  - The format is vt_symbol (contract code + exchange name);
+  - Must be one of the leg options below;
+- Minimum Trading Volume
+  - Minimum trading volume;
+- Price Formula
+  - The calculation formula of the spread contract;
+  - Supports any Python built-in mathematical functions;
+  - Note that the variables in it can only be A, B, C, D, E (not all are needed);
+- 【A, B, C, D, E】
+  - Contains the active leg and the passive leg used to build the spread contract, and can also introduce non-trading pricing legs, composed of contract code, trading direction, and trading multiplier:
+    - The contract code is the local code (vt_symbol) corresponding to the variable in the formula;
+    - Generally, the spread trading is that after the active leg completes the transaction, it is immediately hedged with the passive leg, so the active leg generally chooses a less active contract, and the price multiplier and trading multiplier are both positive; the passive leg generally chooses a more active contract, and the price multiplier and trading multiplier are both negative;
+    - Leave the unused variables blank;
 
-设置好价差合约的参数后，点击下方的【创建价差】按钮，即可成功创建价差合约。
+After setting the parameters of the spread contract, click the 【Create Spread】 button below to successfully create the spread contract.
 
-在豆油期货跨期套利示例中，其价格乘数和交易乘数均为1：1，即价差 = y2205 - y2209；买入1手价差等于买入1手y2205，同时卖出1手y2209完成对冲。
+In the soybean oil futures spread arbitrage example, the price multiplier and trading multiplier are both 1:1, that is, the spread = y2205 - y2209; buying 1 spread is equivalent to buying 1 y2205 and selling 1 y2209 to complete the hedge.
 
-请注意，在多条腿并且期货合约规模不等时，构建价差合约会相对困难一些，如构建虚拟钢厂套利所用到的价差合约时，计算公式如下：
+Please note that when there are multiple legs and the futures contract sizes are not equal, it will be relatively difficult to construct the spread contract. For example, when constructing the spread contract used in the virtual steel mill arbitrage, the calculation formula is as follows:
 
-- 螺纹钢生产技艺是16吨铁矿石加上5吨焦炭练成10吨螺纹钢。
-- 基于价格乘数的价差spread = 1* RB - 1.6\*I  - 0.5\*J。
-- 但是由于螺纹是10吨/手，铁矿石和焦炭都是100吨/手，所以他们交易乘数是1：10：10；
-- 故基于最大公约数规则，其实际交易手数关系是每买入100手螺纹钢（1000吨），需要卖出16手铁矿石（1600吨）和5手焦炭（500吨）完成对冲。
+- The production process of rebar is 16 tons of iron ore plus 5 tons of coke to produce 10 tons of rebar.
+- Based on the price multiplier, the spread of the spread = 1* RB - 1.6\*I  - 0.5\*J.
+- However, since the rebar is 10 tons per hand, and the iron ore and coke are both 100 tons per hand, so their trading multipliers are 1:10:10;
+- Therefore, based on the greatest common divisor rule, the actual trading volume relationship is that for every 100 hands of rebar bought (1000 tons), 16 hands of iron ore (1600 tons) and 5 hands of coke (500 tons) need to be sold to complete the hedge.
 
-### 监控价差合约
+### Monitor Spread Contracts
 
-价差合约创建完毕，监控界面中的【日志】栏会输出“价差创建成功”；【价差】栏也会展示价差合约的实时行情，如下图所示：
+After the spread contract is created, the "Spread Creation Successful" will be output in the 【Log】 column of the monitoring interface; the 【Spread】 column will also display the real-time market of the spread contract, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/6.png)
 
-在豆油期货价差交易示例中，【价差】组件的各字段含义如下所示：
+In the soybean oil futures spread trading example, the meanings of the various fields of the 【Spread】 component are as follows:
 
-- 买价
-  - y2205买一价 - y2209卖一价
-- 买量
-  - min(y2205买一量, y2209卖一量)
-  - 取最小值用于保证各合约能均能成交
-- 卖价
-  - y2205卖一价 - y2209买一价
-- 卖量
-  - min(y2205卖一量, y2209买一量)
+- Bid Price
+  - y2205 buy one price - y2209 sell one price
+- Bid Volume
+  - min(y2205 buy one volume, y2209 sell one volume)
+  - Take the minimum value to ensure that each contract can be traded evenly
+- Ask Price
+  - y2205 sell one price - y2209 buy one price
+- Ask Volume
+  - min(y2205 sell one volume, y2209 buy one volume)
 
-### 移除价差合约
+### Remove Spread Contracts
 
-在价差交易的界面左侧，点击【移除价差】按钮，弹出移除价差界面，如下图所示：
+On the left side of the spread trading interface, click the 【Remove Spread】 button to pop up the remove spread interface, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/35.png)
 
-选择好要移除的价差合约之后，点击【移除】按钮，即可成功移除价差合约。【日志】组件输出“价差移除成功”，如下图所示：
+After selecting the spread contract to be removed, click the 【Remove】 button, and the spread contract will be successfully removed. The 【Log】 component outputs "Spread Removed Successfully", as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/36.png)
 
 
-## 手动交易
+## Manual Trading
 
-假设当前豆油期货价差合约买价为408，卖价为420，并且在大周期上，价差围绕0上下波动。
+Assuming the current spread contract buy price is 408 and the sell price is 420, and on a large time frame, the spread fluctuates around 0.
 
-价差交易的盈利在于高抛低吸，即在低位，如-300买入豆油期货价差合约，在高位，如+800卖出价差合约，平仓获利离场。由于不能立刻成交，所以其默认执行算法SpreadTaker（主动对价成交算法）会每隔一段时间进行委托操作，一般是以超价的限价单的形式发出委托。
+The profit of spread trading lies in buying low and selling high, that is, buying the spread contract when it is at a low level, such as -300, and selling the spread contract when it is at a high level, such as +800, to make a profit. Since it cannot be executed immediately, the default execution algorithm SpreadTaker (active price matching algorithm) will place orders every few seconds, usually in the form of limit orders with a premium.
 
 下面通过2个例子，分别是发出委托立即成交和发出委托等待成交来具体介绍手动交易的操作情况：
 

@@ -1,304 +1,303 @@
-# CtaBacktester - CTA回测研究模块
+# CtaBacktester - CTA Backtesting Research Module
 
-## 功能简介
+## Function Introduction
 
-CtaBacktester是用于**CTA回测研究**的功能模块，用户可以通过其UI界面操作来便捷完成数据下载、历史回测、结果分析和参数优化等任务。
+CtaBacktester is a functional module for **CTA backtesting research**. Users can easily complete tasks such as data download, historical backtesting, result analysis, and parameter optimization through its UI interface.
 
-## 加载启动
+## Load and Start
 
-### VeighNa Station加载
+### VeighNa Station Load
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【CtaBacktester】。
+After starting and logging into VeighNa Station, click the 【Trading】 button, and check the 【CtaBacktester】 in the 【Application Module】 column in the configuration dialog.
 
-### 脚本加载
+### Script Load
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_ctabacktester import CtaBacktesterApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(CtaBacktesterApp)
 ```
 
 
-## 启动模块
+## Start Module
 
-对于用户自行开发的策略，需要放到VeighNa Trader运行时目录下的**strategies**目录中，才能被识别加载。具体的运行时目录路径，可以在VeighNa Trader主界面顶部的标题栏查看。
+For strategies developed by users, they need to be placed in the **strategies** directory under the runtime directory of VeighNa Trader to be recognized and loaded. The specific runtime directory path can be viewed in the title bar at the top of the main interface of VeighNa Trader.
 
-对于在Windows上默认安装的用户来说，放置策略的strategies目录路径通常为：
+For users who have installed on Windows by default, the path of the strategies directory is usually:
 
 ```
 C:\Users\Administrator\strategies
 ```
 
-其中Administrator为当前登录Windows的系统用户名。
+Where Administrator is the system username currently logged in to Windows.
 
-启动VeighNa Trader后，在菜单栏中点击【功能】-> 【CTA回测】，或者点击左侧按钮栏的图标：
+After starting VeighNa Trader, click on the menu bar 【Function】-> 【CTA Backtesting】, or click on the icon on the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/00.png)
 
-即可打开图形化的回测界面，如下图所示：
+You can open the graphical backtesting interface, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/25.png)
 
 
-## 下载数据
+## Download Data
 
-在开始策略回测之前，首先需要保证数据库内有足够的历史数据，CtaBacktester模块也提供了一键下载历史数据的功能。
+Before starting the strategy backtesting, it is necessary to ensure that there is enough historical data in the database. The CtaBacktester module also provides a one-click download of historical data.
 
-下载数据需要填写本地代码、K线周期、开始日期以及结束日期四个字段信息：
+To download data, you need to fill in four fields: local code, K-line period, start date, and end date:
 
 <span id="jump">
 
-- 本地代码
-  - 格式为合约代码 + 交易所名称
-  - 如IF888.CFFEX、rb2105.SHFE
-- K线周期：
-  - 1m（1分钟K线）
-  - 1h（1小时K线）
-  - d（日K线）
-  - w（周K线）
-  - tick（一个Tick）
-- 开始和结束日期
-  - 格式为yyyy/mm/dd
-  - 如2018/2/25、2021/2/28
+- Local code
+  - The format is contract code + exchange name
+  - Such as IF888.CFFEX, rb2105.SHFE
+- K-line period:
+  - 1m (1-minute K-line)
+  - 1h (1-hour K-line)
+  - d (daily K-line)
+  - w (weekly K-line)
+  - tick (one Tick)
+- Start and end date
+  - The format is yyyy/mm/dd
+  - Such as 2018/2/25, 2021/2/28
 
 </span>
 
-填写完成后，点击下方【下载数据】按钮启动下载任务，成功后如下图所示：
+After filling in, click the 【Download Data】 button below to start the download task. After successful download, it will be displayed as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/27.png)
 
-注意下载完成后的历史数据会保存在本地数据库中，后续回测时可以直接使用，无需每次都重复下载。
+Note that after the historical data is downloaded, it will be saved in the local database. It can be used directly for subsequent backtesting without the need to download it repeatedly each time.
 
-### 数据来源：数据服务（期货、股票、期权）
+### Data Source: Data Service (Futures, Stocks, Options)
 
-以RQData为例，[RQData](https://www.ricequant.com/welcome/purchase?utm_source=vnpy)提供国内期货、股票以及期权的历史数据。在使用前需要保证数据服务已经正确配置（配置方法详见基本使用篇的全局配置部分）。打开CtaBacktester时会自动执行数据服务登录初始化，若成功则会输出“数据服务初始化成功”的日志，如下图所示：
+Taking RQData as an example, [RQData](https://www.ricequant.com/welcome/purchase?utm_source=vnpy) provides historical data for domestic futures, stocks, and options. Before using it, make sure that the data service is correctly configured (the configuration method is detailed in the basic usage section of the global configuration). When opening CtaBacktester, the data service login initialization will be automatically executed. If successful, the log will output "Data service initialization successful", as shown in the following figure:
 
  ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/26.png)
 
-### 数据来源：IB（外盘期货、股票、现货等）
+### Data Source: IB (Foreign Futures, Stocks, Spot, etc.)
 
-Interactive Brokers盈透证券（IB）提供丰富的外盘市场历史数据下载（包括股票、期货、期权、现货等），注意下载前需要先启动IB TWS交易软件，并在VeighNa Trader主界面连接好IB接口，并订阅所需合约行情。下载成功如下图所示：
+Interactive Brokers (IB) provides rich historical data download for foreign markets (including stocks, futures, options, spot, etc.). Note that before downloading, you need to start the IB TWS trading software, and connect the IB interface and subscribe to the required contract market data on the main interface of VeighNa Trader. After successful download, it will be displayed as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/28.png)
 
 
-## 执行回测
+## Execute Backtesting
 
-准备好数据后即可开始使用历史数据对策略进行回测研究，回测时需要配置好相关的参数：
+After preparing the data, you can start using historical data to backtest the strategy. When backtesting, you need to configure the relevant parameters:
 
-- 策略品种
-  - 交易策略：在下拉框中选择要回测的策略名称；
-  - 本地代码：注意不要漏掉交易所后缀；
-- 数据范围
-  - 格式详见本章[下载数据](#jump)部分的介绍；
-- 交易成本
-  - 滑点：下单交易点位与实际交易点位的差别；
-  - 百分比手续费：填写数字即可，不要填写百分数；
-  - 固定比手续费：可以手续费填0，然后把手续费除以合约乘数后，加在滑点中；
-- 合约属性
-  - 合约乘数：合约的交易单位；
-  - 价格跳动：合约价格的最小变动价位；
-  - 回测资金：账户资金；
-  - 合约模式：正向。
+- Strategy variety
+  - Trading strategy: Select the strategy name to be backtested in the drop-down box;
+  - Local code: Pay attention to not miss the exchange suffix;
+- Data range
+  - The format is detailed in the [Download Data](#jump) section of this chapter;
+- Trading cost
+  - Slippage: The difference between the order trading point and the actual trading point;
+  - Percentage commission: Fill in the number, do not fill in the percentage;
+  - Fixed commission: You can fill in the commission as 0, and then add the commission divided by the contract multiplier to the slippage;
+- Contract attributes
+  - Contract multiplier: The trading unit of the contract;
+  - Price movement: The minimum price change of the contract;
+  - Backtesting capital: Account capital;
+  - Contract mode: Forward.
 
-配置完成后，点击下方的【开始回测】按钮，会弹出策略参数配置对话框，用于设置策略参数，如下图所示：
+After the configuration is completed, click the 【Start Backtesting】 button below, and a strategy parameter configuration dialog will pop up, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/29.png)
 
-点击【确定】按钮后开始执行回测任务，同时日志界面会输出相关信息，如下图所示：
+After clicking the 【OK】 button, the backtesting task will start, and the log interface will output relevant information, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/10.png)
 
-回测完成后，会自动在右侧区域显示策略回测业绩的统计指标以及相关图表，如下图所示：
+After the backtesting is completed, the statistical indicators of the strategy backtesting performance and related charts will be automatically displayed in the right area, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/30.png)
 
-若数据库没有准备好所需的历史数据就点击【开始回测】，则日志界面会输出“历史数据不足，回测终止”的日志，如下图所示：
+If the required historical data is not ready in the database and you click the 【Start Backtesting】 button, the log interface will output the log "Insufficient historical data, backtesting terminated", as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/15.png)
 
 
-## 结果分析
+## Result Analysis
 
-### 业绩图表
+### Performance Charts
 
-右侧的业绩图表由以下四张子图构成：
+The performance chart on the right consists of the following four sub-charts:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/31.png)
 
-【账户净值】图的横轴是时间，纵轴是资金，体现了账户净值在交易时段内随着交易日变化的情况。
+The horizontal axis of the 【Account Net Worth】 chart is time, and the vertical axis is capital, reflecting the situation of the account net worth changing with the trading day during the trading period.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/32.png)
 
-【净值回撤】图的横轴是时间，纵轴是回撤，体现了净值从最近高点回撤程度随着交易日变化的情况。
+The horizontal axis of the 【Net Worth Drawdown】 chart is time, and the vertical axis is the drawdown, reflecting the degree of drawdown of the net worth from the recent high point changing with the trading day.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/33.png)
 
-【每日盈亏】图的横轴是时间，纵轴是日盈亏的金额（采用逐日盯市规则以收盘价结算），体现了整个回测周期内策略的每日盈亏变化情况。
+The horizontal axis of the 【Daily Profit and Loss】 chart is time, and the vertical axis is the amount of daily profit and loss (settled at the closing price according to the daily mark-to-market rule), reflecting the daily profit and loss change of the strategy during the entire backtesting period.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/34.png)
 
-【盈亏分布】图的横轴是每日盈亏的数值，纵轴是该盈亏数值的出现概率，体现了整体每日盈亏的概率分布情况。
+The horizontal axis of the 【Profit and Loss Distribution】 chart is the numerical value of the daily profit and loss, and the vertical axis is the probability of the occurrence of this profit and loss value, reflecting the probability distribution of the overall daily profit and loss.
 
-### 统计指标
+### Statistical Indicators
 
-统计指标区域用于显示策略历史回测业绩的相关统计数值，如下图所示：
+The statistical indicator area is used to display the relevant statistical values of the historical backtesting performance of the strategy, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/35.png)
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/36.png)
 
-根据数据类型，指标可以分类为：
+According to the data type, the indicators can be classified as:
 
-- 日期信息
-  - 首个交易日
-  - 最后交易日
-  - 总交易日
-  - 盈利交易日
-  - 亏损交易日
-- 资金盈亏
-  - 起始资金
-  - 结束资金
-  - 总收益率
-  - 年化收益
-  - 最大回撤
-  - 百分比最大回撤
-  - 总盈亏
-- 交易成本
-  - 总手续费
-  - 总滑点
-  - 总成交额
-  - 总成交笔数
-- 日均数据
-  - 日均盈亏
-  - 日均手续费
-  - 日均滑点
-  - 日均成交额
-  - 日均成交笔数
-  - 日均收益率
-  - 收益标准差（日均）
-- 绩效评价
-  - 夏普比率
-  - 收益回撤比
+- Date information
+  - First trading day
+  - Last trading day
+  - Total trading days
+  - Profitable trading days
+  - Losing trading days
+- Capital profit and loss
+  - Initial capital
+  - Final capital
+  - Total return
+  - Annualized return
+  - Maximum drawdown
+  - Percentage maximum drawdown
+  - Total profit and loss
+- Trading cost
+  - Total commission
+  - Total slippage
+  - Total turnover
+  - Total number of transactions
+- Daily average data
+  - Daily average profit and loss
+  - Daily average commission
+  - Daily average slippage
+  - Daily average turnover
+  - Daily average number of transactions
+  - Daily average return
+  - Return standard deviation (daily average)
+- Performance evaluation
+  - Sharpe ratio
+  - Return drawdown ratio
 
-### 详细信息
+### Detailed Information
 
-回测完成后，可点击左侧区域的【委托记录】按钮，查看回测过程中策略逐笔委托的细节信息：
+After the backtesting is completed, you can click the 【Order Record】 button in the left area to view the detailed information of the strategy's order during the backtesting process:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/43.png)
 
-如果发现表格内容显示不完整，可以单击鼠标右键弹出菜单后，选择【调整列宽】按钮，即可进行自动列宽缩放：
+If you find that the table content is not displayed completely, you can click the right mouse button to pop up the menu, and select the 【Adjust Column Width】 button, and the table will automatically adjust the column width:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/46.png)
 
-表格也支持一键将表内数据保存为CSV文件，在上一步右键弹出的菜单中，点击【保存数据】按钮，即可弹出如下图所示选择保存文件名的对话框：
+The table also supports one-click saving the data in the table as a CSV file. In the menu popped up in the previous step, click the 【Save Data】 button, and a dialog for selecting the file name to be saved will pop up, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/42.png)
 
-回测过程中策略发出委托的**成交价**不一定是原始下单的价格，而要由回测引擎基于当时的行情数据和下单价格进行撮合后算出，每笔委托对应的具体成交细节可以点击【成交记录】按钮后查看：
+The **execution price** of the order issued by the strategy during the backtesting process is not necessarily the original order price. It needs to be matched by the backtesting engine based on the market data at that time and the order price. The specific execution details of each order can be viewed by clicking the 【Execution Record】 button:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/38.png)
 
-点击【每日盈亏】按钮后，可以看到如下图所示的策略每日盈亏细节：
+After clicking the 【Daily Profit and Loss】 button, you can see the detailed daily profit and loss of the strategy, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/39.png)
 
-这里每日盈亏的统计采用期货市场普遍使用的逐日盯市（Marking-to-Market）规则进行计算：
+The daily profit and loss statistics here are calculated using the widely used daily mark-to-market (Marking-to-Market) rule in the futures market:
 
-- 持仓盈亏：今日开盘持仓的部分，以昨收盘价开仓，今收盘价平仓，计算出的盈亏金额；
-- 交易盈亏：今日日内成交的部分，以成交价格开仓，今收盘价平仓，计算出的盈亏金额；
-- 总盈亏：汇总持仓盈亏和交易盈亏后的金额；
-- 净盈亏：总盈亏扣除手续费和滑点后的金额，也是最终计算显示四张图表时用到的每日盈亏金额。
+- Position profit and loss: The part of the position held at the opening today, opened at the closing price yesterday, closed at the closing price today, and the calculated profit and loss amount;
+- Trading profit and loss: The part of the intraday trading today, opened at the trading price, closed at the closing price today, and the calculated profit and loss amount;
+- Total profit and loss: The amount of the position profit and loss and the trading profit and loss after summarization;
+- Net profit and loss: The amount of the total profit and loss minus the commission and slippage, and it is also the daily profit and loss amount used in the final calculation and display of the four charts.
 
-### K线图表
+### K-line Chart
 
-点击【K线图表】按钮，即可打开用于显示回测K线数据，以及策略具体买卖点位置的图表，如下图所示：
+Click the 【K-line Chart】 button, and you can open the chart that displays the backtesting K-line data and the specific buy and sell positions of the strategy, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/44.png)
 
-注意绘图耗时可能需要一定时间（通常在数十秒到几分钟），请耐心等待。
+Note that the drawing of the chart may take some time (usually from tens of seconds to a few minutes), please be patient.
 
-K线图表中的图例说明可以在窗口底部看到，整体上采用了国内市场标准的配色和风格。开平仓之间的连线采用的是逐笔配对（First-in, First-out）规则进行绘制，每一笔成交会根据其数量自动和其他成交进行匹配，即使策略有复杂的加减仓操作也能正确绘制。
+The legend explanation in the K-line chart can be seen at the bottom of the window, and the overall color and style of the chart use the standard of the domestic market. The line between opening and closing is drawn using the first-in, first-out (FIFO) rule, and each transaction will be automatically matched with other transactions according to its quantity, even if the strategy has complex adding and reducing positions, it can be correctly drawn.
 
+## Parameter Optimization
 
-## 参数优化
+For a developed strategy, you can use the built-in optimization algorithm of CtaBacktester to quickly perform parameter optimization. Currently, it supports two optimization algorithms: exhaustive and genetic.
 
-对于开发好的策略，可以使用CtaBacktester内置的优化算法快速进行参数寻优，目前支持穷举和遗传两种优化算法。
+### Set Optimization Parameters
 
-### 设置优化参数
-
-点击【参数优化】按钮，会弹出“优化参数配置”的窗口：
+Click the 【Parameter Optimization】 button, and a window for "Optimization Parameter Configuration" will pop up:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/37.png)
 
-点击【目标】下拉框，选择优化过程中要使用的目标函数（即以该数值最大化为目标进行优化）：
+Click the 【Objective】 drop-down box, and select the objective function to be used during the optimization process (that is, the objective is to maximize this value):
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/45.png)
 
-对于要进行优化的策略参数，需要配置：
+For the strategy parameters to be optimized, you need to configure:
 
-- 【开始】和【结束】：用于给定参数优化的范围；
-- 【步进】：用于给定参数每次变化的数值；
+- 【Start】 and 【End】: Used to specify the range of parameter optimization;
+- 【Step】: Used to specify the value of each change of the parameter;
 
-举例：如一个参数的【开始】设为10，【结束】设为20，【步进】设为2，则该参数在优化过程中的寻优空间为：10、12、14、16、18、20。
+For example: If the 【Start】 of a parameter is set to 10, the 【End】 is set to 20, and the 【Step】 is set to 2, then the optimization space of this parameter during the optimization process is: 10, 12, 14, 16, 18, 20.
 
-对于要设置固定数值的策略参数，请将【开始】和【结束】都同样设为该数值即可。
+For strategy parameters that need to be set to a fixed value, just set both the 【Start】 and 【End】 to the same value.
 
-### 穷举算法优化
+### Exhaustive Algorithm Optimization
 
-设置好需要优化的参数后，点击窗口底部的【多进程优化】按钮，此时CtaBacktester会调用Python的multiprocessing模块，根据当前电脑CPU的核心数量，启动对应数量的进程来并行执行穷举优化任务。
+After setting the parameters to be optimized, click the 【Multi-Process Optimization】 button at the bottom of the window. At this time, CtaBacktester will call the Python multiprocessing module, and start the corresponding number of processes to execute the exhaustive optimization task in parallel according to the number of CPU cores of the current computer.
 
-在优化的过程中，穷举算法会遍历参数寻优空间中的每一个组合。遍历的过程即使用该组合作为策略参数运行一次历史回测，并返回优化目标函数的数值。完成遍历后，根据所有目标函数的数值进行排序，从而选出最优的参数组合结果。
+During the optimization process, the exhaustive algorithm will traverse every combination in the parameter optimization space. The process of traversal is to run the historical backtesting with this combination as the strategy parameter, and return the value of the optimization objective function. After the traversal is completed, the results will be sorted according to the value of the optimization objective function, and the best parameter combination result will be selected.
 
-穷举算法优化的效率和CPU核心数量直接相关：若用户计算机是2核，则优化时间为单核的1/2；若计算机是10核，则优化时间会大幅降低到单核的1/10。
+The efficiency of the exhaustive algorithm optimization is directly related to the number of CPU cores: If the user's computer is 2 cores, the optimization time is 1/2 of the single core; If the computer is 10 cores, the optimization time will be greatly reduced to 1/10 of the single core.
 
-### 遗传算法优化
+### Genetic Algorithm Optimization
 
-设置好需要优化的参数后，点击窗口底部的【遗传算法优化】按钮，此时CtaBacktester会调用Python的multiprocessing模块和deap模块，来执行高效智能化的多进程遗传算法优化任务。
+After setting the parameters to be optimized, click the 【Genetic Algorithm Optimization】 button at the bottom of the window. At this time, CtaBacktester will call the Python multiprocessing module and the deap module to execute the efficient and intelligent multi-process genetic algorithm optimization task.
 
-附上遗传算法的简要工作原理：
+Here is a brief working principle of the genetic algorithm:
 
-1. 定义优化方向，如总收益率最大化； 
-2. 随机从全局寻优空间中，选择出部分参数组合形成初始族群； 
-3. 对族群内所有个体进行评估，即运行回测获取目标函数结果；
-4. 基于目标函数结果进行排序，剔除表现不好的个体（参数组合）；
-5. 对剩下的个体进行交叉或者变异，通过评估和筛选后形成新的族群；
-6. 以上3-5步为一次完整的种群迭代，在整个优化过程中需要多次重复；
-7. 多次迭代后，种群内差异性减少，参数收敛向最优解，最终输出结果。
+1. Define the optimization direction, such as maximizing the total return;
+2. Randomly select a part of the parameter combinations from the global optimization space to form the initial population;
+3. Evaluate all individuals in the population, that is, run the backtesting to get the value of the optimization objective function;
+4. Sort based on the value of the optimization objective function, and remove the individuals (parameter combinations) with poor performance;
+5. Cross or mutate the remaining individuals, and form a new population through evaluation and screening;
+6. The above 3-5 steps form a complete population iteration, and need to be repeated multiple times in the entire optimization process;
+7. After multiple iterations, the diversity within the population decreases, the parameters converge to the optimal solution, and the final output result is obtained.
 
-### 优化结果分析
+### Optimization Result Analysis
 
-优化完成后，会在日志区域输出信息提示：
+After the optimization is completed, information prompts will be output in the log area:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/49.png)
 
-此时点击【优化结果】按钮即可查看相关结果：
+At this time, click the 【Optimization Result】 button to view the relevant results:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/50.png)
 
-上图中的参数优化结果，基于启动优化任务时所选的目标函数【总收益率】的数值，由高到低进行了排序。
+The parameter optimization results in the above figure are sorted from high to low based on the value of the optimization objective function selected when starting the optimization task.
 
-最后，点击右下角的【保存】按钮即可将优化结果保存到本地CSV文件中，便于后续分析使用。
+Finally, click the 【Save】 button in the lower right corner to save the optimization results to a local CSV file, which is convenient for subsequent analysis and use.
 
 
-## 策略代码
+## Strategy Code
 
-### 代码编辑
+### Code Editing
 
-如果需要对策略进行修改，在CtaBacktester界面左上角的下拉框中选择策略后，点击左下角的【代码编辑】按钮，即可自动打开Visual Studio Code进行代码编辑。若找不到Visual Studio Code，则会弹出启动代码编辑器失败对话框，如下图所示：
+If you need to modify the strategy, select the strategy in the drop-down box in the upper left corner of the CtaBacktester interface, and click the 【Code Editing】 button in the lower left corner to automatically open Visual Studio Code for code editing. If Visual Studio Code is not found, a dialog box will pop up, indicating that the code editor startup failed, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/61.png)
 
-### 策略重载
+### Strategy Reload
 
-当用户通过CtaBacktester对策略源代码进行修改后，此时的修改尚停留在硬盘上的代码文件层面，内存中依然是修改前的策略代码。
+When a user modifies the source code of the strategy through CtaBacktester, the modification is still at the level of the code file on the hard disk, and the original strategy code is still in the memory.
 
-想让修改内容在内存中立即生效，需要点击左下角的【策略重载】按钮，此时CtaBacktester会自动扫描并重新加载所有策略文件中的策略代码，同时会有相关日志输出，如下图所示：
+If you want the modified content to take effect immediately in the memory, you need to click the 【Strategy Reload】 button in the lower left corner. At this time, CtaBacktester will automatically scan and reload the strategy code in all strategy files, and there will be relevant log output, as shown in the following figure:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_backtester/59.png)
 
-重载刷新完成后，再运行回测或者优化时，使用的就是修改后的策略代码了。
+After the reload is completed, when you run the backtesting or optimization again, the modified strategy code will be used.

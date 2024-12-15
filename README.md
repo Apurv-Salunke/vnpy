@@ -1,211 +1,183 @@
-# VeighNa - By Traders, For Traders.
+# By Traders, For Traders.
 
 <p align="center">
-  <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/veighna-logo.png"/>
+  <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
 </p>
-
-💬 Want to read this in **english** ? Go [**here**](README_ENG.md)
 
 <p align="center">
     <img src ="https://img.shields.io/badge/version-3.9.3-blueviolet.svg"/>
     <img src ="https://img.shields.io/badge/platform-windows|linux|macos-yellow.svg"/>
-    <img src ="https://img.shields.io/badge/python-3.10|3.11.|3.12-blue.svg" />
+    <img src ="https://img.shields.io/badge/python-3.10|3.11|3.12-blue.svg" />
     <img src ="https://img.shields.io/github/actions/workflow/status/vnpy/vnpy/pythonapp.yml?branch=master"/>
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-VeighNa是一套基于Python的开源量化交易系统开发框架，在开源社区持续不断的贡献下一步步成长为多功能量化交易平台，自发布以来已经积累了众多来自金融机构或相关领域的用户，包括私募基金、证券公司、期货公司等。
+VeighNa is a Python-based open source quantitative trading system development framework, officially released in January 2015, has grown step by step into a full-featured quantitative trading platform with 6 years of continuous contributions from the open source community, and currently has many users from domestic and international financial institutions, including: hedge funds, investment banks, futures brokers, university research institutions, proprietary trading companies, etc.
 
-:rocket: :rocket: :rocket: **面向专业交易员的【VeighNa Elite量化终端】已经正式发布，针对专业交易员群体在海量策略并发、智能移仓换月、算法拆单执行、多账户交易支持等方面的需求提供了完善支持。了解更详细的信息请扫描下方二维码关注后，点击菜单栏的【社区交流 -> Elite会员服务】即可**：
+The new "VeighNa Full Practical Advance" online course series has been launched on the official WeChat account [**VeighNa开源量化**], covering CTA strategies (completed), options volatility trading (being updated) and more. To purchase, please scan the QR code below and click the [Advanced Course] button in the menu bar to.
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy_qr.jpg"/>
 </p>
 
-在使用VeighNa进行二次开发（策略、模块等）的过程中有任何疑问，请查看[**VeighNa项目文档**](https://www.vnpy.com/docs/cn/index.html)，如果无法解决请前往[**官方社区论坛**](https://www.vnpy.com/forum/)的【提问求助】板块寻求帮助，也欢迎在【经验分享】板块分享你的使用心得！
+If you have any questions about using VeighNa for secondary development (strategies, modules, etc.), please check the [**VeighNa Project Documentation**](https://www.vnpy.com/docs/cn/index.html). If you can't solve it, please go to the [Questions and Help] section of the [**Official Community Forum**](https://www.vnpy.com/forum/) forum for help, or share your experience in the [Experience Sharing] section!
 
-**想要获取更多关于VeighNa的资讯信息？** 请扫描下方二维码添加小助手加入【VeighNa社区交流微信群】：
+For financial institution users of VeighNa, a special [VeighNa Institutional Users Group] (QQ group number: 676499931) has been created to share issues related to institutional applications, such as: interbank market access, asset management O32 system, distributed deployment, etc. Please note that this group is only open to financial institution users, please specify: Name - Institution - Department when joining the group.
 
-<p align="center">
-  <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/github_wx.png"/, width=250>
-</p>
+## Functional Features
 
+1. Full-featured quantitative trading platform (vnpy.trader) that integrates a variety of trading interfaces and provides simple and easy-to-use APIs for specific strategy algorithm and function development, for quickly building quantitative trading applications required by traders.
 
-## 功能特点
+2. Trading interfaces (vnpy.gateway) covering all domestic and international trading varieties.
 
-1. 多功能量化交易平台（trader），整合了多种交易接口，并针对具体策略算法和功能开发提供了简洁易用的API，用于快速构建交易员所需的量化交易应用。
+    * Domestic market
 
-2. 覆盖国内外所拥有的下述交易品种的交易接口（gateway）：
+        * CTP ([ctp](https://www.github.com/vnpy/vnpy_ctp)): Domestic futures and options
 
-    * 国内市场
+        * CTP Mini ([mini](https://www.github.com/vnpy/vnpy_mini)): domestic futures, options
 
-        * CTP（[ctp](https://www.github.com/vnpy/vnpy_ctp)）：国内期货、期权
+        * CTP Securities ([sopt](https://www.github.com/vnpy/vnpy_sopt)): ETF options
 
-        * CTP Mini（[mini](https://www.github.com/vnpy/vnpy_mini)）：国内期货、期权
+        * FEMAS ([femas](https://www.github.com/vnpy/vnpy_femas)): domestic futures
 
-        * CTP证券（[sopt](https://www.github.com/vnpy/vnpy_sopt)）：ETF期权
+        * UFT ([uft](https://www.github.com/vnpy/vnpy_uft)): domestic futures, ETF options
+        
+        * Esunny ([esunny](https://www.github.com/vnpy/vnpy_esunny)): domestic futures, Gold TD
 
-        * 飞马（[femas](https://www.github.com/vnpy/vnpy_femas)）：国内期货
+        * APEX XSpeed ([sec](https://www.github.com/vnpy/vnpy_sec)): ETF options
 
-        * 恒生UFT（[uft](https://www.github.com/vnpy/vnpy_uft)）：国内期货、ETF期权
+        * APEX HTS ([hts](https://www.github.com/vnpy/vnpy_hts)): ETF options
 
-        * 易盛（[esunny](https://www.github.com/vnpy/vnpy_esunny)）：国内期货、黄金TD
+        * XTP ([xtp](https://www.github.com/vnpy/vnpy_xtp)): domestic securities (A shares), ETF options
 
-        * 顶点飞创（[sec](https://www.github.com/vnpy/vnpy_sec)）：ETF期权
+        * TORA ([tora](https://www.github.com/vnpy/vnpy_tora)): domestic securities (A shares), ETF options
 
-        * 顶点HTS（[hts](https://www.github.com/vnpy/vnpy_hts)）：ETF期权
+        * Guotai Junan ([hft](https://www.github.com/vnpy/vnpy_hft)): domestic securities (A shares)
+        
+        * SGIT ([sgit](https://www.github.com/vnpy/vnpy_sgit)): spot precious metal, domestic futures
 
-        * 中泰XTP（[xtp](https://www.github.com/vnpy/vnpy_xtp)）：国内证券（A股）、ETF期权
+        * KsGold ([ksgold](https://www.github.com/vnpy/vnpy_ksgold)): spot precious metal
 
-        * 华鑫奇点（[tora](https://www.github.com/vnpy/vnpy_tora)）：国内证券（A股）、ETF期权
+        * Rohon ([rohon](https://www.github.com/vnpy/vnpy_rohon)): futures management
 
-        * 国泰君安（[hft](https://www.github.com/vnpy/vnpy_hft)）：国内证券（A股、两融）
+        * Jees ([jees](https://www.github.com/vnpy/vnpy_jees)): futures management
 
-        * 东证OST（[ost](https://www.github.com/vnpy/vnpy_ost)）：国内证券（A股）
+        * ComStar ([comstar](https://www.github.com/vnpy/vnpy_comstar)): interbank fixed-income market
+        
+        * TTS ([tts](https://www.github.com/vnpy/vnpy_tts)): domestic futures (simulation)
 
-        * 东方财富EMT（[emt](https://www.github.com/vnpy/vnpy_emt)）：国内证券（A股）
+    * Overseas market
 
-        * 飞鼠（[sgit](https://www.github.com/vnpy/vnpy_sgit)）：黄金TD、国内期货
+        * Interactive Brokers ([ib](https://www.github.com/vnpy/vnpy_ib)): global securities, futures, options, foreign exchange, etc.
 
-        * 金仕达黄金（[ksgold](https://www.github.com/vnpy/vnpy_ksgold)）：黄金TD
+        * Esunny 9.0 ([tap](https://www.github.com/vnpy/vnpy_tap)): global futures
 
-        * 利星资管（[lstar](https://www.github.com/vnpy/vnpy_lstar)）：期货资管
+        * Direct Futures ([da](https://www.github.com/vnpy/vnpy_da)): global futures
 
-        * 融航（[rohon](https://www.github.com/vnpy/vnpy_rohon)）：期货资管
+    * Special Applications
 
-        * 杰宜斯（[jees](https://www.github.com/vnpy/vnpy_jees)）：期货资管
+        * RPC service ([rpc](https://www.github.com/vnpy/vnpy_rpcservice)): inter-process communication interface for distributed architecture
 
-        * 中汇亿达（[comstar](https://www.github.com/vnpy/vnpy_comstar)）：银行间市场
+3. Out-of-the-box trading applications for various quantitative strategies (vnpy.app).
 
-        * 掘金（[gm](https://www.github.com/vnpy/vnpy_gm)）：国内证券（仿真）
+    * [cta_strategy](https://www.github.com/vnpy/vnpy_ctastrategy): CTA strategy engine module, which allows users to perform fine-grained control over the withdrawal behavior of delegates during the operation of CTA-type strategies while maintaining ease of use (reducing trading slippage, implementing high-frequency strategies)
 
-        * 恒生云UF（[uf](https://www.github.com/vnpy/vnpy_uf)）：国内证券（仿真）
+    * [cta_backtester](https://www.github.com/vnpy/vnpy_ctabacktester): CTA strategy backtester module, no need to use Jupyter Notebook, directly use the graphical interface to directly carry out strategy backtester analysis, parameter optimization and other related work
 
-        * TTS（[tts](https://www.github.com/vnpy/vnpy_tts)）：国内期货（仿真）
+    * [spread_trading](https://www.github.com/vnpy/vnpy_spreadtrading): spread trading module, support custom spreads, real-time calculation of spread quotes and positions, support semi-automatic spread algorithm trading and fully automatic spread strategy trading two modes
 
-    * 海外市场
+    * [option_master](https://www.github.com/vnpy/vnpy_optionmaster): option trading module, designed for the domestic options market, supports a variety of option pricing models, implied volatility surface calculation, Greek value risk tracking and other functions
 
-        * Interactive Brokers（[ib](https://www.github.com/vnpy/vnpy_ib)）：海外证券、期货、期权、贵金属等
+    * [portfolio_strategy](https://www.github.com/vnpy/vnpy_portfoliostrategy): portfolio strategy module, designed for trading multi-contract quantitative strategies (Alpha, option arbitrage, etc.) at the same time, providing historical data backtesting and live automatic trading functions
 
-        * 易盛9.0外盘（[tap](https://www.github.com/vnpy/vnpy_tap)）：海外期货
+    * [algo_trading](https://www.github.com/vnpy/vnpy_algotrading): algorithm trading module, providing a variety of commonly used intelligent trading algorithms: TWAP, Sniper, Iceberg, BestLimit, etc.
 
-        * 直达期货（[da](https://www.github.com/vnpy/vnpy_da)）：海外期货
+    * [script_trader](https://www.github.com/vnpy/vnpy_scripttrader): script strategy module, designed for multi-standard portfolio trading strategies, also can be directly in the command line to achieve REPL instructions in the form of trading, does not support the backtest function
 
-    * 特殊应用
+    * [paper_account](https://www.github.com/vnpy/vnpy_paperaccount): Simulation trading module, pure localization of simulation trading functions, based on the real-time quotes obtained from the trading interface for commission aggregation, providing commission transaction push and position records
 
-        * RQData行情（[rqdata](https://www.github.com/vnpy/vnpy_rqdata)）：跨市场（股票、指数、ETF、期货）实时行情
+    * [chart_wizard](https://www.github.com/vnpy/vnpy_chartwizard): K-line chart module, based on RQData data service (futures) or trading interface (digital currency) to obtain historical data, and combined with Tick push to display real-time market changes
 
-        * 迅投研行情（[xt](https://www.github.com/vnpy/vnpy_xt)）：跨市场（股票、指数、可转债、ETF、期货、期权）实时行情
+    * [portfolio_manager](https://www.github.com/vnpy/vnpy_portfoliomanager): portfolio module, for all kinds of fundamental trading strategies, based on separate strategy sub-accounts, providing automatic tracking of trading positions and real-time profit and loss statistics
 
-        * RPC服务（[rpc](https://www.github.com/vnpy/vnpy_rpcservice)）：跨进程通讯接口，用于分布式架构
+    * [rpc_service](https://www.github.com/vnpy/vnpy_rpcservice): RPC service module, allowing a VeighNa Trader process to be started as a server, serving as a unified routing channel for quotes and trades, allowing multiple clients to connect at the same time, realizing a multi-process distributed system
 
-3. 覆盖下述各类量化策略的交易应用（app）：
+    * [data_manager](https://www.github.com/vnpy/vnpy_datamanager): Historical data management module, view the existing data in the database through the tree directory, select any time period data to view the field details, support CSV file data import and export
 
-    * [cta_strategy](https://www.github.com/vnpy/vnpy_ctastrategy)：CTA策略引擎模块，在保持易用性的同时，允许用户针对CTA类策略运行过程中委托的报撤行为进行细粒度控制（降低交易滑点、实现高频策略）
+    * [data_recorder](https://www.github.com/vnpy/vnpy_datarecorder): Quotes recording module, based on the graphical interface for configuration, according to the demand for real-time recording Tick or K-line quotes to the database, for strategy backtesting or live initialization
 
-    * [cta_backtester](https://www.github.com/vnpy/vnpy_ctabacktester)：CTA策略回测模块，无需使用Jupyter Notebook，直接使用图形界面进行策略回测分析、参数优化等相关工作
+    * [excel_rtd](https://www.github.com/vnpy/vnpy_excelrtd): Excel RTD (Real Time Data) real-time data service, based on pyxll module to achieve real-time push updates of various data (quotes, contracts, positions, etc.) in Excel
 
-    * [spread_trading](https://www.github.com/vnpy/vnpy_spreadtrading)：价差交易模块，支持自定义价差，实时计算价差行情和持仓，支持价差算法交易以及自动价差策略两种模式
+    * [risk_manager](https://www.github.com/vnpy/vnpy_riskmanager): risk management module, providing statistics and restrictions on rules including trade flow control, number of orders placed, active orders, total number of cancelled orders, etc., effectively realizing front-end risk control functions
+    
+    * [web_trader](https://www.github.com/vnpy/vnpy_webtrader): The web service module is designed according to the requirements of B-S architecture, and implements a web server that provides active function call (REST) and passive data push (WebSocket)
 
-    * [option_master](https://www.github.com/vnpy/vnpy_optionmaster)：期权交易模块，针对国内期权市场设计，支持多种期权定价模型、隐含波动率曲面计算、希腊值风险跟踪等功能
 
-    * [portfolio_strategy](https://www.github.com/vnpy/vnpy_portfoliostrategy)：组合策略模块，面向同时交易多合约的量化策略（Alpha、期权套利等），提供历史数据回测和实盘自动交易功能
+4. Python trading API interface package (vnpy.api), providing the underlying docking implementation of the above trading interface.
+    
+    * REST Client ([rest](https://www.github.com/vnpy/vnpy_rest)): The high-performance rest API client based on coroutine process asynchronous IO which adopts the programming model of event message cycle to support the sending of high concurrent real-time transaction requests
+    
+    * Websocket Client ([websocket](https://www.github.com/vnpy/vnpy_websocket)): The high-performance websocket API client based on coroutine process asynchronous IO supports which sharing event loops with REST Client to avoid multi-threaded performance loss caused by GIL
 
-    * [algo_trading](https://www.github.com/vnpy/vnpy_algotrading)：算法交易模块，提供多种常用的智能交易算法：TWAP、Sniper、Iceberg、BestLimit等
 
-    * [script_trader](https://www.github.com/vnpy/vnpy_scripttrader)：脚本策略模块，面向多标的类量化策略和计算任务设计，同时也可以在命令行中实现REPL指令形式的交易，不支持回测功能
+5. simple and easy-to-use event-driven engine (vnpy.event), which is the core of event-driven trading program
 
-    * [paper_account](https://www.github.com/vnpy/vnpy_paperaccount)：本地仿真模块，纯本地化实现的仿真模拟交易功能，基于交易接口获取的实时行情进行委托撮合，提供委托成交推送以及持仓记录
+6. standardized management client (vnpy.database) interfacing with various databases.
 
-    * [chart_wizard](https://www.github.com/vnpy/vnpy_chartwizard)：K线图表模块，基于RQData数据服务（期货）或者交易接口获取历史数据，并结合Tick推送显示实时行情变化
+    * SQL class
 
-    * [portfolio_manager](https://www.github.com/vnpy/vnpy_portfoliomanager)：交易组合管理模块，以独立的策略交易组合（子账户）为基础，提供委托成交记录管理、交易仓位自动跟踪以及每日盈亏实时统计功能
+        * SQLite ([sqlite](https://www.github.com/vnpy/vnpy_sqlite)): lightweight single file database, no need to install and configure data service programs, default option of vnpy.py, suitable for novice users
 
-    * [rpc_service](https://www.github.com/vnpy/vnpy_rpcservice)：RPC服务模块，允许将某一进程启动为服务端，作为统一的行情和交易路由通道，允许多客户端同时连接，实现多进程分布式系统
+        * MySQL ([mysql](https://www.github.com/vnpy/vnpy_mysql)): the world's most popular open source relational database, extremely rich documentation, and can replace other high NewSQL compatible implementations (such as TiDB)
 
-    * [data_manager](https://www.github.com/vnpy/vnpy_datamanager)：历史数据管理模块，通过树形目录查看数据库中已有的数据概况，选择任意时间段数据查看字段细节，支持CSV文件的数据导入和导出
+        * PostgreSQL ([postgresql](https://www.github.com/vnpy/vnpy_postgresql)): more feature-rich open source relational database, support for new features through extension plug-ins, only recommended for skilled users
 
-    * [data_recorder](https://www.github.com/vnpy/vnpy_datarecorder)：行情记录模块，基于图形界面进行配置，根据需求实时录制Tick或者K线行情到数据库中，用于策略回测或者实盘初始化
+    * NoSQL classes
 
-    * [excel_rtd](https://www.github.com/vnpy/vnpy_excelrtd)：Excel RTD（Real Time Data）实时数据服务，基于pyxll模块实现在Excel中获取各类数据（行情、合约、持仓等）的实时推送更新
+        * DolphinDB ([dolphindb](https://www.github.com/vnpy/vnpy_dolphindb)): A high-performance distributed temporal database developed by Zhejiang Zhiyu Technology Co., Ltd. is especially suitable for low latency or real-time tasks with high speed requirements
+        
+        * Arctic ([arctic](https://www.github.com/vnpy/vnpy_arctic)): The high-performance financial temporal database developed by quantitative hedge fund Man AHL based on mongodb which adopts performance optimization schemes such as partitioned storage and lz4 compression to achieve higher reading and writing efficiency than mongodb
 
-    * [risk_manager](https://www.github.com/vnpy/vnpy_riskmanager)：风险管理模块，提供包括交易流控、下单数量、活动委托、撤单总数等规则的统计和限制，有效实现前端风控功能
+        * MongoDB ([mongodb](https://www.github.com/vnpy/vnpy_mongodb)): non-relational database based on distributed file storage (bson format), built-in memory cache of hot data provides faster read and write speeds
+        
+        * InfluxDB ([influxdb](https://www.github.com/vnpy/vnpy_influxdb)): non-relational database specially designed for time-series data, columnar data storage provides high read/write efficiency and peripheral analysis applications
+        
+        * LevelDB ([leveldb](https://www.github.com/vnpy/vnpy_leveldb)): The high-performance key/value database launched by Google which realizes the process memory storage engine based on LSM algorithm, and supports billions of levels of massive data
 
-    * [web_trader](https://www.github.com/vnpy/vnpy_webtrader)：Web服务模块，针对B-S架构需求设计，实现了提供主动函数调用（REST）和被动数据推送（Websocket）的Web服务器
+7. Adapter interfaces for various data services:
 
-4. Python交易API接口封装（api），提供上述交易接口的底层对接实现。
+    * RQData ([rqdata](https://www.github.com/vnpy/vnpy_rqdata)): stocks, futures, options, funds, bonds, gold spot
+    
+    * UData ([udata](https://www.github.com/vnpy/vnpy_udata)): stock, futures, options
+    
+    * TuShare ([tushare](https://www.github.com/vnpy/vnpy_tushare)): stocks, futures, options, funds
+    
+    * Wind ([wind](https://www.github.com/vnpy/vnpy_wind)): stocks, futures, options, funds, bonds
+    
+    * Tinysoft ([tinysoft](https://www.github.com/vnpy/vnpy_tinysoft)): stocks, futures, options, funds, bonds
+    
+    * iFinD ([ifind](https://www.github.com/vnpy/vnpy_ifind)): stocks, futures, options, funds, bonds
+    
+    * TQSDK ([tqsdk](https://www.github.com/vnpy/vnpy_tqsdk)): futures
 
-    * REST Client（[rest](https://www.github.com/vnpy/vnpy_rest)）：基于协程异步IO的高性能REST API客户端，采用事件消息循环的编程模型，支持高并发实时交易请求发送
 
-    * Websocket Client（[websocket](https://www.github.com/vnpy/vnpy_websocket)）：基于协程异步IO的高性能Websocket API客户端，支持和REST Client共用事件循环并发运行
+8. Standard component for inter-process communication (vnpy.rpc) for implementing complex trading systems in distributed deployments
 
-5. 简洁易用的事件驱动引擎（event），作为事件驱动型交易程序的核心。
+9. Python high-performance K-line charts (vnpy.chart), supporting large data volume chart display and real-time data update functions
 
-6. 对接各类数据库的适配器接口（database）：
+10.  [Community Forum](http://www.vnpy.com) and [Zhihu Blog](http://zhuanlan.zhihu.com/vn-py), which include the development tutorial of VeighNa project and the research on the application of Python in the field of quantitative trading, etc.
 
-    * SQL类
+11. The official communication group 262656087 (QQ), with strict management (regular purging of long-term diving members), and the membership fee will be donated to the VeighNa community fund.
 
-        * SQLite（[sqlite](https://www.github.com/vnpy/vnpy_sqlite)）：轻量级单文件数据库，无需安装和配置数据服务程序，VeighNa的默认选项，适合入门新手用户
+## Environment preparation
 
-        * MySQL（[mysql](https://www.github.com/vnpy/vnpy_mysql)）：主流的开源关系型数据库，文档资料极为丰富，且可替换其他NewSQL兼容实现（如TiDB）
+* We recommend using the Python distribution [VeighNa Studio-2.9.0](https://download.vnpy.com/veighna-studio-2.9.0.exe), which is built with the latest version of VeighNa framework and VeighNa Station quantitative management platform, specifically created by the VeighNa team for quantitative trading. Manual installation
+* Supported system versions: Windows 10 or above/Windows Server 2019 or above/Ubuntu 22.04 LTS
+* Supported Python version: Python 3.10 64-bit or above
 
-        * PostgreSQL（[postgresql](https://www.github.com/vnpy/vnpy_postgresql)）：特性更为丰富的开源关系型数据库，支持通过扩展插件来新增功能，只推荐熟手使用
+## Installation steps
 
-    * NoSQL类
-
-        * DolphinDB（[dolphindb](https://www.github.com/vnpy/vnpy_dolphindb)）：一款高性能分布式时序数据库，适用于对速度要求极高的低延时或实时性任务
-
-        * Arctic（[arctic](https://www.github.com/vnpy/vnpy_arctic)）：高性能金融时序数据库，采用了分块化储存、LZ4压缩等性能优化方案，以实现时序数据的高效读写
-
-        * TDengine（[taos](https://www.github.com/vnpy/vnpy_taos)）：分布式、高性能、支持SQL的时序数据库，带有内建的缓存、流式计算、数据订阅等系统功能，能大幅减少研发和运维的复杂度
-
-        * TimescaleDB（[timescaledb](https://www.github.com/vnpy/vnpy_timescaledb)）：基于PostgreSQL开发的一款时序数据库，以插件化扩展的形式安装，支持自动按空间和时间对数据进行分区
-
-        * MongoDB（[mongodb](https://www.github.com/vnpy/vnpy_mongodb)）：基于分布式文件储存（bson格式）的文档式数据库，内置的热数据内存缓存提供更快读写速度
-
-        * InfluxDB（[influxdb](https://www.github.com/vnpy/vnpy_influxdb)）：针对TimeSeries Data专门设计的时序数据库，列式数据储存提供极高的读写效率和外围分析应用
-
-        * LevelDB（[leveldb](https://www.github.com/vnpy/vnpy_leveldb)）：由Google推出的高性能Key/Value数据库，基于LSM算法实现进程内存储引擎，支持数十亿级别的海量数据
-
-7. 对接下述各类数据服务的适配器接口（datafeed）：
-
-    * 迅投研（[xt](https://www.github.com/vnpy/vnpy_xt)）：股票、期货、期权、基金、债券
-
-    * 米筐RQData（[rqdata](https://www.github.com/vnpy/vnpy_rqdata)）：股票、期货、期权、基金、债券、黄金TD
-
-    * 咏春大师（[voltrader](https://www.github.com/vnpy/vnpy_voltrader)）：期货、期权
-
-    * 恒生UData（[udata](https://www.github.com/vnpy/vnpy_udata)）：股票、期货、期权
-
-    * TuShare（[tushare](https://www.github.com/vnpy/vnpy_tushare)）：股票、期货、期权、基金
-
-    * 万得Wind（[wind](https://www.github.com/vnpy/vnpy_wind)）：股票、期货、基金、债券
-
-    * 天软Tinysoft（[tinysoft](https://www.github.com/vnpy/vnpy_tinysoft)）：股票、期货、基金、债券
-
-    * 同花顺iFinD（[ifind](https://www.github.com/vnpy/vnpy_ifind)）：股票、期货、基金、债券
-
-    * 天勤TQSDK（[tqsdk](https://www.github.com/vnpy/vnpy_tqsdk)）：期货
-
-8. 跨进程通讯标准组件（rpc），用于实现分布式部署的复杂交易系统。
-
-9. Python高性能K线图表（chart），支持大数据量图表显示以及实时数据更新功能。
-
-10. [社区论坛](http://www.vnpy.com/forum)和[知乎专栏](http://zhuanlan.zhihu.com/vn-py)，内容包括VeighNa项目的开发教程和Python在量化交易领域的应用研究等内容。
-
-11. 官方交流群262656087（QQ），管理严格（定期清除长期潜水的成员），入群费将捐赠给VeighNa社区基金。
-
-注：以上关于功能特点的说明为根据说明文档发布时情况罗列，后续可能存在更新或调整。若功能描述同实际存在出入，欢迎通过Issue联系进行调整。
-
-## 环境准备
-
-* 推荐使用VeighNa团队为量化交易专门打造的Python发行版[VeighNa Studio-3.9.3](https://download.vnpy.com/veighna_studio-3.9.3.exe)，集成内置了VeighNa框架以及VeighNa Station量化管理平台，无需手动安装
-* 支持的系统版本：Windows 11以上 / Windows Server 2019以上 / Ubuntu 22.04 LTS以上
-* 支持的Python版本：Python 3.10以上（64位），**推荐使用Python 3.10**
-
-## 安装步骤
-
-在[这里](https://github.com/vnpy/vnpy/releases)下载Release发布版本，解压后运行以下命令安装：
+Download the latest version from [here](https://github.com/vnpy/vnpy/releases), unzip it and run the following command to install it.
 
 **Windows**
 
@@ -216,7 +188,7 @@ install.bat
 **Ubuntu**
 
 ```
-bash install.sh
+. install.sh
 ```
 
 **Macos**
@@ -225,38 +197,34 @@ bash install.sh
 bash install_osx.sh
 ```
 
-**注意：setup.cfg中列举了VeighNa框架安装所需的依赖库，requirements.txt中给出了这些依赖库的推荐安装版本。**
+## User's Guide
 
-## 使用指南
+1. Register a CTP Demo account at [SimNow](http://www.simnow.com.cn/) and get the broker code and the trading quotes server address at [this page](http://www.simnow.com.cn/product.action).
 
-1. 在[SimNow](http://www.simnow.com.cn/)注册CTP仿真账号，并在[该页面](http://www.simnow.com.cn/product.action)获取经纪商代码以及交易行情服务器地址。
+2. Register at [VeighNa community forum](https://www.vnpy.com/forum/) to get the VeighNa Station account password (the forum account password is)
 
-2. 在[VeighNa社区论坛](https://www.vnpy.com/forum/)注册获得VeighNa Station账号密码（论坛账号密码即是）
+3. Launch VeighNa Station (a shortcut will be created automatically on your desktop after installing VeighNa Studio), enter the account password from the previous step and login
 
-3. 启动VeighNa Station（安装VeighNa Studio后会在桌面自动创建快捷方式），输入上一步的账号密码登录
+4. Click on the **VeighNa Trader** button at the bottom and start your trading!
 
-4. 点击底部的**VeighNa Trader**按钮，开始你的交易！！！
+Attention.
 
-注意：
+* Please do not close VeighNa Station during the running of VeighNa Trader (it will exit automatically)
+* For flexible configuration of quantitative trading application components, please use **VeighNa Trader**
 
-* 在VeighNa Trader的运行过程中请勿关闭VeighNa Station（会自动退出）
+## Script Run
 
-## 脚本运行
-
-除了基于VeighNa Station的图形化启动方式外，也可以在任意目录下创建run.py，写入以下示例代码：
+In addition to the graphical start-up method based on VeighNa Station, you can also create run.py in any directory and write the following sample code.
 
 ```Python
 from vnpy.event import EventEngine
 from vnpy.trader.engine import MainEngine
 from vnpy.trader.ui import MainWindow, create_qapp
-
 from vnpy_ctp import CtpGateway
 from vnpy_ctastrategy import CtaStrategyApp
 from vnpy_ctabacktester import CtaBacktesterApp
 
-
 def main():
-    """Start VeighNa Trader"""
     qapp = create_qapp()
 
     event_engine = EventEngine()
@@ -271,45 +239,52 @@ def main():
 
     qapp.exec()
 
-
-if __name__ == "__main__":
+if __name__ == "__main__"。
     main()
 ```
 
-在该目录下打开CMD（按住Shift->点击鼠标右键->在此处打开命令窗口/PowerShell）后运行下列命令启动VeighNa Trader：
+Open CMD in that directory (hold Shift->click right mouse button->open command window/PowerShell here) and then run the following command to start VeighNa Trader.
 
     python run.py
+    
+## Contributing code
 
-## 贡献代码
+VeighNa uses Github to host its source code, if you wish to contribute code please use the PR (Pull Request) process of github:
 
-VeighNa使用Github托管其源代码，如果希望贡献代码请使用github的PR（Pull Request）的流程:
+1. [create Issue](https://github.com/vnpy/vnpy/issues/new) - For the larger changes (such as new features, large refactoring, etc.) it is best to first open an issue to discuss, and smaller improvements (such as document improvements, bugfixes, etc.) can be sent directly to PR
 
-1. [创建 Issue](https://github.com/vnpy/vnpy/issues/new) - 对于较大的改动（如新功能，大型重构等）建议先开issue讨论一下，较小的improvement（如文档改进，bugfix等）直接发PR即可
+2. Fork [VeighNa](https://github.com/vnpy/vnpy) - Click the **Fork** button in the upper right corner
 
-2. Fork [VeighNa](https://github.com/vnpy/vnpy) - 点击右上角**Fork**按钮
+3. CloneYour own fork: ```git clone https://github.com/$userid/vnpy.git```
 
-3. Clone你自己的fork: ```git clone https://github.com/$userid/vnpy.git```
-	* 如果你的fork已经过时，需要手动sync：[同步方法](https://help.github.com/articles/syncing-a-fork/)
+	* If your fork is out of date, you need to manually sync: [Synchronization method](https://help.github.com/articles/syncing-a-fork/)
 
-4. 从**dev**创建你自己的feature branch: ```git checkout -b $my_feature_branch dev```
+4. Create your own feature branch from **dev**: ```git checkout -b $my_feature_branch dev```
 
-5. 在$my_feature_branch上修改并将修改push到你的fork上
+5. Make changes on $my_feature_branch and push the changes to your fork
 
-6. 创建从你的fork的$my_feature_branch分支到主项目的**dev**分支的[Pull Request] -  [在此](https://github.com/vnpy/vnpy/compare?expand=1)点击**compare across forks**，选择需要的fork和branch创建PR
+6. Create a [Pull Request] from your fork's $my_feature_branch branch to the main project's **dev** branch - [here](https://github.com/vnpy/vnpy/compare?expand=1) Click on **compare across forks** and select the required fork and branch to create the PR
 
-7. 等待review, 需要继续改进，或者被Merge!
+7. Waiting for review, need to continue to improve, or be Merge!
 
-在提交代码的时候，请遵守以下规则，以提高代码质量：
+When submitting code, please observe the following rules to improve the quality of the code:
 
-  * 使用[flake8](https://pypi.org/project/flake8/)检查你的代码，确保没有error和warning。在项目根目录下运行```flake8```即可。
+  * Check your code with [flake8](https://pypi.org/project/flake8/) to make sure there are no errors and warnings. Just run ``flake8`` in the project root directory.
 
-## 其他内容
 
-* [获取帮助](https://github.com/vnpy/vnpy/blob/dev/.github/SUPPORT.md)
-* [社区行为准则](https://github.com/vnpy/vnpy/blob/dev/.github/CODE_OF_CONDUCT.md)
-* [Issue模板](https://github.com/vnpy/vnpy/blob/dev/.github/ISSUE_TEMPLATE.md)
-* [PR模板](https://github.com/vnpy/vnpy/blob/dev/.github/PULL_REQUEST_TEMPLATE.md)
+## Other content
 
-## 版权说明
+* [Getting Help](https://github.com/vnpy/vnpy/blob/dev/.github/SUPPORT.md)
+* [Community Conduct side](https://github.com/vnpy/vnpy/blob/dev/.github/CODE_OF_CONDUCT.md)
+* [Issue templates](https://github.com/vnpy/vnpy/blob/dev/.github/ISSUE_TEMPLATE.md)
+* [PR templates](https://github.com/vnpy/vnpy/blob/dev/.github/PULL_REQUEST_TEMPLATE.md)
+
+
+
+## Copyright statement
 
 MIT
+  
+
+
+

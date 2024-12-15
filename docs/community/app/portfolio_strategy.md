@@ -1,255 +1,264 @@
-# PortfolioStrategy - 多合约组合策略模块
+# PortfolioStrategy - Multi-Contract Portfolio Strategy Module
 
-## 功能简介
+## Function Introduction
 
-PortfolioStrategy是用于**多合约组合策略实盘**的功能模块，用户可以通过其UI界面操作来便捷完成策略初始化、策略启动、策略停止、策略参数编辑以及策略移除等任务。
+PortfolioStrategy is a functional module for **multi-contract portfolio strategy live trading**. Users can use its UI interface to easily complete tasks such as strategy initialization, strategy start, strategy stop, strategy parameter editing, and strategy removal.
 
-## 加载启动
+## Loading and Starting
 
-### VeighNa Station加载
+### VeighNa Station Loading
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【PortfolioStrategy】。
+After starting and logging into VeighNa Station, click the 【Trading】 button, and check the 【PortfolioStrategy】 in the 【Application Module】 column in the configuration dialog.
 
-### 脚本加载
+### Script Loading
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_portfoliostrategy import PortfolioStrategyApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(PortfolioStrategyApp)
 ```
 
 
-## 启动模块
+## Starting the Module
 
 <span id="jump">
 
-对于用户自行开发的策略，需要放到VeighNa Trader运行时目录下的**strategies**目录中，才能被识别加载。具体的运行时目录路径，可以在VeighNa Trader主界面顶部的标题栏查看。
+For strategies developed by users, they need to be placed in the **strategies** directory under the runtime directory of VeighNa Trader to be recognized and loaded. The specific runtime directory path can be viewed in the title bar at the top of the main interface of VeighNa Trader.
 
-对于在Windows上默认安装的用户来说，放置策略的strategies目录路径通常为：
+For users who are default installed on Windows, the path to the strategies directory is usually:
 
 ```
     C:\Users\Administrator\strategies
 ```
 
-其中Administrator为当前登录Windows的系统用户名。
+Where Administrator is the system username of the currently logged in Windows.
 
 </span>
 
-在启动模块之前，请先连接交易接口（连接方法详见基本使用篇的连接接口部分）。看到VeighNa Trader主界面【日志】栏输出“合约信息查询成功”之后再启动模块，如下图所示：
+Before starting the module, please connect to the trading interface (the connection method is detailed in the basic usage section of the connection interface). After seeing the output of "Contract information query successful" in the VeighNa Trader main interface 【Log】 column, start the module as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_strategy/1.png)
 
-请注意，IB接口因为登录时无法自动获取所有的合约信息，只有在用户手动订阅行情时才能获取。因此需要在主界面上先行手动订阅合约行情，再启动模块。
+Please note that the IB interface cannot automatically obtain all contract information when logging in, and can only obtain it when the user manually subscribes to market data. Therefore, you need to manually subscribe to market data on the main interface before starting the module.
 
-成功连接交易接口后，在菜单栏中点击【功能】-> 【组合策略】，或者点击左侧按钮栏的图标：
+After successfully connecting to the trading interface, click on the 【Function】-> 【Portfolio Strategy】 in the menu bar, or click on the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/0.png)
 
-即可进入多合约组合策略模块的UI界面，如下图所示：
+You can enter the UI interface of the multi-contract portfolio strategy module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/1.png)
 
-如果配置了数据服务（配置方法详见基本使用篇的全局配置部分），打开多合约组合策略模块时会自动执行数据服务登录初始化。若成功登录，则会输出“数据服务初始化成功”的日志，如下图所示：
+If the data service is configured (the configuration method is detailed in the global configuration section of the basic usage section), the data service login initialization will be automatically executed when the multi-contract portfolio strategy module is opened. If the login is successful, the log will output "Data service initialization successful", as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/2.png)
 
 
-## 添加策略
+## Adding a Strategy
 
-用户可以基于编写好的组合策略模板（类）来创建不同的策略实例（对象）。
+Users can create different strategy instances (objects) based on the written combination strategy template (class).
 
-在左上角的下拉框中选择要交易的策略名称，如下图所示：
+Select the strategy name to be traded in the drop-down box in the upper left corner, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/3.png)
 
-请注意，显示的策略名称是**策略类**（驼峰式命名）的名字，而不是策略文件（下划线模式命名）的名字。
+Please note that the displayed strategy name is the **strategy class** (camel case naming), not the strategy file (underscore mode naming) name.
 
-选择好策略类之后，点击【添加策略】，会弹出添加策略对话框，如下图所示：
+After selecting the strategy class, click on the 【Add Strategy】 button, and the add strategy dialog will pop up, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/4.png)
 
-在创建策略实例时，需要配置相关参数，各参数要求如下：
+When creating a strategy instance, you need to configure the relevant parameters. The requirements for each parameter are as follows:
 
-- 实例名称
-  - 实例名称不能重名；
-- 合约品种
-  - 格式为vt_symbol（合约代码 + 交易所名称）；
-  - 一定要是实盘交易系统中可以查到的合约名称；
-  - 合约名用“,”隔开，中间不加空格；
-- 参数设置
-  - 显示的参数名是策略里写在parameters列表中的参数名；
-  - 默认数值为策略里的参数的默认值；
-  - 由上图可观察到，参数名后面<>括号中显示的是该参数的数据类型，在填写参数时应遵循相应的数据类型。其中，<class 'str'>是字符串、<class 'int'>是整数、<class 'float'>是浮点数；
-  - 请注意，如果某个参数可能会调整至有小数位的数值，而默认参数值是整数（比如1）。请在编写策略时，把默认参数值设为浮点数（比如1.0）。否则策略会默认该项参数为整数，在后续【编辑】策略实例参数时，会只允许填进整数。
+- Instance name
+  - The instance name cannot be duplicated;
+- Contract variety
+  - The format is vt_symbol (contract code + exchange name);
+  - It must be a contract name that can be found in the live trading system;
+  - The contract name is separated by "," without spaces in between;
+- Parameter settings
+  - The displayed parameter name is the parameter name written in the parameters list of the strategy;
+  - The default value is the default value of the parameter in the strategy;
+  - As can be observed from the figure above, the data type of the parameter is displayed in the <> brackets after the parameter name. When filling in the parameter, you should follow the corresponding data type. Among them, <class 'str'> is a string, <class 'int'> is an integer, <class 'float'> is a floating point number;
+- Instance name
+  - The instance name cannot be duplicated;
+- Contract variety
+  - The format is vt_symbol (contract code + exchange name);
+  - It must be a contract name that can be found in the live trading system;
+  - The contract name is separated by "," without spaces in between;
+- Parameter settings
+  - The displayed parameter name is the parameter name written in the parameters list of the strategy;
+  - The default value is the default value of the parameter in the strategy;
+  - As can be observed from the figure above, the data type of the parameter is displayed in the <> brackets after the parameter name. When filling in the parameter, you should follow the corresponding data type. Among them, <class 'str'> is a string, <class 'int'> is an integer, <class 'float'> is a floating point number;
+  - Please note that if a parameter may be adjusted to a value with decimal places, and the default parameter value is an integer (such as 1). Please set the default parameter value to a floating point number (such as 1.0) when writing the strategy. Otherwise, the strategy will default this parameter to an integer, and when editing the strategy instance parameters in the subsequent [Edit], only integers will be allowed to be filled in.
 
-参数配置完成后，点击【添加】按钮，则开始创建策略实例。创建成功后可在左侧的策略监控组件中看到该策略实例，如下图所示：
+After the parameter configuration is completed, click the 【Add】 button to start creating the strategy instance. After the creation is successful, you can see the strategy instance in the left strategy monitoring component, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/5.png)
 
-策略监控组件顶部显示的是策略实例名、策略类名以及策略作者名（在策略里定义的author）。顶部按钮用于控制和管理策略实例，第一行表格显示了策略内部的参数信息（参数名需要写在策略的parameters列表中图形界面才会显示），第二行表格则显示了策略运行过程中的变量信息（变量名需要写在策略的variables列表中图形界面才会显示）。【inited】字段表示当前策略的初始化状态（是否已经完成了历史数据回放），【trading】字段表示策略当前是否能够开始交易。
+The top of the strategy monitoring component displays the strategy instance name, strategy class name, and strategy author name (defined in the author of the strategy). The top button is used to control and manage the strategy instance, the first row of the table shows the parameter information inside the strategy (the parameter name needs to be written in the parameters list of the strategy for the graphical interface to display), and the second row of the table shows the variable information during the operation of the strategy (the variable name needs to be written in the variables list of the strategy for the graphical interface to display). The [inited] field indicates the initialization status of the current strategy (whether the historical data playback has been completed), and the [trading] field indicates whether the strategy can currently start trading.
 
-从上图可观察到，此时该策略实例的【inited】和【trading】状态都为【False】。说明该策略实例还没有初始化，也还不能发出交易信号。
+As can be observed from the figure above, at this time, the [inited] and [trading] statuses of this strategy instance are both [False]. This indicates that the strategy instance has not been initialized and cannot yet send out trading signals.
 
-策略实例创建成功后，该策略实例的配置信息会被保存到.vntrader文件夹下的portfolio_strategy_setting.json文件中。
+After the successful creation of the strategy instance, the configuration information of this strategy instance will be saved to the portfolio_strategy_setting.json file under the .vntrader folder.
 
-请注意，如果添加了同名的策略实例，则会创建失败，图形界面输出“创建策略失败，存在重名”的日志信息，如下图所示：
+Please note that if a strategy instance with the same name is added, the creation will fail, and the graphical interface will output the log information "Failed to create strategy, duplicate name exists", as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/8.png)
 
 
-## 管理策略
+## Managing Strategies
 
-### 初始化
+### Initialization
 
-策略实例创建成功后，就可以对该实例进行初始化了。点击该策略实例下的【初始化】按钮，若初始化成功，则如下图所示：
+After the strategy instance is successfully created, you can initialize the instance. Click the [Initialize] button under the strategy instance, if the initialization is successful, it will be as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/6.png)
 
-初始化完成后，可观察到此时该策略实例的【inited】状态已经为【True】。说明该策略实例已经加载过历史数据并完成初始化了。【trading】状态还是为【False】，说明此时该策略实例还不能开始自动交易。
+After the initialization is completed, it can be observed that the [inited] status of the strategy instance is already [True]. This indicates that the strategy instance has already loaded historical data and completed initialization. The [trading] status is still [False], indicating that the strategy instance cannot start automatic trading at this time.
 
-请注意，与CTA策略不同，如果创建实例时输入错误的vt_symbol，多合约组合策略模块会在初始化时报错，而不是在创建策略实例时报错，如下图所示：
+Please note that unlike the CTA strategy, if an error vt_symbol is entered when creating an instance, the multi-contract combination strategy module will report an error during initialization, not when creating a strategy instance, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/7.png)
 
-### 启动
+### Start
 
-策略实例初始化成功，【inited】状态为【True】时，才能启动该策略的自动交易功能。点击该策略实例下的【启动】按钮，即可启动该策略实例。成功后如下图所示：
+After the successful initialization of the strategy instance, when the [inited] status is [True], the automatic trading function of the strategy instance can be started. Click the [Start] button under the strategy instance, and the strategy instance can be started. If successful, it will be as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/10.png)
 
-可观察到此时该策略实例的【inited】和【trading】状态都为【True】。说明此时该策略实例已经完成了历史数据回放，而且此时策略内部的交易请求类函数（buy/sell/short/cover/cancel_order等），以及信息输出类函数（send_email/put_event等），才会真正执行并发出对应的请求指令到底层接口中（真正执行交易）。
+At this time, it can be observed that the [inited] and [trading] statuses of this strategy instance are both [True]. This indicates that the strategy instance has completed historical data playback and that the trading request class functions (buy/sell/short/cover/cancel_order, etc.) and information output class functions (send_email/put_event, etc.) inside the strategy will only be executed and send the corresponding request instructions to the underlying interface (actually execute the transaction) at this time.
 
-在上一步策略初始化的过程中，尽管策略同样在接收（历史）数据，并调用对应的功能函数，但因为【trading】状态为【False】，所以并不会有任何真正的委托下单操作或者交易相关的日志信息输出。
+During the initialization process of the strategy in the previous step, although the strategy is also receiving (historical) data and calling the corresponding functional functions, because the [trading] status is [False], there will be no real order placing operation or trading-related log information output.
 
-如果启动之后，策略发出了委托，可以去VeighNa Trader主界面【委托】栏查看委托订单细节，如下图所示：
+If the strategy sends an order after starting, you can check the order details in the [Order] column of the main interface of VeighNa Trader, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/9.png)
 
-请注意，与CTA策略模块不同，多合约组合策略**不提供本地停止单功能**，所以UI界面上不会有停止单的显示区域了。
+Please note that unlike the CTA strategy module, the multi-contract combination strategy **does not provide local stop order function**, so there will be no stop order display area on the UI interface.
 
+### Stop
 
-### 停止
-
-如果启动策略之后，由于某些情况（如到了市场收盘时间，或盘中遇到紧急情况）想要停止、编辑或者移除策略，可以点击策略实例下的【停止】按钮，即可停止该策略实例的自动交易。成功后如下图所示：
+If you want to stop, edit, or remove a strategy instance due to certain circumstances (such as the market closing time, or an emergency situation during the trading session), you can click the [Stop] button under the strategy instance to stop the automatic trading of this strategy instance. If successful, it will be as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/11.png)
 
-组合策略引擎会自动将该策略之前发出的所有活动委托全部撤销，以保证在策略停止后不会有失去控制的委托存在。同时该策略实例最新的变量信息会被保存到.vntrader文件夹下的portfolio_strategy_data.json文件中。
+The portfolio strategy engine will automatically cancel all active orders issued by the strategy before stopping the strategy to ensure that there are no uncontrolled orders after the strategy stops. At the same time, the latest variable information of this strategy instance will be saved to the portfolio_strategy_data.json file under the .vntrader folder.
 
-此时可观察到该策略实例的【trading】状态已变为【False】，说明此时该策略实例已经停止自动交易了。
+At this time, it can be observed that the [trading] status of this strategy instance has been changed to [False], indicating that the automatic trading of this strategy instance has been stopped.
 
-在多合约组合策略的实盘交易过程中，正常情况应该让策略在整个交易时段中都自动运行，尽量不要有额外的暂停重启类操作。对于国内期货市场来说，应该在交易时段开始前，启动策略的自动交易，然后直到收盘后，再关闭自动交易。因为现在CTP夜盘收盘后也会关闭系统，早上开盘前重启，所以夜盘收盘后也需要停止策略，关闭VeighNa Trader了。
+In the real trading process of the multi-contract combination strategy, the strategy should be run automatically throughout the entire trading session, and there should be as few additional pause and restart operations as possible. For the domestic futures market, the strategy should be started for automatic trading before the trading session starts, and then closed until the end of the trading session. Because the CTP night trading system will also be closed after the night trading session, and restarted before the morning trading session, the strategy needs to be stopped after the night trading session is closed and VeighNa Trader is closed.
 
-### 编辑
+### Edit
 
-如果创建策略实例之后，想要编辑某个策略实例的参数（若已启动策略，需要先点击策略实例下的【停止】按钮，停止策略），可以点击该策略实例下的【编辑】按钮，会弹出参数编辑对话框，以供修改策略参数。如下图所示：
+If you want to edit the parameters of a strategy instance after creating the strategy instance (if the strategy has been started, you need to click the [Stop] button under the strategy instance to stop the strategy first), you can click the [Edit] button under the strategy instance, and a parameter editing dialog box will pop up for you to modify the strategy parameters. As shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/12.png)
 
-编辑完策略参数之后，点击下方的【确定】按钮，相应的修改会立即更新在参数表格中。
+After editing the strategy parameters, click the [OK] button at the bottom, and the corresponding modifications will be immediately updated in the parameter table.
 
-但是策略实例的交易合约代码无法修改，同时修改完后也不会重新执行初始化操作。也请注意，此时修改的只是.vntrader文件夹下porfolio_strategy_setting.json文件中该策略实例的参数值，并没有修改原策略文件下的参数。
+However, the trading contract code of the strategy instance cannot be modified, and the initialization operation will not be re-executed after the modification. Also, please note that at this time, only the parameter values of the strategy instance under the portfolio_strategy_setting.json file in the .vntrader folder have been modified, and the parameters under the original strategy file have not been modified.
 
-修改前，json文件如下图所示：
+Before the modification, the json file is as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/18.png)
 
 
-修改后，json文件如下图所示：
+After the modification, the json file is as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/17.png)
 
-若盘中编辑后想要再次启动策略，点击策略实例下的【启动】按钮即可再次启动该策略实例。
+If you want to start the strategy again after editing during the trading session, you can click the [Start] button under the strategy instance to start the strategy instance again.
 
-### 移除
+### Remove
 
-如果创建策略实例之后，想要移除某个策略实例（若已启动策略，需要先点击策略实例下的【停止】按钮，停止策略），可以点击该策略实例下的【移除】按钮。移除成功后，图形界面左侧的策略监控组件中将不会再显示该策略实例的信息。如下图所示：
+If you want to remove a strategy instance after creating the strategy instance (if the strategy has been started, you need to click the [Stop] button under the strategy instance to stop the strategy first), you can click the [Remove] button under the strategy instance. After the removal is successful, the information of this strategy instance will no longer be displayed in the left strategy monitoring component of the graphical interface. As shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/13.png)
 
-此时.vntrader文件夹下的portfolio_strategy_setting.json文件也移除了该策略实例的配置信息。
+The configuration information of this strategy instance has also been removed from the portfolio_strategy_setting.json file under the .vntrader folder.
 
-### 状态跟踪
+### Status Tracking
 
-如果想要通过图形界面跟踪策略的状态，有两种方式：
+If you want to track the status of the strategy through the graphical interface, there are two ways:
 
-1. 调用put_event函数
+1. Call the put_event function
 
-   策略实例中所有的的变量信息，都需要把变量名写在策略的variables列表中，才能在图形界面显示。如果想跟踪变量的状态变化，则需要在策略中调用put_event函数，界面上才会进行数据刷新。
+   All variable information in the strategy instance needs to have the variable name written in the strategy's variables list in order to be displayed in the graphical interface. If you want to track the change of the variable state, you need to call the put_event function in the strategy, and the interface will refresh the data.
 
-   有时用户会发现自己写的策略无论跑多久，变量信息都不发生变化，这种情况请检查策略中是否漏掉了对put_event函数的调用。
+   Sometimes users may find that no matter how long their strategy runs, the variable information does not change. In this case, please check whether the put_event function is missing in the strategy.
 
-2. 调用write_log函数
+2. Call the write_log function
 
-   如果不仅想观察到变量信息的状态变化，还想根据策略的状态输出基于自己需求的个性化的日志，可以在策略中调用write_log函数，进行日志输出。
+   If you not only want to observe the change of the variable information, but also want to output personalized logs based on the status of the strategy, you can call the write_log function in the strategy to output logs.
 
-## 运行日志
+## Running Log
 
-### 日志内容
+### Log Content
 
-多合约组合策略模块UI界面上输出的日志有两个来源，分别是策略引擎和策略实例。
+There are two sources of logs output on the UI interface of the multi-contract combination strategy module, which are the strategy engine and the strategy instance.
 
-**引擎日志**
+**Engine Log**
 
-策略引擎一般输出的是全局信息。下图中除了策略实例名后加冒号的内容之外，都是策略引擎输出的日志。
+The strategy engine generally outputs global information. In the figure below, except for the content after the strategy instance name followed by a colon, all are logs output by the strategy engine.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/15.png)
 
-**策略日志**
+**Strategy Log**
 
-如果在策略中调用了write_log函数，那么日志内容就会通过策略日志输出。下图红框里的内容是策略实例输出的策略日志。冒号前是策略实例的名称，冒号后是write_log函数输出的内容。
+If the write_log function is called in the strategy, the log content will be output through the strategy log. The content in the red box in the figure below is the strategy log output by the strategy instance. The content before the colon is the name of the strategy instance, and the content after the colon is the content output by the write_log function.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/16.png)
 
-### 清空操作
+### Clear Operation
 
-如果想要清空多合约组合策略UI界面上的日志输出，可以点击右上角的【清空日志】按钮，则可一键清空该界面上已输出的日志。
+If you want to clear the log output on the UI interface of the multi-contract combination strategy, you can click the [Clear Log] button in the upper right corner, and the log output on the interface can be cleared with one click.
 
-点击【清空日志】后，如下图所示：
+After clicking [Clear Log], as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/14.png)
 
-## 批量操作
+## Batch Operation
 
-在策略经过充分测试，实盘运行较为稳定，不需要经常进行调整的情况下，如果有多个需要运行的组合策略实例，可以使用界面右上角的【全部初始化】、【全部启动】和【全部停止】功能来执行盘前批量初始化、启动策略实例以及盘后批量停止策略实例的操作。
+In the case where the strategy has been thoroughly tested, the live trading is relatively stable, and there is no need to make frequent adjustments, if there are multiple combination strategy instances that need to be run, you can use the [All Initialize], [All Start], and [All Stop] functions in the upper right corner of the interface to execute pre-market batch initialization of strategy instances, start strategy instances, and post-market batch stop of strategy instances.
 
-### 全部初始化
+### All Initialize
 
-在所有策略实例创建成功后，点击右上角的【全部初始化】按钮，则可批量初始化策略实例，如下图所示：
+After all strategy instances have been successfully created, click the [All Initialize] button in the upper right corner, and you can batch initialize the strategy instances, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/19.png)
 
-### 全部启动
+### All Start
 
-在所有策略实例初始化成功后，点击右上角的【全部启动】按钮，则可批量启动策略实例，如下图所示：
+After all strategy instances have been successfully initialized, click the [All Start] button in the upper right corner, and you can batch start the strategy instances, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/20.png)
 
-### 全部停止
+### All Stop
 
-在所有策略实例启动成功后，点击右上角的【全部停止】按钮，则可批量停止策略实例，如下图所示：
+After all strategy instances have been successfully started, click the [All Stop] button in the upper right corner, and you can batch stop the strategy instances, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_strategy/21.png)
 
-## 多合约组合策略模板（StrategyTemplate）-- 基础
+## Multi-Contract Combination Strategy Template (StrategyTemplate) -- Basic
 
-多合约组合策略模板提供了信号生成和委托管理功能，用户可以基于该模板(位于site-packages\vnpy_portfoliostrategy\template中)自行开发多合约组合策略。
+The multi-contract combination strategy template provides signal generation and order management functions. Users can develop multi-contract combination strategies based on this template (located in site-packages\vnpy_portfoliostrategy\template).
 
-用户自行开发的策略可以放在用户运行文件夹下的[strategies](#jump)文件夹内。
+The strategy developed by the user can be placed in the [strategies](#jump) folder under the user's running folder.
 
-请注意：
+Please note:
 
-1. 策略文件命名采用下划线模式，如portfolio_boll_channel_strategy.py，而策略类命名采用驼峰式，如PortfolioBollChannelStrategy。
+1. The naming of the strategy file is in underscore mode, such as portfolio_boll_channel_strategy.py, and the naming of the strategy class is in camel case, such as PortfolioBollChannelStrategy.
 
-2. 自建策略的类名不要与示例策略的类名重合。如果重合了，图形界面上只会显示一个策略类名。
+2. The class name of the self-built strategy should not conflict with the class name of the example strategy. If there is a conflict, only one strategy class name will be displayed on the graphical interface.
 
-下面通过PortfolioBollChannelStrategy策略示例，来展示策略开发的具体步骤：
+The specific steps of strategy development are shown through the example strategy PortfolioBollChannelStrategy strategy.
 
-在基于策略模板编写策略逻辑之前，需要在策略文件的顶部载入需要用到的内部组件，如下方代码所示：
+Before writing the strategy logic based on the strategy template, you need to import the internal components that need to be used at the top of the strategy file, as shown in the code below:
 
 ```python3
 from typing import List, Dict
@@ -261,15 +270,15 @@ from vnpy_portfoliostrategy import StrategyTemplate, StrategyEngine
 from vnpy_portfoliostrategy.utility import PortfolioBarGenerator
 ```
 
-其中，StrategyTemplate是策略模板，StrategyEngine是策略引擎，Interval是数据频率，TickData和BarData都是储存对应信息的数据容器，PortfolioBarGenerator是组合策略K线生成模块，ArrayManager是K线时间序列管理模块。
+Where, StrategyTemplate is the strategy template, StrategyEngine is the strategy engine, Interval is the data frequency, TickData and BarData are the data containers that store the corresponding information, PortfolioBarGenerator is the combination strategy K-line generation module, ArrayManager is the K-line time series management module.
 
-### 策略参数与变量
+### Strategy Parameters and Variables
 
-在策略类的下方，可以设置策略的作者（author），参数（parameters）以及变量（variables），如下方代码所示：
+Below the strategy class, you can set the strategy's author (author), parameters (parameters), and variables (variables), as shown in the code below:
 
 ```python3
 
-    author = "用Python的交易员"
+    author = "Python Trader"
 
     boll_window = 18
     boll_dev = 3.4
@@ -292,21 +301,21 @@ from vnpy_portfoliostrategy.utility import PortfolioBarGenerator
 
 ```
 
-虽然策略的参数和变量都从属于策略类，但策略参数是固定的（由交易员从外部指定），而策略变量则在交易的过程中随着策略的状态而变化，所以策略变量一开始只需要初始化为对应的基础类型。例如：整数设为0，浮点数设为0.0，而字符串则设为""。
+Although the strategy's parameters and variables both belong to the strategy class, the strategy parameters are fixed (specified from the outside by the trader), while the strategy variables change with the state of the strategy during the trading process, so the strategy variables only need to be initialized as the corresponding basic types. For example: set the integer to 0, the float to 0.0, and the string to "".
 
-如果需要策略引擎在运行过程中，将策略参数和变量显示在UI界面上，并在数据刷新、停止策略时保存其数值，则需把参数和变量的名字（以字符串的数据类型）添加进parameters和variables列表里。
+If the strategy engine needs to display the strategy parameters and variables on the UI interface during the running process, and save their values when the data is refreshed or the strategy is stopped, the names of the parameters and variables (as strings) need to be added to the parameters and variables lists.
 
-请注意，该列表只能接受参数或变量以str、int、float和bool四种数据类型传入。如果策略里需要用到其他数据类型的参数与变量，请把该参数或变量的定义放到__init__函数下。
+Please note that this list can only accept parameters or variables of four data types: str, int, float, and bool. If the strategy needs to use parameters and variables of other data types, please put the definition of the parameter or variable under the __init__ function.
 
-### 类的初始化
+### Class Initialization
 
-入参：strategy_engine: StrategyEngine, strategy_name: str, vt_symbols: List[str], setting: dict
+Input: strategy_engine: StrategyEngine, strategy_name: str, vt_symbols: List[str], setting: dict
 
-出参：无
+Output: None
 
-__init__函数是策略类的构造函数，需要与继承的StrategyTemplate保持一致。
+The __init__ function is the constructor of the strategy class, which needs to be consistent with the inherited StrategyTemplate.
 
-在这个继承的策略类里，初始化一般分四步，如下方代码所示：
+In this inherited strategy class, the initialization generally consists of four steps, as shown in the code below:
 
 ```python3
     def __init__(
@@ -337,110 +346,110 @@ __init__函数是策略类的构造函数，需要与继承的StrategyTemplate�
         self.pbg = PortfolioBarGenerator(self.on_bars, 2, self.on_2hour_bars, Interval.HOUR)
 ```
 
-1 . 通过super( )的方法继承策略模板，在__init__( )函数中传入策略引擎、策略名称、vt_symbols以及参数设置（以上参数均由策略引擎在使用策略类创建策略实例时自动传入，用户无需进行设置）。
+1. Inherit the strategy template through the super() method, and pass the strategy engine, strategy name, vt_symbols, and parameter settings (all of which are automatically passed by the strategy engine when creating a strategy instance, and the user does not need to set them).
 
-2 . 创建策略所需的存放不同合约K线时间序列管理实例（ArrayManager）和策略变量的字典。
+2. Create the ArrayManager instance and the dictionary of strategy variables that are needed for different contract K-line time series management (ArrayManager) and strategy variables.
 
-3 . 分别为策略交易的不同合约创建ArrayManager和目标仓位变量并放进字典里。
+3. Create ArrayManager and target position variables for different contracts and put them into the dictionary.
 
-ArrayManager的默认长度为100，如需调整ArrayManager的长度，可传入size参数进行调整（size不能小于计算指标的周期长度）。
+The default length of ArrayManager is 100. If you need to adjust the length of ArrayManager, you can pass the size parameter to adjust it (size cannot be less than the length of the calculated indicator).
 
-4 . 调用组合策略K线生成模块（PortfolioBarGenerator）：通过时间切片将Tick数据合成1分钟K线数据。如有需求，还可合成更长的时间周期数据，如15分钟K线。
+4. Call the combination strategy K-line generation module (PortfolioBarGenerator): synthesize Tick data into 1-minute K-line data through time slicing. If necessary, longer time period data can also be synthesized, such as 15-minute K-line.
 
-如果只基于on_bar进行交易，这里代码可以写成：
+If the strategy is only based on on_bar trading, the code here can be written as:
 
 ```python3
         self.pbg = PortfolioBarGenerator(self.on_bars)
 ```
 
-而不用给pbg实例传入需要基于on_bars周期合成的更长K线周期，以及接收更长K线周期的函数名。
+And there is no need to pass the longer K-line period that needs to be synthesized based on on_bars, and the function name that receives the longer K-line period.
 
-请注意：
+Please note:
 
- - 合成X分钟线时，X必须设为能被60整除的数（60除外）。对于小时线的合成没有这个限制。
+ - When synthesizing X-minute line, X must be set to a number that can be divided by 60 (except 60). There is no such restriction for synthesizing hourly line.
 
- - PortfolioBarGenerator默认的基于on_bar函数合成长周期K线的数据频率是分钟级别，如果需要基于合成的小时线或者更长周期的K线交易，请在策略文件顶部导入Interval，并传入对应的数据频率给bg实例。
+ - The default data frequency for synthesizing long period K-line data based on on_bar function in PortfolioBarGenerator is minute level. If you need to trade based on synthesized hourly line or longer period K-line, please import Interval at the top of the strategy file and pass the corresponding data frequency to the bg instance.
 
- - **self.on_hour_bars函数名在程序内部已使用**，如需合成1小时K线，请使用self.on_1_hour_bars或者其他命名。
+ - The function name self.on_hour_bars has been used internally in the program. If you need to synthesize 1-hour K-line, please use self.on_1_hour_bars or other naming.
 
-### 策略引擎调用的函数
+### Functions called by the strategy engine
 
-StrategyTemplate中的update_setting函数和该函数后面四个以get开头的函数以及update_trade和update_order函数，都是策略引擎去负责调用的函数，一般在策略编写的时候是不需要调用的。
+The update_setting function in StrategyTemplate and the four functions starting with get and update, as well as the update_trade and update_order functions, are functions called by the strategy engine. They are generally not needed to be called when writing the strategy.
 
-### 策略的回调函数
+### Callback functions of the strategy
 
-StrategyTemplate中以on开头的函数称为回调函数，在编写策略的过程中能够用来接收数据或者接收状态更新。回调函数的作用是当某一个事件发生的时候，策略里的这类函数会被策略引擎自动调用（无需在策略中主动操作）。回调函数按其功能可分为以下两类：
+The functions starting with on in StrategyTemplate are called callback functions. They can be used to receive data or receive status updates during the writing of the strategy. Callback functions can be divided into the following two categories according to their functions:
 
-#### 策略实例状态控制（所有策略都需要）
+#### Strategy instance status control (required for all strategies)
 
 **on_init**
 
-* 入参：无
+* Input: None
 
-* 出参：无
+* Output: None
 
-初始化策略时on_init函数会被调用，默认写法是先调用write_log函数输出“策略初始化”日志，再调用load_bars函数加载历史数据。如下方代码所示：
+When the strategy is initialized, the on_init function will be called. The default writing is to call the write_log function to output the "Strategy Initialization" log, and then call the load_bars function to load historical data. As shown in the code below:
 
 ```python3
     def on_init(self):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("Strategy Initialization")
         self.load_bars(10)
 ```
 
-与CTA策略不同，多合约组合策略只支持K线回测，所以多合约策略模板并没有load_ticks函数。
+Unlike CTA strategy, the multi-contract combination strategy only supports K-line backtesting, so the multi-contract strategy template does not have the load_ticks function.
 
-策略初始化时，策略的inited和trading状态都为【False】，此时只是调用ArrayManager计算并缓存相关的计算指标，不能发出交易信号。调用完on_init函数之后，策略的inited状态才变为【True】，策略初始化才完成。
+When the strategy is initialized, the inited and trading states of the strategy are both [False]. At this time, only the ArrayManager is called to calculate and cache the relevant calculation indicators, and no trading signals can be sent. After calling the on_init function, the inited state of the strategy becomes [True], and the strategy initialization is completed.
 
 **on_start**
 
-* 入参：无
+* Input: None
 
-* 出参：无
+* Output: None
 
-启动策略时on_start函数会被调用，默认写法是调用write_log函数输出“策略启动”日志，如下方代码所示：
+When the strategy is started, the on_start function will be called. The default writing is to call the write_log function to output the "Strategy Start" log, as shown in the code below:
 
 ```python3
     def on_start(self):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("Strategy Start")
 ```
 
-调用策略的on_start函数启动策略后，策略的trading状态变为【True】，此时策略才能够发出交易信号。
+After calling the on_start function of the strategy to start the strategy, the trading state of the strategy becomes [True], and the strategy can send trading signals.
 
 **on_stop**
 
-* 入参：无
+* Input: None
 
-* 出参：无
+* Output: None
 
-停止策略时on_stop函数会被调用，默认写法是调用write_log函数输出“策略停止”日志，如下方代码所示：
+When the strategy is stopped, the on_stop function will be called. The default writing is to call the write_log function to output the "Strategy Stop" log, as shown in the code below:
 
 ```python3
     def on_stop(self):
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("Strategy Stop")
 ```
 
-调用策略的on_stop函数停止策略后，策略的trading状态变为【False】，此时策略就不会发出交易信号了。
+After calling the on_stop function of the strategy to stop the strategy, the trading state of the strategy becomes [False], and the strategy will no longer send trading signals.
 
-#### 接收数据、计算指标、发出交易信号
+#### Receive data, calculate indicators, and send trading signals
 
 **on_tick**
 
-* 入参：tick: TickData
+* Input: tick: TickData
 
-* 出参：无
+* Output: None
 
-绝大部分交易系统都只提供Tick数据的推送。即使一部分平台可以提供K线数据的推送，但是这些数据到达本地电脑的速度也会慢于Tick数据的推送，因为也需要平台合成之后才能推送过来。所以实盘的时候，VeighNa里所有的策略的K线都是由收到的Tick数据合成的。
+Most trading systems only provide Tick data push. Even if some platforms can provide K-line data push, the speed of these data reaching the local computer is slower than the push of Tick data, because it also needs to be synthesized by the platform before it can be pushed over. Therefore, in live trading, all the strategies in VeighNa are based on K-line data synthesized from received Tick data.
 
-当策略收到实盘中最新的Tick数据的行情推送时，on_tick函数会被调用。默认写法是通过PortfolioBarGenerator的update_tick函数把收到的Tick数据推进前面创建的pbg实例中以便合成1分钟的K线，如下方代码所示：
+When the strategy receives the latest market push of Tick data in live trading, the on_tick function will be called. The default writing is to push the received Tick data into the pbg instance created earlier through the update_tick function of the PortfolioBarGenerator, so that 1-minute K-line data can be synthesized, as shown in the code below:
 
 ```python3
     def on_tick(self, tick: TickData):
@@ -450,23 +459,23 @@ StrategyTemplate中以on开头的函数称为回调函数，在编写策略的�
         self.pbg.update_tick(tick)
 ```
 
-请注意，on_tick函数只在实盘中会被调用，回测不支持。
+Please note that the on_tick function is only called in live trading, and backtesting does not support it.
 
 **on_bars**
 
-* 入参：bars: Dict[str, BarData]
+* Input: bars: Dict[str, BarData]
 
-* 出参：无
+* Output: None
 
-当策略收到最新的K线数据时（实盘时默认推进来的是基于Tick合成的一分钟的K线，回测时则取决于选择参数时填入的K线数据频率），on_bars函数就会被调用。
+When the strategy receives the latest K-line data (in live trading, the default is to push 1-minute K-line data synthesized from Tick data, and in backtesting, it depends on the K-line data frequency parameter filled in when selecting the parameter), the on_bars function will be called.
 
-与CTA策略模块不同，多合约组合策略模块在接收K线推送时，是通过on_bars回调函数一次性接收该时间点上所有合约的K线数据，而不是通过on_bar函数一个个接收（无法判断当前时点的K线是否全部走完了 ）。
+Unlike the CTA strategy module, the multi-contract combination strategy module receives K-line push through the on_bars callback function, and all the K-line data of all contracts at this time point are received at once, rather than one by one through the on_bar function (cannot judge whether the K-line at the current time point has all been completed). 
 
-示例策略里出现过的写法有两种：
+There are two ways of writing in the example strategy:
 
-1 . 如果策略基于on_bars推进来的K线交易，那么请把交易请求类函数都写在on_bars函数下（因本次示例策略类PortfolioBollChannelStrategy不是基于on_bars交易，故不作示例讲解。基于on_bars交易的示例代码可参考其他示例策略）；
+1. If the strategy is based on on_bars to push K-line trading, then please write all the trading request class functions under the on_bars function (because the example strategy class PortfolioBollChannelStrategy is not based on on_bars trading, it is not explained in the example. The example code of the strategy based on on_bars trading can be found in the example strategy).
 
-2 . 如果策略需要基于on_bars推进来的K线数据通过PortfolioBarGenerator合成更长时间周期的K线来交易，那么请在on_bars中调用PortfolioBarGenerator的update_bars函数，把收到的bars推进前面创建的pbg实例中即可，如下方代码所示：
+2. If the strategy needs to use the K-line data pushed by on_bars to synthesize longer time period K-line data through the PortfolioBarGenerator for trading, then please call the update_bars function of the PortfolioBarGenerator to push the received bars into the pbg instance created earlier, as shown in the code below:
 
 ```python3
     def on_bars(self, bars: Dict[str, BarData]):
@@ -476,7 +485,7 @@ StrategyTemplate中以on开头的函数称为回调函数，在编写策略的�
         self.pbg.update_bars(bars)
 ```
 
-示例策略类PortfolioBollChannelStrategy是通过2小时K线数据回报来生成信号的。一共有三部分，如下方代码所示：
+The example strategy class PortfolioBollChannelStrategy generates signals through 2-hour K-line data. There are three parts in total, as shown in the code below:
 
 ```python3
     def on_2hour_bars(self, bars: Dict[str, BarData]):
@@ -552,46 +561,46 @@ StrategyTemplate中以on开头的函数称为回调函数，在编写策略的�
         self.put_event()
 ```
 
-- 清空未成交委托：为了防止之前下的单子在上一个2小时没有成交，但是下一个2小时可能已经调整了价格，就用cancel_all()方法立刻撤销之前未成交的所有委托，保证策略在当前这2小时开始时的整个状态是清晰和唯一的；
+- Clear Unfilled Orders: To prevent orders placed earlier from not being executed in the last 2 hours, but the price may have been adjusted in the next 2 hours, use the cancel_all() method to immediately cancel all unfilled orders placed earlier, ensuring that the strategy is clear and unique at the beginning of the current 2 hours;
 
-- 调用K线时间序列管理模块：基于最新的2小时K线数据来计算相应的技术指标，如布林带上下轨、CCI指标、ATR指标等。首先获取ArrayManager对象，然后将收到的K线推送进去，检查ArrayManager的初始化状态，如果还没初始化成功就直接返回，没有必要去进行后续的交易相关的逻辑判断。因为很多技术指标计算对最少K线数量有要求，如果数量不够的话计算出来的指标会出现错误或无意义。反之，如果没有return，就可以开始计算技术指标了；
+- Call K-line Time Series Management Module: Calculate the corresponding technical indicators, such as Bollinger Bands, CCI Index, ATR Index, etc., based on the latest 2-hour K-line data. First, get the ArrayManager object, then push the received K-line into it, check the initialization status of ArrayManager, if it has not been initialized successfully, return directly, there is no need to go through the subsequent trading-related logical judgment. Because many technical indicator calculations have requirements for the minimum number of K-lines, if the quantity is not enough, the calculated indicators will be incorrect or meaningless. On the contrary, if there is no return, you can start calculating technical indicators;
 
-- 信号计算：通过持仓的判断以及结合CCI指标、ATR指标在通道突破点挂出**限价单委托**（buy/sell)，同时设置离场点(short/cover)。
+- Signal Calculation: Hang out **limit order** (buy/sell) based on the judgment of the position and combined with the CCI Index, ATR Index at the channel breakthrough point, and set the exit point (short/cover).
 
-    请注意：
-    1. 在CTA策略模块中，通常都是通过访问策略的变量pos获取策略持仓来进行持仓判断。但在多合约组合策略模块中，是通过调用get_pos函数获取某一合约现在的持仓来进行逻辑判断，然后设定该合约的目标仓位，最后通过目标仓位和实际仓位的差别来进行逻辑判断进而发出交易信号的；
+    Please note:
+    1. In the CTA strategy module, it is usually through accessing the strategy variable pos to get the strategy position judgment. However, in the multi-contract combination strategy module, it is through calling the get_pos function to get the current position of a certain contract for logical judgment, then set the target position of the contract, and finally use the difference between the target position and the actual position for logical judgment to send out the trading signal;
 
-    2. 如果需要在图形界面刷新指标数值，请不要忘记调用put_event()函数。
+    2. If you need to refresh the indicator values in the graphical interface, please do not forget to call the put_event() function.
 
-#### 委托状态更新
+#### Order Status Update
 
-因为组合策略中需要对多合约同时下单交易，在回测时无法判断某一段K线内部每个合约委托成交的先后时间顺序，因此无法提供on_order和on_trade函数来获取委托成交推送，而只能在每次on_bars回调时通过get_pos和get_order来进行相关的状态查询。
+Because the multi-contract combination strategy needs to place orders for multiple contracts at the same time, it is impossible to judge the order execution order of each contract within a certain K-line segment during backtesting, so it is impossible to provide the on_order and on_trade functions to obtain the order execution push, and can only be queried through get_pos and get_order in each on_bars callback.
 
-### 主动函数
+### Active Functions
 
-**buy**：买入开仓（Direction：LONG，Offset：OPEN）
+**buy**: Buy to open (Direction: LONG, Offset: OPEN)
 
-**sell**：卖出平仓（Direction：SHORT，Offset：CLOSE）
+**sell**: Sell to close (Direction: SHORT, Offset: CLOSE)
 
-**short**：卖出开仓（Direction：SHORT，Offset：OPEN）
+**short**: Sell to open (Direction: SHORT, Offset: OPEN)
 
-**cover**：买入平仓（Direction：LONG，Offset：CLOSE）
+**cover**: Buy to close (Direction: LONG, Offset: CLOSE)
 
-* 入参：vt_symbol: str, price: float, volume: float, lock: bool = False, net: bool = False
+* Input: vt_symbol: str, price: float, volume: float, lock: bool = False, net: bool = False
 
-* 出参：vt_orderids: List[str] / 无 
+* Output: vt_orderids: List[str] / None
 
-buy/sell/short/cover都是策略内部的负责发单的交易请求类函数。策略可以通过这些函数给策略引擎发送交易信号来达到下单的目的。
+buy/sell/short/cover are all trading request class functions responsible for placing orders within the strategy. The strategy can send trading signals to the strategy engine through these functions to achieve the purpose of placing orders.
 
-以下方buy函数的代码为例，可以看到，**具体要交易合约的代码**，价格和数量是必填的参数，锁仓转换和净仓转换则默认为False。也可以看到，函数内部收到传进来的参数之后就调用了StrategyTemplate里的send_order函数来发单（因为是buy指令，则自动把方向填成了LONG，开平填成了OPEN）。
+The following is an example of the buy function. As you can see, the **specific code of the contract to be traded**, the price and volume are required parameters, and the lock and net conversion are set to False by default. You can also see that after receiving the parameters passed in, the function calls the send_order function in StrategyTemplate to place an order (because it is a buy command, the direction is automatically filled in as LONG, and the offset is filled in as OPEN).
 
-与CTA策略模块不同，组合策略模块不提供本地停止单功能，所以委托函数中移除了stop参数。
+Unlike the CTA strategy module, the multi-contract combination strategy module does not provide local stop order function, so the stop parameter is removed from the order function.
 
-如果lock设置为True，那么该笔订单则会进行锁仓委托转换（在有今仓的情况下，如果想平仓，则会先平掉所有的昨仓，然后剩下的部分都进行反向开仓来代替平今仓，以避免平今的手续费惩罚）。
+If lock is set to True, then the order will be converted to a lock order (in the case of today's position, if you want to close the position, all yesterday's position will be closed first, and then the remaining part will be converted to reverse opening to replace the closing today's position, in order to avoid the penalty of today's position fee).
 
-如果net设置为True，那么该笔订单则会进行净仓委托转换（基于整体账户的所有仓位，根据净仓持有方式来对策略下单的开平方向进行转换）。但是净仓交易模式与锁仓交易模式互斥，因此net设置为True时，lock必须设置为False。
+If net is set to True, then the order will be converted to a net order (based on the overall account's total position, the direction of the strategy's order will be converted according to the net position holding method). However, the net trading mode is mutually exclusive with the lock trading mode, so when net is set to True, lock must be set to False.
 
-请注意，如果向上期所发出平仓委托，因为该交易所必须指定平今、平昨，底层会对其平仓指令自动进行转换。因为上期所部分品种有平今优惠，所以默认是以平今优先的方式发出委托的（如果交易的标的在上期所平昨更优惠的话，可以自行在vnpy.trader.converter的convert_order_request_shfe函数中做适当的修改）。
+Please note that if a closing order is sent to the Shanghai Futures Exchange, because the exchange must specify today's or yesterday's closing, the bottom layer will automatically convert its closing order. Because some varieties on the Shanghai Futures Exchange have today's closing preference, it is default to send the order in today's closing preference manner (if the target of the transaction is more favorable in yesterday's closing of the Shanghai Futures Exchange, you can make appropriate modifications in the convert_order_request_shfe function in vnpy.trader.converter).
 
 ```python3
     def buy(self, vt_symbol: str, price: float, volume: float, lock: bool = False, net: bool = False) -> List[str]:
@@ -601,89 +610,89 @@ buy/sell/short/cover都是策略内部的负责发单的交易请求类函数。
         return self.send_order(vt_symbol, Direction.LONG, Offset.OPEN, price, volume, lock, net)
 ```
 
-请注意，国内期货有开平仓的概念，例如买入操作要区分为买入开仓和买入平仓；但对于股票、外盘期货都是净持仓模式，没有开仓和平仓概念，所以只需使用买入（buy）和卖出（sell）这两个指令就可以了。
+Please note that domestic futures have the concept of opening and closing positions, for example, the buy operation needs to be distinguished as buy to open and buy to close; but for stocks and foreign futures, it is a net position mode, without the concept of opening and closing, so only the buy (buy) and sell (sell) commands are needed.
 
 **send_order**
 
-* 入参：vt_symbol: str, direction: Direction, offset: Offset, price: float, volume: float, lock: bool = False, net: bool = False
+* Input: vt_symbol: str, direction: Direction, offset: Offset, price: float, volume: float, lock: bool = False, net: bool = False
 
-* 出参：vt_orderids: List[str] / 无
+* Output: vt_orderids: List[str] / None
 
-send_order函数是策略引擎调用的发送委托的函数。一般在策略编写的时候不需要单独调用，通过buy/sell/short/cover函数发送限价委托即可。
+The send_order function is the function used by the strategy engine to send orders. Generally, it is not necessary to call it separately when writing the strategy. You can send a limit order by using the buy/sell/short/cover functions.
 
-实盘的时候，收到传进来的参数后，会调用round_to函数基于合约的pricetick和min_volume对委托的价格和数量进行处理。
+In real trading, after receiving the parameters, the round_to function will be called to process the order price and quantity based on the contract's pricetick and min_volume.
 
-请注意，要在策略启动之后，也就是策略的trading状态变为【True】之后，才能发出交易委托。如果策略的Trading状态为【False】时调用了该函数，只会返回[]。
+Please note that the send_order function can only be called after the strategy is started, that is, after the trading status of the strategy becomes [True]. If the function is called when the trading status of the strategy is [False], it will only return [].
 
 **cancel_order**
 
-* 入参：vt_orderid: str
+* Input: vt_orderid: str
 
-* 出参：无
+* Output: None
 
 **cancel_all**
 
-* 入参：无
+* Input: None
 
-* 出参：无
+* Output: None
 
-cancel_order和cancel_all都是负责撤单的交易请求类函数。cancel_order是撤掉策略内指定的活动委托，cancel_all是撤掉策略所有的活动委托。
+The cancel_order and cancel_all functions are trading request class functions responsible for canceling orders. cancel_order cancels the specified active order within the strategy, and cancel_all cancels all active orders within the strategy.
 
-请注意，要在策略启动之后，也就是策略的trading状态变为【True】之后，才能撤单。
+Please note that the order can only be canceled after the strategy is started, that is, after the trading status of the strategy becomes [True].
 
-### 功能函数
+### Functional Functions
 
-以下为策略以外的功能函数：
+The following are functional functions outside the strategy:
 
 **get_pos**
 
-* 入参：vt_symbol: str
+* Input: vt_symbol: str
 
-* 出参：int / 0 
+* Output: int / 0
 
-在策略里调用get_pos函数，可以获取特定合约的持仓数据。
+When the get_pos function is called in the strategy, the specific contract's position data can be obtained.
 
 **get_order**
 
-* 入参：vt_orderid
+* Input: vt_orderid
 
-* 出参：OrderData / 无
+* Output: OrderData / None
 
-在策略里调用get_order函数，可以获取特定合约的委托数据。
+When the get_order function is called in the strategy, the specific contract's order data can be obtained.
 
 **get_all_active_orderids**
 
-* 入参：无
+* Input: None
 
-* 出参：List[OrderData] / 无
+* Output: List[OrderData] / None
 
-在策略里调用get_all_active_orderids函数，可以获取当前全部活动委托号。
+When the get_all_active_orderids function is called in the strategy, all current active order numbers can be obtained.
 
 **get_pricetick**
 
-* 入参：vt_symbol
+* Input: vt_symbol
 
-* 出参：pricetick: float / None
+* Output: pricetick: float / None
 
-在策略里调用get_price函数，可以获取特定合约的最小价格跳动。
+When the get_price function is called in the strategy, the minimum price movement of a specific contract can be obtained.
 
 **write_log**
 
-* 入参：msg: str
+* Input: msg: str
 
-* 出参：无
+* Output: None
 
-在策略中调用write_log函数，可以进行指定内容的日志输出。
+When the write_log function is called in the strategy, the specified content can be logged.
 
 **load_bars**
 
-* 入参：days: int, interval: Interval = Interval.MINUTE
+* Input: days: int, interval: Interval = Interval.MINUTE
 
-* 出参：无
+* Output: None
 
-在策略中调用load_bars函数，可以在策略初始化时加载K线数据。
+When the load_bars function is called in the strategy, K-line data can be loaded during the initialization of the strategy.
 
-如下方代码所示，load_bars函数调用时，默认加载的天数是10，频率是一分钟，对应也就是加载10天的1分钟K线数据。在回测时，10天指的是10个交易日，而在实盘时，10天则是指的是自然日，因此建议加载的天数宁可多一些也不要太少。加载时会先依次尝试通过交易接口、数据服务、数据库获取历史数据，直到获取历史数据或返回空。
+As shown in the following code, when the load_bars function is called, the default number of days to load is 10, and the frequency is one minute, which corresponds to loading 10 days of one-minute K-line data. In backtesting, 10 days refers to 10 trading days, while in real trading, 10 days refers to natural days, so it is recommended to load more days rather than too few. When loading, it will first try to obtain historical data through the trading interface, data service, and database in turn, until historical data is obtained or returned empty.
 
 ```python3
     def load_bars(self, days: int, interval: Interval = Interval.MINUTE) -> None:
@@ -695,102 +704,113 @@ cancel_order和cancel_all都是负责撤单的交易请求类函数。cancel_ord
 
 **put_event**
 
-* 入参：无
+* Input: None
 
-* 出参：无
+* Output: None
 
-在策略中调用put_event函数，可以通知图形界面刷新策略状态相关显示。
+When the put_event function is called in the strategy, the graphical interface can be notified to refresh the display related to the strategy status.
 
-请注意，要策略初始化完成，inited状态变为【True】之后，才能刷新界面。
+Please note that the interface can only be refreshed after the strategy is initialized, that is, after the inited status of the strategy becomes [True].
 
 **send_email**
 
-* 入参：msg: str
+* Input: msg: str
 
-* 出参：无
+* Output: None
 
-配置好邮箱相关信息之后（配置方法详见基本使用篇的全局配置部分），在策略中调用send_email函数，可以发送指定内容的邮件到自己的邮箱。
+After configuring the email-related information (the configuration method is detailed in the global configuration part of the basic usage section), the send_email function can be called in the strategy to send an email with the specified content to your email.
 
-请注意，要策略初始化完成，inited状态变为【True】之后，才能发送邮件。
+Please note that the email can only be sent after the strategy is initialized, that is, after the inited status of the strategy becomes [True].
 
 **sync_data**
 
-* 入参：无
+* Input: None
 
-* 出参：无
+* Output: None
 
-在策略中调用sync_data函数，可以在实盘的时候，每次停止或成交时都同步策略变量进json文件中进行本地缓存，方便第二天初始化时再进行读取还原（策略引擎会去调用，在策略里无需主动调用）。
+When the sync_data function is called in the strategy, the strategy variables are synchronized into the json file for local caching every time the strategy stops or is executed in real trading, making it easy to read and restore when initializing the next day (the strategy engine will call it, no need to call it actively in the strategy).
 
-请注意，要在策略启动之后，也就是策略的trading状态变为【True】之后，才能同步策略信息。
+Please note that the strategy information can only be synchronized after the strategy is started, that is, after the trading status of the strategy becomes [True].
 
-## 多合约组合策略模板（StrategyTemplate）-- 进阶
+## Advanced Multi-Contract Combination Strategy Template (StrategyTemplate)
 
-PortfolioStrategy模块针对的是多标的投资组合类的量化策略，这类策略在执行层面追求的是将策略投资组合的持仓调整到目标状态，而不去过多关注底层的委托交易细节。
+The PortfolioStrategy module is aimed at quantitative strategies of multi-underlying investment portfolios. This type of strategy pursues the adjustment of the position of the strategy investment portfolio to the target state at the execution level, rather than paying too much attention to the underlying order trading details.
 
-首先介绍持仓目标调仓交易的功能函数，来展示持仓目标调仓交易的功能支持：
+First, introduce the functional functions of the position target rebalancing trading, to show the support of the position target rebalancing trading:
 
-### 持仓目标调仓交易的功能函数介绍
+### Introduction to the Functional Functions of Position Target Rebalancing Trading
 
-以下为持仓目标调仓交易模式中策略调用的功能函数：
+The following are the functional functions called by the strategy in the position target rebalancing trading mode:
 
 **set_target**
 
-* 入参：vt_symbol: str, target: int
+* Input: vt_symbol: str, target: int
 
-* 出参：无
+* Output: None
 
-在策略里调用set_target函数，可以设定特定合约的目标仓位。
+When the set_target function is called in the strategy, the target position of a specific contract can be set.
 
-请注意：目标仓位是一种持续性的状态，因此设置后在后续时间会持续保持下去，直到被再次设置修改。
+Please note: The target position is a persistent state, so after it is set, it will be maintained in the subsequent time until it is set and modified again.
 
 **get_target**
 
-* 入参：vt_symbol: str
+* Input: vt_symbol: str
 
-* 出参：int
+* Output: int
 
-在策略里调用get_target函数，可以获取设定的特定合约目标仓位。
+When the get_target function is called in the strategy, the target position of a specific contract can be obtained.
 
-请注意：策略的目标仓位状态会在sync_data时（成交、停止等）自动持久化到硬盘文件，并在策略重启后恢复。
+Please note: The target position state of the strategy will be automatically persisted to the hard disk file during the sync_data operation (execution, stop, etc.), and will be restored after the strategy is restarted.
 
 **rebalance_portfolio**
 
-* 入参：bars: Dict[str, BarData]
+* Input: bars: Dict[str, BarData]
 
-* 出参：无
+* Output: None
 
-在策略里调用rebalance_portfolio函数，可以基于设定的特定合约的目标仓位执行调仓交易。
+When the rebalance_portfolio function is called in the strategy, the rebalancing trading can be executed based on the target position of a specific contract.
 
-请注意：只有当前bars字典中有K线切片的合约，才会参与本次调仓交易的执行，从而保证非交易时段（没有行情推送）的合约不会错误发出委托。
+Please note: Only the contracts with K-line slices in the current bars dictionary will participate in the execution of this rebalancing trading, so as to ensure that contracts without market data push during non-trading hours (no market data push) will not mistakenly place orders.
 
 **calculate_price**
 
-* 入参：vt_symbol: str, direction: Direction, reference: float
+* Input: vt_symbol: str, direction: Direction, reference: float
 
-* 出参：pricetick: float
+* Output: pricetick: float
 
-在策略里重载calculate_price函数，可以按需设定特定合约的目标价格（如固定价格超价、固定pricetick超价、百分比超价等）。
+When the rebalance_portfolio function detects a difference between the target position and the actual position, the calculate_price function will be called to calculate the price of the rebalancing order.
 
-如果不传则默认返回参考价格（如不在策略中重载，则在rebalance_portfolio函数中以K线的收盘价作为委托价发出）。
+The default writing in the strategy is to calculate the order price based on the price_add set for the order direction, and you can also refer to the example strategy PairTradingStrategy to calculate the order price based on the tick_add set for the order direction.
 
-### 持仓目标调仓交易的功能函数使用示例
+```python3
+    def calculate_price(self, vt_symbol: str, direction: Direction, reference: float) -> float:
+        """Calculate the price of the rebalancing order (support on-demand reloading)"""
+        if direction == Direction.LONG:
+            price: float = reference + self.price_add
+        else:
+            price: float = reference - self.price_add
 
-持仓目标调仓交易功能与StrategyTemplate基础用法最大的不同，就在于策略on_bars函数中的处理差异。下面通过TrendFollowingStrategy策略示例，来展示持仓目标调仓交易的具体步骤：
+        return price
+```
+
+### Example of Using Functional Functions of Position Target Rebalancing Trading
+
+The biggest difference between the functional functions of position target rebalancing trading and the basic usage of StrategyTemplate is in the processing difference in the on_bars function of the strategy. The specific steps of the position target rebalancing trading are shown below through the example strategy class TrendFollowingStrategy:
 
 **on_bars**
 
-* 入参：bars: Dict[str, BarData]
+* Input: bars: Dict[str, BarData]
 
-* 出参：无
+* Output: None
 
-当策略收到最新的K线数据时（实盘时默认推进来的是基于Tick合成的一分钟的K线，回测时则取决于选择参数时填入的K线数据频率），on_bars函数就会被调用。
+When the strategy receives the latest K-line data (by default, the one-minute K-line synthesized based on the Tick is pushed in during real trading, and it depends on the K-line data frequency parameter filled in during backtesting), the on_bars function will be called.
 
-示例策略类TrendFollowingStrategy是通过一分钟K线数据回报来生成信号的。一共有三部分，如下方代码所示：
+The example strategy class TrendFollowingStrategy generates signals based on the return of one-minute K-line data. There are three parts in total, as shown in the following code:
 
 ```python3
     def on_bars(self, bars: Dict[str, BarData]) -> None:
-        """K线切片回调"""
-        # 更新K线计算RSI数值
+        """K-line slice callback"""
+        # Update K-line to calculate RSI value
         for vt_symbol, bar in bars.items():
             am: ArrayManager = self.ams[vt_symbol]
             am.update_bar(bar)
@@ -841,43 +861,18 @@ PortfolioStrategy模块针对的是多标的投资组合类的量化策略，这
         self.put_event()
 ```
 
-- 调用K线时间序列管理模块：基于最新的分钟K线数据来计算相应的技术指标，如ATR指标、RSI指标等。首先获取ArrayManager对象，然后将收到的K线推送进去，检查ArrayManager的初始化状态，如果还没初始化成功就直接返回，没有必要去进行后续的交易相关的逻辑判断。因为很多技术指标计算对最少K线数量有要求，如果数量不够的话计算出来的指标会出现错误或无意义。反之，如果没有return，就可以开始计算技术指标了；
+- Call K-line Time Series Management Module: Calculate the corresponding technical indicators, such as ATR Index, RSI Index, etc., based on the latest one-minute K-line data. First, get the ArrayManager object, then push the received K-line into it, check the initialization status of ArrayManager, if it has not been initialized successfully, return directly, there is no need to go through the subsequent trading-related logical judgment. Because many technical indicator calculations have requirements for the minimum number of K-lines, if the quantity is not enough, the calculated indicators will be incorrect or meaningless. On the contrary, if there is no return, you can start calculating technical indicators;
 
-- 信号计算：通过持仓的判断（get_pos）以及结合指标计算结果在通道突破点**设定目标仓位**（set_target）
+- Signal Calculation: Set the target position based on the judgment of the position (get_pos) and the calculation result of the indicator at the channel breakthrough point.
 
-- 执行调仓交易（rebalance_portfolio）
-
-**calculate_price**
-
-* 入参：vt_symbol: str, direction: Direction, reference: float
-
-* 出参：prcie: float
-
-当rebalance_portfolio函数检测到目标仓位与实际仓位存在差别的时候，会调用calculate_price函数计算调仓委托价格。
-
-策略内的默认写法是针对委托方向基于设置的price_add来计算委托价格，也可以参考示例策略PairTradingStrategy中的基于设置的tick_add来计算委托价格。
-
-```python3
-    def calculate_price(self, vt_symbol: str, direction: Direction, reference: float) -> float:
-        """计算调仓委托价格（支持按需重载实现）"""
-        if direction == Direction.LONG:
-            price: float = reference + self.price_add
-        else:
-            price: float = reference - self.price_add
-
-        return price
-```
-
-### 与StrategyTemplate基础用法的差别
-
-**on_bars**
-
-1 . 无需清空未成交委托：rebalance_portfolio中已经有调用cancel_all函数的逻辑，无需再在收到on_bars函数推送的时候调用cancel_all函数对未成交的委托进行撤单处理。
-
-2 . 无需使用self.targets字典缓存合约目标仓位：直接调用set_target函数传入合约以及目标仓位（正数代表做多、负数代表做空）进行设置即可。
-
-3 . 无需基于缓存的目标仓位在策略内手写委托逻辑：rebalance_portfolio函数已经自动接管调仓交易，会基于目标仓位进行委托。
+- Execute rebalancing trading (rebalance_portfolio)
 
 **calculate_price**
 
-持仓目标调仓交易需要调用calculate_price函数计算调仓委托价格。
+* Input: vt_symbol: str, direction: Direction, reference: float
+
+* Output: pricetick: float
+
+When the rebalance_portfolio function detects a difference between the target position and the actual position, the calculate_price function will be called to calculate the price of the rebalancing order.
+
+The default writing in the strategy is to calculate the order price based on the price_add set for the order direction, and you can also refer to the example strategy PairTradingStrategy to calculate the order price based on the tick_add set for the order direction.

@@ -152,7 +152,7 @@ def get_database() -> BaseDatabase:
     try:
         module: ModuleType = import_module(module_name)
     except ModuleNotFoundError:
-        print(_("找不到数据库驱动{}，使用默认的SQLite数据库").format(module_name))
+        print(_("Cannot find database driver {}, using default SQLite database").format(module_name))
         module: ModuleType = import_module("vnpy_sqlite")
 
     # Create database object from module
