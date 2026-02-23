@@ -7,7 +7,7 @@ This document defines the target architecture for a headless, extensible trading
 - Headless first (no GUI dependency for core runtime).
 - Strict component boundaries and ownership.
 - Event-driven with deterministic order lifecycle.
-- Extensible through plugin contracts (vnpy-style pip-install extensions).
+- Extensible through plugin contracts (pip-install extensions).
 - Production controls: reconciliation, journaling, kill switches, risk gates.
 
 ## Kernel vs Extensions (Architecture Rule)
@@ -221,14 +221,14 @@ Discovery model:
 - load plugins by capability + configured ID at startup.
 
 Example entry-point groups:
-- `tradingext.data_service`
-- `tradingext.oms`
-- `tradingext.strategy_runtime`
-- `tradingext.risk_rule`
-- `tradingext.sizer`
-- `tradingext.execution_policy`
-- `tradingext.fee_tax`
-- `tradingext.broker_adapter`
+- `tiny_trader_engine.data_service`
+- `tiny_trader_engine.oms`
+- `tiny_trader_engine.strategy_runtime`
+- `tiny_trader_engine.risk_rule`
+- `tiny_trader_engine.sizer`
+- `tiny_trader_engine.execution_policy`
+- `tiny_trader_engine.fee_tax`
+- `tiny_trader_engine.broker_adapter`
 
 ## Compatibility and Contract Testing
 
@@ -276,3 +276,4 @@ This ensures strategy/risk/portfolio logic remains portable across live and back
 ## See Also
 
 - Runtime details: `docs/architecture/PYTHON_RUNTIME_EXECUTION_MODEL.md`
+- Build checklist: `docs/architecture/TINY_TRADER_ENGINE_IMPLEMENTATION_CHECKLIST.md`

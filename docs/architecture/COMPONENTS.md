@@ -1,329 +1,404 @@
-# VeighNa Components Reference
+# Components Reference (Kernel + Extensions)
 
-This reference is optimized for onboarding and debugging: each component includes `Responsibilities`, `Capabilities`, `Scope`, and `Limitations`.
+This document defines each component as a strict contract with clear boundaries.
 
-## Extension-First Rule
+For every component, read in this order:
+1. `Responsibilities`
+2. `Capabilities`
+3. `Scope`
+4. `Limitations`
+5. `Extension Points`
+6. `Current vnpy mapping` (where applicable)
 
-- Component interfaces are stable contracts.
-- Concrete implementations should be shipped as pip-installable extensions.
-- Kernel should not accumulate strategy/use-case specific variants.
-- Backtest/paper/live variants should implement the same contracts and be selected by configuration.
+## Global Rules
 
-## How To Read This System
-
-### Main entry point
-- Runtime bootstrap path:
-  - script entry (for example `examples/veighna_trader/run.py`)
-  - create `EventEngine`
-  - create `MainEngine`
-  - `MainEngine.init_engines()` loads `LogEngine`, `OmsEngine`, `EmailEngine`
-  - add gateways/apps via `main_engine.add_gateway(...)` and `main_engine.add_app(...)`
-  - start UI (`MainWindow`) or service layer
-
-### Fast tracing workflow
-1. Start from the action: market event, order placement, strategy callback, or UI update.
-2. Follow event type in `vnpy/trader/event.py` (`eTick.`, `eOrder.`, `eTrade.`, ...).
-3. Find who publishes it (usually gateway or app engine).
-4. Find handlers registered in engines (`event_engine.register(...)`).
-5. Check `OmsEngine` cache updates for current state.
-6. Check app-engine specific maps (`orderid_strategy_map`, `symbol_strategy_map`, etc.).
+- Kernel contains contracts, schemas, lifecycle, plugin loading, compatibility checks.
+- Concrete variants are pip-installable extensions.
+- Backtest/paper/live implementations must share the same contracts.
+- No component may bypass the canonical event model.
 
 ---
 
-## EventEngine (`vnpy/event/engine.py`)
+## Event Bus / Event Engine
 
 ### Responsibilities
-- Own central event queue.
-- Dispatch events to type-specific and general handlers.
-- Emit timer heartbeat events (`EVENT_TIMER`).
+- Accept canonical events from producers.
+- Dispatch events to subscribers deterministically.
+- Provide timer/heartbeat events.
 
 ### Capabilities
-- FIFO event processing in dedicated event thread.
-- Separate timer thread with configurable interval.
-- Dynamic registration/unregistration of handlers.
+- FIFO processing semantics.
+- Type-based subscription and fan-out.
+- Backpressure monitoring hooks.
 
 ### Scope
-- In-process pub/sub only.
-- Delivery and sequencing, not business logic.
+- Transport and dispatch only.
+- Not responsible for business logic or persistence.
 
 ### Limitations
-- Single event-processing thread can bottleneck under heavy handlers.
-- No persistence/replay built in.
-- Handler exceptions must be managed by handler code.
+- Single-loop dispatch can bottleneck under heavy handlers.
+- Requires bounded queues + lag alarms to remain safe.
+
+### Extension Points
+- Bus backend implementation (in-memory, Redis Streams, NATS, Kafka).
+- Codec/serialization implementations.
+
+### Current vnpy mapping
+- `vnpy/event/engine.py`
+- `vnpy/trader/event.py`
 
 ---
 
-## MainEngine (`vnpy/trader/engine.py`)
+## DataService (Data Handler)
 
 ### Responsibilities
-- Compose system runtime (gateways + engines + apps).
-- Route trading operations (`send_order`, `cancel_order`, `subscribe`, `query_history`).
-- Provide access façade to OMS cache query functions.
+- Ingest market/reference/alt data from adapters.
+- Maintain instrument master and symbol metadata.
+- Maintain query cache for recent/history windows.
+- Publish normalized market/domain events.
 
 ### Capabilities
-- Dynamic plugin loading for gateways/apps.
-- Centralized lifecycle management (`close()` for engines/gateways).
-- Unified API surface used by UI and app engines.
+- Multi-source adapter support.
+- Subscription and replay window APIs.
+- Expose query API (`get_bars`, `get_tick`, `get_snapshot`, etc.).
 
 ### Scope
-- Orchestration and routing.
-- Not strategy logic and not broker protocol specifics.
+- Data correctness, normalization, and delivery.
+- No strategy, portfolio, or order execution decisions.
 
 ### Limitations
-- No cross-process orchestration by itself.
-- Depends on correctly implemented gateway/app plugins.
+- Dependent on source quality and source SLAs.
+- Must guard against stale/invalid/crossed data.
+
+### Extension Points
+- Data adapters by market/use case (options, multi-asset, news, corp actions).
+- Cache policies and storage backends.
+
+### Current vnpy mapping
+- `vnpy/trader/datafeed.py`
+- Gateway market callbacks in `vnpy/trader/gateway.py` and `vnpy_*`
+- Recorder/data manager modules (`vnpy_datarecorder`, `vnpy_datamanager`)
 
 ---
 
-## BaseGateway + Gateway Implementations (`vnpy/trader/gateway.py`, `vnpy_*`)
+## StrategyRuntime
 
 ### Responsibilities
-- Translate external broker/exchange APIs into canonical vnpy objects.
-- Push normalized events (`on_tick`, `on_order`, `on_trade`, ...).
-- Execute broker-specific order/cancel/subscribe/query calls.
+- Host and manage multiple strategy instances.
+- Consume market/domain events.
+- Emit `SignalIntent` (not broker orders).
+- Manage strategy lifecycle and isolation.
 
 ### Capabilities
-- Per-venue protocol mapping and session handling.
-- Per-symbol and per-order specific event fan-out (`EVENT_TICK + vt_symbol`, etc.).
-- Optional history querying if venue supports it.
+- Multi-strategy orchestration.
+- Per-strategy config/state and controls (pause/stop/kill).
+- Optional CPU offload for heavy computations.
 
 ### Scope
-- External boundary adapter layer.
-- Venue-specific concerns only.
+- Alpha/signal generation only.
+- No direct fund/margin/risk ownership.
 
 ### Limitations
-- Feature coverage varies by gateway.
-- Behavior and latency depend on vendor SDK/network.
-- Reconnect/state recovery quality is gateway-specific.
+- Poor isolation can cause strategy interference.
+- High CPU strategies require explicit worker isolation.
+
+### Extension Points
+- Strategy packs by asset class/use case.
+- Signal translators (signal -> target position).
+
+### Current vnpy mapping
+- `vnpy_ctastrategy`, `vnpy_portfoliostrategy`, `vnpy_spreadtrading`, `vnpy_scripttrader`
 
 ---
 
-## OmsEngine (`vnpy/trader/engine.py`)
+## PortfolioRiskEngine
 
 ### Responsibilities
-- Maintain latest in-memory state for core trading entities.
-- Track active orders/quotes.
-- Update offset converters for exchange-specific position semantics.
+- Own funds, margin, holdings, and exposure state.
+- Maintain per-strategy ledgers and global ledger.
+- Perform sizing and policy/risk checks.
+- Produce `OrderIntent` or `RiskBlocked`.
+- Update accounting from execution events.
 
 ### Capabilities
-- Fast lookup APIs (`get_order`, `get_position`, `get_all_active_orders`, etc.).
-- Unified cache refreshed by event stream.
+- Limit frameworks (per day/per strategy/per symbol/global).
+- Dynamic market-aware pre-trade checks.
+- Position sizing policies.
+- Net/gross/concentration controls.
 
 ### Scope
-- Runtime state cache and query point.
-- Not long-term storage or reporting warehouse.
+- Portfolio, risk, sizing, and accounting decision layer.
+- Not responsible for broker protocol execution.
 
 ### Limitations
-- In-memory only; process restart clears cache.
-- “Latest state” model, not full event history.
+- Needs authoritative and timely fills/state from OMS.
+- Risk quality is limited by data quality and rule completeness.
+
+### Extension Points
+- `ISizer` implementations.
+- `IRiskRule` libraries.
+- fee/tax models and jurisdiction-specific accounting rules.
+
+### Current vnpy mapping
+- Risk: `vnpy_riskmanager`
+- Portfolio-like accounting: `vnpy_portfoliomanager`
+- Strategy-local sizing patterns across strategy apps
 
 ---
 
-## LogEngine (`vnpy/trader/engine.py`)
+## OMS / ExecutionEngine (Order Handler)
 
 ### Responsibilities
-- Consume log events and output structured logs.
+- Own canonical order state machine.
+- Convert `OrderIntent` into broker actions.
+- Execute with policy (plain, sliced, urgency profiles).
+- Publish order lifecycle events.
 
 ### Capabilities
-- Level-based logging and gateway/app source tagging.
+- Idempotent order command processing.
+- Replace/cancel/timeout handling.
+- Multi-policy execution (limit/TWAP/iceberg/etc.).
 
 ### Scope
-- Logging output only.
+- Execution correctness and order lifecycle management.
+- No alpha generation and no portfolio policy ownership.
 
 ### Limitations
-- Not a metrics/trace backend.
+- Dependent on broker adapter correctness and API behavior.
+- Must reconcile to avoid drift after disconnect/restart.
+
+### Extension Points
+- OMS variants (live, paper, backtest OMS).
+- `IExecutionPolicy` implementations.
+- routing policies by venue/symbol.
+
+### Current vnpy mapping
+- Main order routing in `vnpy/trader/engine.py` (`MainEngine.send_order`)
+- Lifecycle cache in `OmsEngine`
+- Algo execution modules: `vnpy_algotrading`, parts of spread/option engines
 
 ---
 
-## EmailEngine (`vnpy/trader/engine.py`)
+## BrokerAdapter Layer
 
 ### Responsibilities
-- Asynchronous email delivery for alerts/notifications.
+- Translate canonical order/query commands to broker-specific APIs.
+- Translate broker callbacks to canonical events.
+- Maintain session, heartbeat, reconnect.
 
 ### Capabilities
-- Background queue + SMTP send.
+- Broker-specific feature mapping.
+- Callback dedupe and identifier normalization.
+- Snapshot endpoints for reconciliation.
 
 ### Scope
-- Notification transport.
+- Protocol boundary only.
+- No strategy/risk/business policy.
 
 ### Limitations
-- Depends on SMTP config and availability.
-- Best-effort; no guaranteed delivery semantics.
+- Vendor API inconsistency and outages.
+- Feature availability differs by broker.
+
+### Extension Points
+- Broker-specific adapters packaged independently.
+- specialized adapters for options/multileg features.
+
+### Current vnpy mapping
+- `vnpy/trader/gateway.py`
+- `vnpy_*` gateway packages (e.g., `vnpy_ib`, `vnpy_binance`)
 
 ---
 
-## BaseApp + App Engines (`vnpy/trader/app.py`, `vnpy_*`)
+## Accounting (Commission + Taxes + Net PnL)
 
 ### Responsibilities
-- Package feature modules as plugin units (metadata + engine + optional UI widget).
-- Implement domain logic (CTA, spread, portfolio, algo, options, risk, recorder, etc.).
+- Compute transaction costs and taxes from fills.
+- Maintain net/gross PnL views per strategy and globally.
+- Emit ledger entries and accounting summaries.
 
 ### Capabilities
-- Independent engines with dedicated event handlers.
-- Reusable app loading via `main_engine.add_app(...)`.
+- Rule-driven cost modeling by product/venue/jurisdiction.
+- Realized/unrealized PnL separation.
+- Audit-friendly ledger output.
 
 ### Scope
-- Domain-specific behavior on top of core engine/event model.
+- Post-trade accounting under portfolio ownership.
 
 ### Limitations
-- State persistence is uneven across apps.
-- App interactions can become coupled through shared events if not designed carefully.
+- Accuracy depends on complete fee/tax schedule configuration.
+- Complex jurisdictional rules may require periodic updates.
 
-### Extension Guidance
-- Keep app engine interfaces in kernel.
-- Move specialized app engines to extension packages.
-- Load by plugin ID and capability, not by hardcoded imports.
+### Extension Points
+- `IFeeTaxModel` implementations by venue/jurisdiction.
+- custom reporting modules.
+
+### Current vnpy mapping
+- Distributed across app modules; not a single centralized kernel component.
 
 ---
 
-## RiskEngine (`vnpy_riskmanager/vnpy_riskmanager/engine.py`)
+## Journal / Event Store
 
 ### Responsibilities
-- Enforce pre-trade rules before order submission.
+- Persist immutable event stream for audit/replay/recovery.
+- Support sequence-based replay.
 
 ### Capabilities
-- Rule plugin loading.
-- Intercepts order path by patching `main_engine.send_order`.
+- Append-only writes with ordering guarantees.
+- Playback by offset/time/correlation.
 
 ### Scope
-- Front-end risk gate, rule evaluation.
+- Durability and replay substrate.
 
 ### Limitations
-- Relies on in-process interception.
-- Does not replace exchange/broker-side risk controls.
+- Storage and throughput constraints if schema/events are excessive.
+- Requires schema evolution governance.
+
+### Extension Points
+- journal backend implementations.
+- snapshotting strategies.
+
+### Current vnpy mapping
+- Partial via JSON state files and DB modules; no unified canonical event journal.
 
 ---
 
-## RecorderEngine (`vnpy_datarecorder/vnpy_datarecorder/engine.py`)
+## Reconciliation Service
 
 ### Responsibilities
-- Record tick/bar/spread data into database asynchronously.
+- Compare internal vs broker orders/positions/funds.
+- Classify and resolve drift or halt system safely.
 
 ### Capabilities
-- Buffered writes via background queue.
-- Tick-to-bar aggregation support.
+- periodic snapshot diff checks.
+- auto-heal safe cases and escalate unsafe cases.
 
 ### Scope
-- Market data capture pipeline.
+- Operational consistency control.
 
 ### Limitations
-- Backpressure and data loss risks if source rate exceeds processing/storage capacity.
+- Broker snapshot APIs may be delayed/incomplete.
+- Aggressive auto-heal policies can create side effects if not validated.
+
+### Extension Points
+- reconciliation policies per venue/asset class.
+- mismatch severity policy plugins.
+
+### Current vnpy mapping
+- Usually user/engine specific logic; not a unified dedicated service.
 
 ---
 
-## Datafeed Layer (`vnpy/trader/datafeed.py`, `vnpy_* datafeed adapters`)
+## Control Plane (Headless Ops)
 
 ### Responsibilities
-- Provide standardized historical data query interface.
+- Expose operational commands (start/stop/kill, limits updates, drain mode).
+- Enforce authn/authz and audit for operator actions.
 
 ### Capabilities
-- Pluggable provider adapters selected via settings.
+- runtime control over strategy and risk lifecycle.
+- global/symbol/strategy kill switches.
 
 ### Scope
-- Historical data retrieval only.
+- Operations and governance.
 
 ### Limitations
-- Availability/schema/granularity vary by provider.
-- Misconfiguration silently falls back to base no-op behavior.
+- If unsecured, becomes critical attack surface.
+- needs strict policy and audit discipline.
 
-### Extension Guidance
-- Provider-specific logic must stay in provider extensions.
-- Kernel should only enforce the datafeed interface and compatibility checks.
+### Extension Points
+- CLI/API frontends.
+- policy/authorization providers.
+
+### Current vnpy mapping
+- UI/manual control patterns exist; no single headless control-plane kernel by default.
 
 ---
 
-## Database Layer (`vnpy/trader/database.py`, `vnpy_* database adapters`)
+## Observability Layer
 
 ### Responsibilities
-- Persist/load bar and tick data through unified interface.
+- Provide logs, metrics, traces, and alerts across all components.
+- Surface queue lag, reject spikes, mismatch alerts, and kill-switch events.
 
 ### Capabilities
-- Pluggable database backends (sqlite/mysql/postgresql/mongodb/etc.).
-- Timezone normalization support.
+- unified telemetry pipeline.
+- component-level health and SLA indicators.
 
 ### Scope
-- Time-series persistence abstraction.
+- runtime visibility and incident response support.
 
 ### Limitations
-- Performance and consistency depend on adapter/backend.
-- No universal transactional model across all adapters.
+- poor instrumentation leaves blind spots.
+- high-cardinality metrics can become expensive.
 
-### Extension Guidance
-- Database adapters should be independent extension packages.
-- Kernel should validate declared capabilities (for example, bulk write support) before startup.
+### Extension Points
+- metric exporters and alerting backends.
+- trace correlation enrichers.
+
+### Current vnpy mapping
+- Logging exists via `LogEngine`; full distributed observability is typically external.
 
 ---
 
-## UI Layer (`vnpy/trader/ui/mainwindow.py`)
-
-### Responsibilities
-- Render trading workstation UI.
-- Load app widgets dynamically from app metadata.
-
-### Capabilities
-- Monitor components for ticks/orders/trades/positions/accounts/logs.
-- App menu and dockable widget framework.
-
-### Scope
-- Desktop interaction layer.
-
-### Limitations
-- Qt main-thread constraints for UI updates.
-- Visualization only; core correctness remains in engines/gateways.
-
----
-
-## RPC/Web Integration (`vnpy_webtrader/vnpy_webtrader/engine.py`, `vnpy_rpcservice/*`)
-
-### Responsibilities
-- Expose core trading functions over RPC/web channels.
-- Publish selected events for remote consumers.
-
-### Capabilities
-- Remote command and event distribution patterns.
-
-### Scope
-- Integration boundary for multi-process/remote clients.
-
-### Limitations
-- Security, auth, and deployment hardening are environment responsibilities.
-- Network partition/failure handling is integration-dependent.
-
----
-
-## Plugin Registry and Compatibility (Cross-Cutting)
+## Plugin Registry and Compatibility
 
 ### Responsibilities
 - Discover installed extensions via entry points.
 - Resolve plugin IDs from runtime config.
-- Validate kernel-interface compatibility before start.
-- Enforce capability requirements for selected runtime profile.
+- Validate interface compatibility/capabilities before startup.
+- Run contract tests or startup self-checks.
 
 ### Capabilities
-- Hot-swappable implementation selection at startup.
-- Contract-test execution for extension acceptance.
+- hot-swappable implementation selection at startup.
+- fail-closed startup for incompatible plugins.
 
 ### Scope
-- Boot-time validation and plugin wiring only.
+- plugin wiring and admission control.
 
 ### Limitations
-- Requires disciplined semantic versioning for interfaces.
-- Poor extension hygiene can still degrade runtime quality without strict CI gates.
+- depends on strict interface versioning discipline.
+- weak CI gates can still allow low-quality extensions.
+
+### Extension Points
+- registry backends and policy engines.
+- compatibility rule packs.
+
+### Current vnpy mapping
+- Extension ecosystem exists; full contract-based admission control is typically project-specific.
 
 ---
 
-## Data Model Contract (`vnpy/trader/object.py`)
+## Canonical Domain Model
 
 ### Responsibilities
-- Define canonical objects used across gateways, engines, apps, and UI.
+- Define immutable contracts for events and domain objects.
+- Standardize identifiers and causal tracing fields.
 
 ### Capabilities
-- Uniform field semantics (`vt_symbol`, `vt_orderid`, etc.).
-- Request-to-data conversion helpers (`create_order_data`, `create_cancel_request`).
+- cross-component interoperability.
+- replay and audit consistency.
 
 ### Scope
-- Shared domain schema and identifiers.
+- schema and contract layer only.
 
 ### Limitations
-- Canonical model may not expose every exchange-specific nuance directly.
-- Extensions may need `extra` metadata for venue-specific fields.
+- schema changes require migration/version strategy.
+- insufficient fields force unsafe use of ad-hoc metadata.
+
+### Extension Points
+- schema version adapters.
+- payload enrichers for optional domains.
+
+### Current vnpy mapping
+- `vnpy/trader/object.py` plus event constants in `vnpy/trader/event.py`
+
+---
+
+## Quick Trace Map
+
+- Market data issue: `DataService` -> adapter -> bus lag -> strategy subscribers.
+- Signal issue: `StrategyRuntime` instance state/config -> emitted `SignalIntent`.
+- Risk block issue: `PortfolioRiskEngine` rule/sizer decision + market snapshot.
+- Execution issue: `OMS` transition table + adapter callbacks + idempotency cache.
+- Position mismatch: reconciliation snapshot diff -> ledger correction or halt.

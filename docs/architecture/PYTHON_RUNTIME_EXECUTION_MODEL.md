@@ -2,6 +2,8 @@
 
 This document defines how the target architecture runs in Python, including process topology, concurrency, event transport, lifecycle, and operational controls.
 
+Product name in this document: `tiny-trader-engine` (TT).
+
 ## 1. Scope and Intent
 
 This is the execution model for the **target headless system**, not a description of vnpy internals.
@@ -386,7 +388,7 @@ tradingext-<name>/
 `pyproject.toml` entry point example:
 
 ```toml
-[project.entry-points."tradingext.oms"]
+[project.entry-points."tiny_trader_engine.oms"]
 live_oms_v1 = "tradingext_live_oms.plugin:LiveOmsPlugin"
 ```
 
