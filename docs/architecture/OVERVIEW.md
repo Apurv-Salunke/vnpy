@@ -30,8 +30,8 @@ VeighNa is designed as an event-driven trading platform where broker-specific ad
 
 ### 5. Plugin-first extensibility
 - **Why:** Users need custom gateways, apps, rules, and storage backends.
-- **Design choice:** `BaseGateway`, `BaseApp`, `BaseDatabase`, `BaseDatafeed` contracts.
-- **Effect:** Extension packages can be added with minimal core changes.
+- **Design choice:** stable contracts + pip-installable extensions discovered via plugin registry.
+- **Effect:** extension packages can be added with minimal core changes and without kernel bloat.
 
 ### 6. Runtime state + selective durability
 - **Why:** Low-latency operation and operational flexibility matter.
@@ -44,12 +44,29 @@ VeighNa is designed as an event-driven trading platform where broker-specific ad
 
 ```text
 External Venues/Data
-  -> Gateway Extensions (protocol translation)
-  -> EventEngine (queue + dispatch)
-  -> Engines (OMS/log/email + app engines)
-  -> UI / RPC / Web integrations
-  -> Database & Datafeed adapters (persistence/history)
+  -> Extension Implementations (protocol/data/strategy/risk/oms)
+  -> Kernel Runtime (event bus + lifecycle + contracts)
+  -> Operational Interfaces (control/reconciliation/observability)
 ```
+
+---
+
+## Kernel and Extension Policy
+
+Kernel should contain only:
+- canonical models and schemas
+- interfaces/contracts
+- orchestration/lifecycle/control primitives
+- plugin discovery, compatibility checks, and contract-test harnesses
+
+Extensions should contain:
+- strategy families
+- data-handler variants by use case
+- OMS variants (live/paper/backtest)
+- risk/sizer/execution-policy implementations
+- broker/data adapters and fee-tax models
+
+This separation is mandatory to preserve maintainability and release velocity.
 
 ---
 

@@ -2,6 +2,13 @@
 
 This reference is optimized for onboarding and debugging: each component includes `Responsibilities`, `Capabilities`, `Scope`, and `Limitations`.
 
+## Extension-First Rule
+
+- Component interfaces are stable contracts.
+- Concrete implementations should be shipped as pip-installable extensions.
+- Kernel should not accumulate strategy/use-case specific variants.
+- Backtest/paper/live variants should implement the same contracts and be selected by configuration.
+
 ## How To Read This System
 
 ### Main entry point
@@ -162,6 +169,11 @@ This reference is optimized for onboarding and debugging: each component include
 - State persistence is uneven across apps.
 - App interactions can become coupled through shared events if not designed carefully.
 
+### Extension Guidance
+- Keep app engine interfaces in kernel.
+- Move specialized app engines to extension packages.
+- Load by plugin ID and capability, not by hardcoded imports.
+
 ---
 
 ## RiskEngine (`vnpy_riskmanager/vnpy_riskmanager/engine.py`)
@@ -214,6 +226,10 @@ This reference is optimized for onboarding and debugging: each component include
 - Availability/schema/granularity vary by provider.
 - Misconfiguration silently falls back to base no-op behavior.
 
+### Extension Guidance
+- Provider-specific logic must stay in provider extensions.
+- Kernel should only enforce the datafeed interface and compatibility checks.
+
 ---
 
 ## Database Layer (`vnpy/trader/database.py`, `vnpy_* database adapters`)
@@ -231,6 +247,10 @@ This reference is optimized for onboarding and debugging: each component include
 ### Limitations
 - Performance and consistency depend on adapter/backend.
 - No universal transactional model across all adapters.
+
+### Extension Guidance
+- Database adapters should be independent extension packages.
+- Kernel should validate declared capabilities (for example, bulk write support) before startup.
 
 ---
 
@@ -268,6 +288,27 @@ This reference is optimized for onboarding and debugging: each component include
 ### Limitations
 - Security, auth, and deployment hardening are environment responsibilities.
 - Network partition/failure handling is integration-dependent.
+
+---
+
+## Plugin Registry and Compatibility (Cross-Cutting)
+
+### Responsibilities
+- Discover installed extensions via entry points.
+- Resolve plugin IDs from runtime config.
+- Validate kernel-interface compatibility before start.
+- Enforce capability requirements for selected runtime profile.
+
+### Capabilities
+- Hot-swappable implementation selection at startup.
+- Contract-test execution for extension acceptance.
+
+### Scope
+- Boot-time validation and plugin wiring only.
+
+### Limitations
+- Requires disciplined semantic versioning for interfaces.
+- Poor extension hygiene can still degrade runtime quality without strict CI gates.
 
 ---
 
