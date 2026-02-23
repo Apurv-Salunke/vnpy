@@ -43,13 +43,13 @@ class OptimizationSetting:
         """"""
         if end is None or step is None:
             self.params[name] = [start]
-            return True, _("固定参数添加成功")
+            return True, _("Fixed parameter added successfully")
 
         if start >= end:
-            return False, _("参数优化起始点必须小于终止点")
+            return False, _("Optimization start must be less than end")
 
         if step <= 0:
-            return False, _("参数优化步进必须大于0")
+            return False, _("Optimization step must be greater than 0")
 
         value: float = start
         value_list: list[float] = []
@@ -60,7 +60,7 @@ class OptimizationSetting:
 
         self.params[name] = value_list
 
-        return True, _("范围参数添加成功，数量{}").format(len(value_list))
+        return True, _("Range parameter added successfully, count: {}").format(len(value_list))
 
     def set_target(self, target_name: str) -> None:
         """"""
@@ -86,11 +86,11 @@ def check_optimization_setting(
 ) -> bool:
     """"""
     if not optimization_setting.generate_settings():
-        output(_("优化参数组合为空，请检查"))
+        output(_("Optimization parameter combination is empty, please check"))
         return False
 
     if not optimization_setting.target_name:
-        output(_("优化目标未设置，请检查"))
+        output(_("Optimization target not set, please check"))
         return False
 
     return True
@@ -106,8 +106,8 @@ def run_bf_optimization(
     """Run brutal force optimization"""
     settings: list[dict] = optimization_setting.generate_settings()
 
-    output(_("开始执行穷举算法优化"))
-    output(_("参数优化空间：{}").format(len(settings)))
+    output(_("Starting brute force optimization"))
+    output(_("Parameter optimization space: {}").format(len(settings)))
 
     start: float = perf_counter()
 
@@ -124,7 +124,7 @@ def run_bf_optimization(
 
         end: float = perf_counter()
         cost: int = int(end - start)
-        output(_("穷举算法优化完成，耗时{}秒").format(cost))
+        output(_("Brute force optimization completed, took {} seconds").format(cost))
 
         return results
 
@@ -197,14 +197,14 @@ def run_ga_optimization(
         pop: list = toolbox.population(pop_size)
 
         # Run ga optimization
-        output(_("开始执行遗传算法优化"))
-        output(_("参数优化空间：{}").format(total_size))
-        output(_("每代族群总数：{}").format(pop_size))
-        output(_("优良筛选个数：{}").format(mu))
-        output(_("迭代次数：{}").format(ngen))
-        output(_("交叉概率：{:.0%}").format(cxpb))
-        output(_("突变概率：{:.0%}").format(mutpb))
-        output(_("个体突变概率：{:.0%}").format(indpb))
+        output(_("Starting genetic algorithm optimization"))
+        output(_("Parameter optimization space: {}").format(total_size))
+        output(_("Population size per generation: {}").format(pop_size))
+        output(_("Number of elite individuals: {}").format(mu))
+        output(_("Number of generations: {}").format(ngen))
+        output(_("Crossover probability: {:.0%}").format(cxpb))
+        output(_("Mutation probability: {:.0%}").format(mutpb))
+        output(_("Gene mutation probability: {:.0%}").format(indpb))
 
         start: float = perf_counter()
 
@@ -222,7 +222,7 @@ def run_ga_optimization(
         end: float = perf_counter()
         cost: int = int(end - start)
 
-        output(_("遗传算法优化完成，耗时{}秒").format(cost))
+        output(_("Genetic algorithm optimization completed, took {} seconds").format(cost))
 
         results: list = list(cache.values())
         results.sort(reverse=True, key=key_func)

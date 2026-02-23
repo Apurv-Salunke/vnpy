@@ -43,7 +43,7 @@ class CtaBacktesterApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = _("CTA回测")
+    display_name: str = _("CTABacktest")
     engine_class: type[BacktesterEngine] = BacktesterEngine
     widget_name: str = "BacktesterManager"
     icon_name: str = str(app_path.joinpath("ui", "backtester.ico"))

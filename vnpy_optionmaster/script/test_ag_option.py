@@ -1,4 +1,4 @@
-"""隐含波动率计算测试脚本"""
+"""Implied volatilityCalculateTestscript"""
 import sys
 import io
 from collections.abc import Callable
@@ -11,29 +11,29 @@ from vnpy_optionmaster.pricing import (
 )
 
 
-# 测试数据
+# TestData
 TEST_DATA: list[dict] = [
-    # 深度虚值期权
-    {"symbol": "ag2601P14700", "price": 22.0, "underlying": 16143.0, "strike": 14700, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
-    {"symbol": "ag2601P14800", "price": 27.0, "underlying": 16143.0, "strike": 14800, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
-    {"symbol": "ag2601P14900", "price": 32.5, "underlying": 16143.0, "strike": 14900, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
-    {"symbol": "ag2601P15000", "price": 41.0, "underlying": 16143.0, "strike": 15000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
-    # 平值期权
-    {"symbol": "ag2601P16100", "price": 350.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": -1, "category": "平值"},
-    {"symbol": "ag2601C16100", "price": 340.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": 1, "category": "平值"},
-    # 深度实值期权
-    {"symbol": "ag2601C14000", "price": 2200.0, "underlying": 16143.0, "strike": 14000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "深度实值"},
-    {"symbol": "ag2601C13000", "price": 3200.0, "underlying": 16143.0, "strike": 13000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "深度实值"},
-    {"symbol": "ag2601P19000", "price": 2920.0, "underlying": 16143.0, "strike": 19000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度实值"},
+    # deep OTMOption
+    {"symbol": "ag2601P14700", "price": 22.0, "underlying": 16143.0, "strike": 14700, "r": 0.02, "t": 0.0167, "cp": -1, "category": "deep OTM"},
+    {"symbol": "ag2601P14800", "price": 27.0, "underlying": 16143.0, "strike": 14800, "r": 0.02, "t": 0.0167, "cp": -1, "category": "deep OTM"},
+    {"symbol": "ag2601P14900", "price": 32.5, "underlying": 16143.0, "strike": 14900, "r": 0.02, "t": 0.0167, "cp": -1, "category": "deep OTM"},
+    {"symbol": "ag2601P15000", "price": 41.0, "underlying": 16143.0, "strike": 15000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "deep OTM"},
+    # at-the-moneyOption
+    {"symbol": "ag2601P16100", "price": 350.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": -1, "category": "at-the-money"},
+    {"symbol": "ag2601C16100", "price": 340.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": 1, "category": "at-the-money"},
+    # deep ITMOption
+    {"symbol": "ag2601C14000", "price": 2200.0, "underlying": 16143.0, "strike": 14000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "deep ITM"},
+    {"symbol": "ag2601C13000", "price": 3200.0, "underlying": 16143.0, "strike": 13000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "deep ITM"},
+    {"symbol": "ag2601P19000", "price": 2920.0, "underlying": 16143.0, "strike": 19000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "deep ITM"},
 ]
 
 
 def verify_impv(model_name: str, calc_price_func: Callable, calc_impv_func: Callable, use_n: bool = False) -> dict:
-    """验证隐含波动率计算结果"""
+    """VerifyImplied volatilityCalculateresult"""
     results = {"success": 0, "total": len(TEST_DATA), "details": []}
 
     for data in TEST_DATA:
-        # 计算隐含波动率
+        # CalculateImplied volatility
         if use_n:
             impv = calc_impv_func(
                 price=data["price"],
@@ -53,7 +53,7 @@ def verify_impv(model_name: str, calc_price_func: Callable, calc_impv_func: Call
                 cp=data["cp"]
             )
 
-        # 反向验证
+        # reversetoVerify
         if impv > 0:
             if use_n:
                 calc_price = calc_price_func(
@@ -94,11 +94,11 @@ def verify_impv(model_name: str, calc_price_func: Callable, calc_impv_func: Call
 
 
 def print_results(model_name: str, results: dict) -> None:
-    """打印测试结果"""
+    """printTestresult"""
     print(f"\n{'='*70}")
-    print(f"{model_name} 测试结果")
+    print(f"{model_name} Testresult")
     print(f"{'='*70}")
-    print(f"{'合约':15s} {'类别':8s} {'隐含波动率':>12s} {'误差':>10s} {'状态':>6s}")
+    print(f"{'Contract':15s} {'Classtype':8s} {'Implied volatility':>12s} {'error':>10s} {'Status':>6s}")
     print("-" * 70)
 
     for d in results["details"]:
@@ -107,27 +107,27 @@ def print_results(model_name: str, results: dict) -> None:
 
     rate = results["success"] / results["total"] * 100
     print("-" * 70)
-    print(f"成功率: {results['success']}/{results['total']} ({rate:.1f}%)")
+    print(f"Successrate: {results['success']}/{results['total']} ({rate:.1f}%)")
 
 
 def main() -> None:
-    """主函数"""
+    """mainFunction"""
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
     print("=" * 70)
-    print("期权定价模型隐含波动率计算测试")
+    print("OptionPricing ModelImplied volatilityCalculateTest")
     print("=" * 70)
 
-    # 测试二叉树模型
+    # Testbinomialtreemodel
     bt_results = verify_impv(
         "Binomial Tree",
         binomial_tree.calculate_price,
         binomial_tree.calculate_impv,
         use_n=True
     )
-    print_results("Binomial Tree (二叉树)", bt_results)
+    print_results("Binomial Tree (binomialtree)", bt_results)
 
-    # 测试 Black-76 模型
+    # Test Black-76 model
     b76_results = verify_impv(
         "Black-76",
         black_76.calculate_price,
@@ -136,7 +136,7 @@ def main() -> None:
     )
     print_results("Black-76", b76_results)
 
-    # 测试 Black-Scholes 模型
+    # Test Black-Scholes model
     bs_results = verify_impv(
         "Black-Scholes",
         black_scholes.calculate_price,
@@ -145,21 +145,21 @@ def main() -> None:
     )
     print_results("Black-Scholes", bs_results)
 
-    # 测试 Cython 版本
+    # Test Cython version
     print(f"\n{'='*70}")
-    print("Cython 版本测试")
+    print("Cython versionTest")
     print(f"{'='*70}")
 
-    # 测试二叉树模型 (Cython)
+    # Testbinomialtreemodel (Cython)
     bt_cython_results = verify_impv(
         "Binomial Tree Cython",
         binomial_tree_cython.calculate_price,
         binomial_tree_cython.calculate_impv,
         use_n=True
     )
-    print_results("Binomial Tree Cython (二叉树)", bt_cython_results)
+    print_results("Binomial Tree Cython (binomialtree)", bt_cython_results)
 
-    # 测试 Black-76 模型 (Cython)
+    # Test Black-76 model (Cython)
     b76_cython_results = verify_impv(
         "Black-76 Cython",
         black_76_cython.calculate_price,
@@ -168,7 +168,7 @@ def main() -> None:
     )
     print_results("Black-76 Cython", b76_cython_results)
 
-    # 测试 Black-Scholes 模型 (Cython)
+    # Test Black-Scholes model (Cython)
     bs_cython_results = verify_impv(
         "Black-Scholes Cython",
         black_scholes_cython.calculate_price,
@@ -177,11 +177,11 @@ def main() -> None:
     )
     print_results("Black-Scholes Cython", bs_cython_results)
 
-    # 汇总
+    # summaryTotal
     print(f"\n{'='*70}")
-    print("汇总统计")
+    print("summaryTotalstatistics")
     print(f"{'='*70}")
-    print(f"{'模型':25s} {'成功率':>15s}")
+    print(f"{'model':25s} {'Successrate':>15s}")
     print("-" * 45)
     for name, results in [
         ("Binomial Tree", bt_results),

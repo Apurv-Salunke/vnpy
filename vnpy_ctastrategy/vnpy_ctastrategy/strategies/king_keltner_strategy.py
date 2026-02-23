@@ -13,7 +13,7 @@ from vnpy_ctastrategy import (
 class KingKeltnerStrategy(CtaTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     kk_length: int = 11
     kk_dev: float = 1.6
@@ -32,7 +32,7 @@ class KingKeltnerStrategy(CtaTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.bg: BarGenerator = BarGenerator(self.on_bar, 5, self.on_5min_bar)
         self.am: ArrayManager = ArrayManager()
@@ -47,13 +47,13 @@ class KingKeltnerStrategy(CtaTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
         """

@@ -15,12 +15,12 @@ EVENT_RPC_LOG = "eRpcLog"
 
 class RpcEngine(BaseEngine):
     """
-    VeighNa的rpc服务引擎。
+    VeighNarpcServiceEngine。
     """
     setting_filename: str = "rpc_service_setting.json"
 
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(main_engine, event_engine, APP_NAME)
 
         self.rep_address: str = "tcp://*:2014"
@@ -33,7 +33,7 @@ class RpcEngine(BaseEngine):
         self.register_event()
 
     def init_server(self) -> None:
-        """初始化服务器"""
+        """InitializeServer"""
         self.server = RpcServer()
 
         self.server.register(self.main_engine.subscribe)
@@ -56,13 +56,13 @@ class RpcEngine(BaseEngine):
         self.server.register(self.main_engine.get_all_active_orders)
 
     def load_setting(self) -> None:
-        """读取配置文件"""
+        """readConfigfile"""
         setting: dict[str, str] = load_json(self.setting_filename)
         self.rep_address = setting.get("rep_address", self.rep_address)
         self.pub_address = setting.get("pub_address", self.pub_address)
 
     def save_setting(self) -> None:
-        """保存配置文件"""
+        """Save Configfile"""
         setting: dict[str, str] = {
             "rep_address": self.rep_address,
             "pub_address": self.pub_address
@@ -70,9 +70,9 @@ class RpcEngine(BaseEngine):
         save_json(self.setting_filename, setting)
 
     def start(self, rep_address: str, pub_address: str) -> bool:
-        """启动rpc服务"""
+        """StartrpcService"""
         if self.server.is_active():
-            self.write_log("RPC服务运行中")
+            self.write_log("RPCServiceRunningin")
             return False
 
         self.rep_address = rep_address
@@ -82,41 +82,41 @@ class RpcEngine(BaseEngine):
             self.server.start(rep_address, pub_address)
         except:  # noqa
             msg: str = traceback.format_exc()
-            self.write_log(f"RPC服务启动失败：{msg}")
+            self.write_log(f"RPCServiceStartFailed：{msg}")
             return False
 
         self.save_setting()
-        self.write_log("RPC服务启动成功")
+        self.write_log("RPCServiceStartSuccess")
         return True
 
     def stop(self) -> bool:
-        """停止rpc服务"""
+        """StoprpcService"""
         if not self.server.is_active():
-            self.write_log("RPC服务未启动")
+            self.write_log("RPCServicenotStart")
             return False
 
         self.server.stop()
         self.server.join()
-        self.write_log("RPC服务已停止")
+        self.write_log("RPCServicealreadyStop")
         return True
 
     def close(self) -> None:
-        """关闭rpc服务"""
+        """CloserpcService"""
         self.stop()
 
     def register_event(self) -> None:
-        """注册事件"""
+        """RegisterEvent"""
         self.event_engine.register_general(self.process_event)
 
     def process_event(self, event: Event) -> None:
-        """调用事件"""
+        """callEvent"""
         if self.server.is_active():
             if event.type == EVENT_TIMER:
                 return
             self.server.publish("", event)
 
     def write_log(self, msg: str) -> None:
-        """输出日志"""
+        """OutputLog"""
         log: LogData = LogData(msg=msg, gateway_name=APP_NAME)
         event: Event = Event(EVENT_RPC_LOG, log)
         self.event_engine.put(event)

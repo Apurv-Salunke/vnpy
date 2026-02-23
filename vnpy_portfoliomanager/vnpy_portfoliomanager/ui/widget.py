@@ -49,18 +49,18 @@ class PortfolioManager(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("投资组合")
+        self.setWindowTitle("Portfolio")
 
         labels: list[str] = [
-            "组合名称",
-            "本地代码",
-            "开盘仓位",
-            "当前仓位",
-            "交易盈亏",
-            "持仓盈亏",
-            "总盈亏",
-            "多头成交",
-            "空头成交"
+            "Portfolio name",
+            "Local code",
+            "Opening position",
+            "Current position",
+            "Trading PnL",
+            "Position PnL",
+            "Total PnL",
+            "Long trade",
+            "Short trade"
         ]
         self.column_count: int = len(labels)
 
@@ -75,19 +75,19 @@ class PortfolioManager(QtWidgets.QWidget):
 
         self.monitor: PortfolioTradeMonitor = PortfolioTradeMonitor()
 
-        expand_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部展开")
+        expand_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Expand all")
         expand_button.clicked.connect(self.tree.expandAll)
 
-        collapse_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部折叠")
+        collapse_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Collapse all")
         collapse_button.clicked.connect(self.tree.collapseAll)
 
-        resize_button: QtWidgets.QPushButton = QtWidgets.QPushButton("调整列宽")
+        resize_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Adjust column width")
         resize_button.clicked.connect(self.resize_columns)
 
         interval_spin: QtWidgets.QSpinBox = QtWidgets.QSpinBox()
         interval_spin.setMinimum(1)
         interval_spin.setMaximum(60)
-        interval_spin.setSuffix("秒")
+        interval_spin.setSuffix("seconds")
         interval_spin.setValue(self.portfolio_engine.get_timer_interval())
         interval_spin.valueChanged.connect(self.portfolio_engine.set_timer_interval)
 
@@ -101,10 +101,10 @@ class PortfolioManager(QtWidgets.QWidget):
         hbox1.addWidget(collapse_button)
         hbox1.addWidget(resize_button)
         hbox1.addStretch()
-        hbox1.addWidget(QtWidgets.QLabel("刷新频率"))
+        hbox1.addWidget(QtWidgets.QLabel("Refresh frequency"))
         hbox1.addWidget(interval_spin)
         hbox1.addStretch()
-        hbox1.addWidget(QtWidgets.QLabel("组合成交"))
+        hbox1.addWidget(QtWidgets.QLabel("Portfolio trade"))
         hbox1.addWidget(self.reference_combo)
 
         hbox2: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
@@ -130,7 +130,7 @@ class PortfolioManager(QtWidgets.QWidget):
         """"""
         trades: list[TradeData] = self.main_engine.get_all_trades()
         for trade in trades:
-            # 过滤掉没有用reference的成交
+            # FilterdropnousereferenceTrade
             if hasattr(trade, "reference"):
                 self.monitor.update_trade(trade)
 
@@ -251,17 +251,17 @@ class PortfolioTradeMonitor(QtWidgets.QTableWidget):
     def init_ui(self) -> None:
         """"""
         labels: list[str] = [
-            "组合",
-            "成交号",
-            "委托号",
-            "代码",
-            "交易所",
-            "方向",
-            "开平",
-            "价格",
-            "数量",
-            "时间",
-            "接口",
+            "Portfolio",
+            "TradeID",
+            "Order ID",
+            "Code",
+            "Exchange",
+            "Direction",
+            "Offset",
+            "Price",
+            "Volume",
+            "Time",
+            "Gateway",
         ]
         self.setColumnCount(len(labels))
         self.setHorizontalHeaderLabels(labels)

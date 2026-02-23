@@ -1,4 +1,4 @@
-# VeighNa框架的RQData数据服务接口
+# RQData Datafeed for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,50 +11,85 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-基于米筐rqdatac模块的3.1.4版本开发，支持以下中国金融市场的K线和Tick数据：
+Developed based on Ricequant rqdatac module version 3.1.4. Supports K-line and Tick data for the following Chinese financial markets:
 
-* 期货和期货期权：
-  * CFFEX：中国金融期货交易所
-  * SHFE：上海期货交易所
-  * DCE：大连商品交易所
-  * CZCE：郑州商品交易所
-  * INE：上海国际能源交易中心
-  * GFEX：广州期货交易所
-* 贵金属现货：
-  * SGE：上海黄金交易所
-* 股票和ETF期权：
-  * SSE：上海证券交易所
-  * SZSE：深圳证券交易所
+**Futures and Futures Options:**
+- CFFEX: China Financial Futures Exchange
+- SHFE: Shanghai Futures Exchange
+- DCE: Dalian Commodity Exchange
+- CZCE: Zhengzhou Commodity Exchange
+- INE: Shanghai International Energy Exchange
+- GFEX: Guangzhou Futures Exchange
 
-注意：需要购买相应的数据服务权限，可以通过[该页面](https://www.ricequant.com/welcome/purchase?utm_source=vnpy)申请试用。
+**Precious Metals Spot:**
+- SGE: Shanghai Gold Exchange
 
+**Stocks and ETF Options:**
+- SSE: Shanghai Stock Exchange
+- SZSE: Shenzhen Stock Exchange
 
-## 安装
+**Note:** Requires appropriate data service subscription. Apply for trial [here](https://www.ricequant.com/welcome/purchase?utm_source=vnpy).
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+## Installation
 
-直接使用pip命令：
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-```
+**Install via pip:**
+```bash
 pip install vnpy_rqdata
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+# Download and extract source code
+cd vnpy_rqdata
 pip install .
 ```
 
+## Usage
 
-## 使用
+When using Ricequant RQData in VeighNa, configure the following fields in global settings:
 
-在VeighNa中使用米筐RQData时，需要在全局配置中填写以下字段信息：
+| Name | Description | Required | Example |
+|------|-------------|----------|---------|
+| datafeed.name | Datafeed name | Yes | rqdata |
+| datafeed.username | Username | Yes | (Your license) |
+| datafeed.password | Password | Yes | (RQData token after purchase/trial) |
 
-|名称|含义|必填|举例|
-|---------|----|---|---|
-|datafeed.name|名称|是|rqdata|
-|datafeed.username|用户名|是|license|
-|datafeed.password|密码|是|(请填写购买或申请试用RQData后，RQData提供的token)|
+## Supported Data Types
+
+| Type | Description |
+|------|-------------|
+| 1m | 1-minute K-line |
+| 5m | 5-minute K-line |
+| 15m | 15-minute K-line |
+| 30m | 30-minute K-line |
+| 1h | 1-hour K-line |
+| 1d | Daily K-line |
+| tick | Tick data |
+
+## Example
+
+```python
+from vnpy.trader.datafeed import get_datafeed
+
+datafeed = get_datafeed()
+
+# Query historical data
+bars = datafeed.query_bar_history(
+    symbol="IF2401",
+    exchange=Exchange.CFFEX,
+    interval=Interval.MINUTE,
+    start=datetime(2024, 1, 1),
+    end=datetime(2024, 12, 31)
+)
+```
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_rqdata
+- **RQData:** https://www.ricequant.com/

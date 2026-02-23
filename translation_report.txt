@@ -1,0 +1,1425 @@
+Translation Report
+================================================================================
+
+Total files translated: 103
+Total Chinese strings translated: 2468
+
+Files modified:
+--------------------------------------------------------------------------------
+
+/Users/apurv/Desktop/algo-trading/vnpy/examples/data_recorder/data_recorder.py:
+  Line 84: # AdddataRecord引擎，for recordingTickdata to database -> # AdddataRecordEngine，for recordingTickdata to database
+  Line 108: recorder_engine.add_bar_recording(contract.vt_symbol)       # RecordminuteK线 -> recorder_engine.add_bar_recording(contract.vt_symbol)       # RecordminuteK线
+
+/Users/apurv/Desktop/algo-trading/vnpy/examples/no_ui/run.py:
+  Line 78: logger.info("CTA策略初始化完成") -> logger.info("CTAStrategyInitializeCompleted")
+  Line 82: logger.info("CTA策略全部初始化") -> logger.info("CTAStrategyAllInitialize")
+  Line 85: logger.info("CTA策略全部启动") -> logger.info("CTAStrategyAllStart")
+  Line 101: print("启动CTA策略守护父进程") -> print("StartCTAStrategy守护父进程")
+
+/Users/apurv/Desktop/algo-trading/vnpy/translate_chinese.py:
+  Line 17: "算法": "Algo", -> "Algo": "Algo",
+  Line 18: "引擎": "Engine", -> "Engine": "Engine",
+  Line 19: "委托": "Order", -> "Order": "Order",
+  Line 20: "成交": "Trade", -> "Trade": "Trade",
+  Line 21: "行情": "Market data", -> "Market data": "Market data",
+  Line 22: "持仓": "Position", -> "Position": "Position",
+  Line 23: "资金": "Account", -> "Account": "Account",
+  Line 24: "合约": "Contract", -> "Contract": "Contract",
+  Line 25: "启动": "Start", -> "Start": "Start",
+  Line 26: "停止": "Stop", -> "Stop": "Stop",
+  Line 27: "暂停": "Pause", -> "Pause": "Pause",
+  Line 28: "恢复": "Resume", -> "Resume": "Resume",
+  Line 29: "初始化": "Initialize", -> "Initialize": "Initialize",
+  Line 30: "关闭": "Close", -> "Close": "Close",
+  Line 31: "载入": "Load", -> "Load": "Load",
+  Line 32: "添加": "Add", -> "Add": "Add",
+  Line 33: "获取": "Get", -> "Get": "Get",
+  Line 34: "注册": "Register", -> "Register": "Register",
+  Line 35: "处理": "Process", -> "Process": "Process",
+  Line 36: "事件": "Event", -> "Event": "Event",
+  ... and 327 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/__init__.py:
+  Line 47: display_name: str = "算法交易" -> display_name: str = "Algo Trading"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/algos/best_limit_algo.py:
+  Line 11: """最优限价算法类""" -> """Best limit algo class"""
+  Line 13: display_name: str = "BestLimit 最优限价" -> display_name: str = "BestLimit Best limit"
+  Line 36: """构造函数""" -> """Constructor"""
+  Line 39: # 参数 -> # Parameter
+  Line 43: # 变量 -> # 变量
+  Line 49: # 检查最大/最小挂单量 -> # Check max/min order volume
+  Line 51: self.write_log("最小挂单量必须大于0，算法启动失败") -> self.write_log("最小挂单量Must大于0，Start algoFailed")
+  Line 56: self.write_log("最大挂单量必须不小于最小委托量，算法启动失败") -> self.write_log("Max order volume must be >= min order volume, algo start failed")
+  Line 61: """Tick行情回调""" -> """TickMarket dataCallback"""
+  Line 76: """成交回调""" -> """Trade callback"""
+  Line 78: self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}") -> self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
+  Line 84: """委托回调""" -> """Order callback"""
+  Line 91: """最优限价买入""" -> """Best limit buy"""
+  Line 105: """最优限价卖出""" -> """Best limit sell"""
+  Line 119: """随机生成委托数量""" -> """Randomly generate order volume"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/algos/iceberg_algo.py:
+  Line 9: """冰山算法类""" -> """Iceberg algo class"""
+  Line 11: display_name: str = "Iceberg 冰山" -> display_name: str = "Iceberg Iceberg"
+  Line 34: """构造函数""" -> """Constructor"""
+  Line 37: # 参数 -> # Parameter
+  Line 41: # 变量 -> # 变量
+  Line 48: """委托回调""" -> """Order callback"""
+  Line 49: msg: str = f"委托号：{order.vt_orderid}，委托状态：{order.status.value}" -> msg: str = f"Order ID：{order.vt_orderid}，Order status：{order.status.value}"
+  Line 57: """成交回调""" -> """Trade callback"""
+  Line 59: self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}") -> self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
+  Line 65: """定时回调""" -> """Timer callback"""
+  Line 78: # 当委托完成后，发起新的委托 -> # WhenOrderCompleted后，发起NewOrder
+  Line 95: # 否则检查撤单 -> # ElseCheck撤单
+  Line 101: self.write_log("最新Tick卖一价，低于买入委托价格，之前委托可能丢失，强制撤单") -> self.write_log("最NewTick卖一价，低于BuyOrderPrice，BeforeOrder可能丢失，强制撤单")
+  Line 106: self.write_log("最新Tick买一价，高于卖出委托价格，之前委托可能丢失，强制撤单") -> self.write_log("最NewTick买一价，高于SellOrderPrice，BeforeOrder可能丢失，强制撤单")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/algos/sniper_algo.py:
+  Line 9: """狙击手算法类""" -> """Sniper algo class"""
+  Line 11: display_name: str = "Sniper 狙击手" -> display_name: str = "Sniper Sniper"
+  Line 28: """构造函数""" -> """Constructor"""
+  Line 31: # 变量 -> # 变量
+  Line 37: """Tick行情回调""" -> """TickMarket dataCallback"""
+  Line 66: """委托回调""" -> """Order callback"""
+  Line 72: """成交回调""" -> """Trade callback"""
+  Line 74: self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}") -> self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/algos/stop_algo.py:
+  Line 9: """条件委托算法类""" -> """Conditional order algo class"""
+  Line 11: display_name: str = "Stop 条件委托" -> display_name: str = "Stop Conditional order"
+  Line 33: """构造函数""" -> """Constructor"""
+  Line 36: # 参数 -> # Parameter
+  Line 39: # 变量 -> # 变量
+  Line 46: """Tick行情回调""" -> """TickMarket dataCallback"""
+  Line 63: f"停止单已触发，代码：{self.vt_symbol}，方向：{self.direction}, 价格：{self.price}，数量：{self.volume}，开平：{self.offset}") -> f"Stop order triggered，Code：{self.vt_symbol}，Direction：{self.direction}, Price：{self.price}，Volume：{self.volume}，Offset：{self.offset}")
+  Line 78: f"停止单已触发，代码：{self.vt_symbol}，方向：{self.direction}, 价格：{self.price}，数量：{self.volume}，开平：{self.offset}") -> f"Stop order triggered，Code：{self.vt_symbol}，Direction：{self.direction}, Price：{self.price}，Volume：{self.volume}，Offset：{self.offset}")
+  Line 83: """委托回调""" -> """Order callback"""
+  Line 88: """成交回调""" -> """Trade callback"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/algos/twap_algo.py:
+  Line 10: """TWAP算法类""" -> """TWAPAlgoClass"""
+  Line 12: display_name: str = "TWAP 时间加权平均" -> display_name: str = "TWAP TWAP"
+  Line 36: """构造函数""" -> """Constructor"""
+  Line 39: # 参数 -> # Parameter
+  Line 43: # 变量 -> # 变量
+  Line 55: """成交回调""" -> """Trade callback"""
+  Line 57: self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}") -> self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
+  Line 63: """定时回调""" -> """Timer callback"""
+  Line 69: self.write_log("执行时间已结束，停止算法") -> self.write_log("Execution time ended, stopping algo")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/ui/display.py:
+  Line 2: "vt_symbol": "本地代码", -> "vt_symbol": "Local code",
+  Line 3: "direction": "方向", -> "direction": "Direction",
+  Line 4: "price": "价格", -> "price": "Price",
+  Line 5: "volume": "委托数量", -> "volume": "Order volume",
+  Line 6: "time": "执行时间（秒）", -> "time": "Execution time（秒）",
+  Line 7: "interval": "每轮间隔（秒）", -> "interval": "Interval（秒）",
+  Line 8: "offset": "开平", -> "offset": "Offset",
+  Line 9: "status": "算法状态", -> "status": "Algo status",
+  Line 10: "traded_price": "成交均价", -> "traded_price": "Avg trade price",
+  Line 11: "traded": "成交数量", -> "traded": "Trade volume",
+  Line 12: "left": "剩余数量", -> "left": "Remaining volume",
+  Line 13: "order_volume": "单笔委托", -> "order_volume": "Single order",
+  Line 14: "timer_count": "本轮读秒", -> "timer_count": "Current count",
+  Line 15: "total_count": "累计读秒", -> "total_count": "Total count",
+  Line 16: "template_name": "算法模板", -> "template_name": "Algo template",
+  Line 17: "display_volume": "挂出数量", -> "display_volume": "Display volume",
+  Line 18: "price_add": "委托超价", -> "price_add": "Price offset",
+  Line 19: "step_price": "网格交易间距", -> "step_price": "Grid spacing",
+  Line 20: "step_volume": "网格交易数量", -> "step_volume": "Grid volume",
+  Line 21: "order_type": "委托类型", -> "order_type": "Order type",
+  ... and 10 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_algotrading/vnpy_algotrading/ui/widget.py:
+  Line 23: """算法启动控件""" -> """Algo start widget"""
+  Line 30: """构造函数""" -> """Constructor"""
+  Line 59: """使用默认配置初始化输入框和表单布局""" -> """Initialize input fields and form layout with default config"""
+  Line 78: start_algo_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动算法") -> start_algo_button: QtWidgets.QPushButton = QtWidgets.QPushButton("StartAlgo")
+  Line 82: load_csv_button: QtWidgets.QPushButton = QtWidgets.QPushButton("CSV启动") -> load_csv_button: QtWidgets.QPushButton = QtWidgets.QPushButton("CSVStart")
+  Line 95: """加载CSV文件中的算法配置""" -> """LoadCSV文件中Algo config"""
+  Line 96: # 从对话框获取csv地址 -> # From对话框GetcsvAddress
+  Line 99: "加载算法配置", -> "LoadAlgo config",
+  Line 107: # 创建csv dictReader -> # Createcsv dictReader
+  Line 115: "CSV文件格式错误", -> "CSV文件格式Error",
+  Line 116: "CSV文件为空或格式不正确，无法识别列名。请检查文件是否包含标题行，并确保格式正确。" -> "CSV文件Is emptyOr格式不正确，无法识别列名。请Check文件是否包含标题行，并确保格式正确。"
+  Line 120: # 检查csv文件是否有字段缺失 -> # Checkcsv文件是否有Field missing
+  Line 125: "字段缺失", -> "Field missing",
+  Line 126: f"CSV文件缺失算法{self.template_name}所需字段{field_name}" -> f"CSV文件缺失Algo{self.template_name}所需字段{field_name}"
+  Line 133: # 用模版名初始化算法配置 -> # Initialize algo config with template name
+  Line 136: # 读取csv文件每行中各个字段内容 -> # 读取csv文件每行中各个字段内容
+  Line 149: "参数错误", -> "Parameter error",
+  Line 150: f"{field_name}参数类型应为{field_type}，请检查！" -> f"{field_name}ParameterClass型应为{field_type}，请Check！"
+  Line 156: # 将setting添加到settings -> # 将settingAddTosettings
+  Line 159: # 当没有错误发生时启动算法 -> # Start algo when no errors occur
+  ... and 54 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctabacktester/vnpy_ctabacktester/__init__.py:
+  Line 46: display_name: str = _("CTA回测") -> display_name: str = _("CTABacktest")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctabacktester/vnpy_ctabacktester/engine.py:
+  Line 60: self.write_log(_("初始化CTA回测引擎")) -> self.write_log(_("InitializeCTABacktestEngine"))
+  Line 67: self.write_log(_("策略文件加载完成")) -> self.write_log(_("Strategy文件LoadCompleted"))
+  Line 77: self.write_log(_("数据服务初始化成功")) -> self.write_log(_("DataServiceInitializeSuccess"))
+  Line 114: # 重载模块，确保如果策略文件中有任何修改，能够立即生效。 -> # 重载模块，确保IfStrategy文件中有任何Modify，能够立即生效。
+  Line 126: msg: str = _("策略文件{}加载失败，触发异常：\n{}").format( -> msg: str = _("Strategy文件{}LoadFailed，触发Exception：\n{}").format(
+  Line 135: self.write_log(_("策略文件重载刷新完成")) -> self.write_log(_("Strategy文件重载刷NewCompleted"))
+  Line 188: self.write_log(_("策略回测失败，历史数据为空")) -> self.write_log(_("StrategyBacktestFailed，HistoricalDataIs empty"))
+  Line 195: msg: str = _("策略回测失败，触发异常：\n{}").format(traceback.format_exc()) -> msg: str = _("StrategyBacktestFailed，触发Exception：\n{}").format(traceback.format_exc())
+  Line 226: self.write_log(_("已有任务在运行中，请等待完成")) -> self.write_log(_("已有任务InRunning中，请等待Completed"))
+  Line 314: # 0则代表不限制 -> # 0则代表不Limit
+  Line 333: self.write_log(_("多进程参数优化完成")) -> self.write_log(_("多进程ParameterOptimizationCompleted"))
+  Line 356: self.write_log(_("已有任务在运行中，请等待完成")) -> self.write_log(_("已有任务InRunning中，请等待Completed"))
+  Line 390: 执行下载任务 -> 执行下载任务
+  Line 392: self.write_log(_("{}-{}开始下载历史数据").format(vt_symbol, interval)) -> self.write_log(_("{}-{}Start下载HistoricalData").format(vt_symbol, interval))
+  Line 397: self.write_log(_("{}解析失败，请检查交易所后缀").format(vt_symbol)) -> self.write_log(_("{}解析Failed，请Check交易所后缀").format(vt_symbol))
+  Line 414: self.write_log(_("{}-{}历史数据下载完成").format(vt_symbol, interval)) -> self.write_log(_("{}-{}HistoricalData下载Completed").format(vt_symbol, interval))
+  Line 416: self.write_log(_("数据下载失败，无法获取{}的历史数据").format(vt_symbol)) -> self.write_log(_("Data下载Failed，无法Get{}HistoricalData").format(vt_symbol))
+  Line 431: self.write_log(_("{}-{}历史数据下载完成").format(vt_symbol, interval)) -> self.write_log(_("{}-{}HistoricalData下载Completed").format(vt_symbol, interval))
+  Line 433: self.write_log(_("数据下载失败，无法获取{}的历史数据").format(vt_symbol)) -> self.write_log(_("Data下载Failed，无法Get{}HistoricalData").format(vt_symbol))
+  Line 435: msg: str = _("数据下载失败，触发异常：\n{}").format(traceback.format_exc()) -> msg: str = _("Data下载Failed，触发Exception：\n{}").format(traceback.format_exc())
+  ... and 1 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctabacktester/vnpy_ctabacktester/ui/widget.py:
+  Line 76: self.setWindowTitle(_("CTA回测")) -> self.setWindowTitle(_("CTABacktest"))
+  Line 107: backtesting_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("开始回测")) -> backtesting_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("StartBacktest"))
+  Line 110: optimization_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("参数优化")) -> optimization_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("ParameterOptimization"))
+  Line 113: self.result_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("优化结果")) -> self.result_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Optimization结果"))
+  Line 117: downloading_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("下载数据")) -> downloading_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("下载Data"))
+  Line 120: self.order_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("委托记录")) -> self.order_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Order记录"))
+  Line 124: self.trade_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("成交记录")) -> self.trade_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Trade记录"))
+  Line 128: self.daily_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("每日盈亏")) -> self.daily_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("每日盈亏"))
+  Line 132: self.candle_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("K线图表")) -> self.candle_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("K线图表"))
+  Line 136: edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("代码编辑")) -> edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Code编辑"))
+  Line 139: reload_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("策略重载")) -> reload_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Strategy重载"))
+  Line 157: form.addRow(_("交易策略"), self.class_combo) -> form.addRow(_("交易Strategy"), self.class_combo)
+  Line 158: form.addRow(_("本地代码"), self.symbol_line) -> form.addRow(_("Local code"), self.symbol_line)
+  Line 159: form.addRow(_("K线周期"), self.interval_combo) -> form.addRow(_("K线周期"), self.interval_combo)
+  Line 160: form.addRow(_("开始日期"), self.start_date_edit) -> form.addRow(_("Start日期"), self.start_date_edit)
+  Line 161: form.addRow(_("结束日期"), self.end_date_edit) -> form.addRow(_("Finished日期"), self.end_date_edit)
+  Line 162: form.addRow(_("手续费率"), self.rate_line) -> form.addRow(_("手续费率"), self.rate_line)
+  Line 163: form.addRow(_("交易滑点"), self.slippage_line) -> form.addRow(_("交易滑点"), self.slippage_line)
+  Line 164: form.addRow(_("合约乘数"), self.size_line) -> form.addRow(_("Contract乘数"), self.size_line)
+  Line 165: form.addRow(_("价格跳动"), self.pricetick_line) -> form.addRow(_("Price跳动"), self.pricetick_line)
+  ... and 106 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/__init__.py:
+  Line 64: display_name: str = _("CTA策略") -> display_name: str = _("CTAStrategy")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/backtesting.py:
+  Line 163: self.output(_("开始加载历史数据")) -> self.output(_("StartLoadHistoricalData"))
+  Line 169: self.output(_("起始日期必须小于结束日期")) -> self.output(_("起始日期Must小于Finished日期"))
+  Line 186: self.output(_("加载进度：{} [{:.0%}]").format(progress_bar, progress)) -> self.output(_("Load进度：{} [{:.0%}]").format(progress_bar, progress))
+  Line 214: self.output(_("历史数据加载完成，数据量：{}").format(len(self.history_data))) -> self.output(_("HistoricalDataLoadCompleted，Data量：{}").format(len(self.history_data)))
+  Line 225: self.output(_("策略初始化完成")) -> self.output(_("StrategyInitializeCompleted"))
+  Line 229: self.output(_("开始回放历史数据")) -> self.output(_("Start回放HistoricalData"))
+  Line 240: self.output(_("触发异常，回测终止")) -> self.output(_("触发Exception，Backtest终止"))
+  Line 246: self.output(_("回放进度：{} [{:.0%}]").format(progress_bar, progress)) -> self.output(_("回放进度：{} [{:.0%}]").format(progress_bar, progress))
+  Line 249: self.output(_("历史数据回放结束")) -> self.output(_("HistoricalData回放Finished"))
+  Line 253: self.output(_("开始计算逐日盯市盈亏")) -> self.output(_("StartCalculate逐日盯市盈亏"))
+  Line 256: self.output(_("回测成交记录为空")) -> self.output(_("BacktestTrade记录Is empty"))
+  Line 293: self.output(_("逐日盯市盈亏计算完成")) -> self.output(_("逐日盯市盈亏CalculateCompleted"))
+  Line 302: self.output(_("开始计算策略统计指标")) -> self.output(_("StartCalculateStrategy统计指标"))
+  Line 307: self.output(_("回测结果为空，无法计算绩效统计指标")) -> self.output(_("Backtest结果Is empty，无法Calculate绩效统计指标"))
+  Line 362: self.output(_("回测中出现爆仓（资金小于等于0），无法计算策略统计指标")) -> self.output(_("Backtest中出现爆仓（Account小于等于0），无法CalculateStrategy统计指标"))
+  Line 453: self.output(_("首个交易日：\t{}").format(start_date)) -> self.output(_("首个交易日：\t{}").format(start_date))
+  Line 454: self.output(_("最后交易日：\t{}").format(end_date)) -> self.output(_("最后交易日：\t{}").format(end_date))
+  Line 456: self.output(_("总交易日：\t{}").format(total_days)) -> self.output(_("Total交易日：\t{}").format(total_days))
+  Line 457: self.output(_("盈利交易日：\t{}").format(profit_days)) -> self.output(_("盈利交易日：\t{}").format(profit_days))
+  Line 458: self.output(_("亏损交易日：\t{}").format(loss_days)) -> self.output(_("亏损交易日：\t{}").format(loss_days))
+  ... and 23 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/base.py:
+  Line 17: WAITING = _("等待中") -> WAITING = _("等待中")
+  Line 18: CANCELLED = _("已撤销") -> CANCELLED = _("已Cancel")
+  Line 19: TRIGGERED = _("已触发") -> TRIGGERED = _("已触发")
+  Line 23: LIVE = _("实盘") -> LIVE = _("实盘")
+  Line 24: BACKTESTING = _("回测") -> BACKTESTING = _("Backtest")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/engine.py:
+  Line 58: # 停止单状态映射 -> # Stop单Status映射
+  Line 108: self.write_log(_("CTA策略引擎初始化成功")) -> self.write_log(_("CTAStrategyEngineInitializeSuccess"))
+  Line 129: self.write_log(_("数据服务初始化成功")) -> self.write_log(_("DataServiceInitializeSuccess"))
+  Line 438: self.write_log(_("撤单失败，找不到委托{}").format(vt_orderid), strategy) -> self.write_log(_("撤单Failed，Not foundOrder{}").format(vt_orderid), strategy)
+  Line 481: self.write_log(_("委托失败，找不到合约：{}").format(strategy.vt_symbol), strategy) -> self.write_log(_("OrderFailed，Not foundContract：{}").format(strategy.vt_symbol), strategy)
+  Line 626: msg: str = _("触发异常已停止\n{}").format(traceback.format_exc()) -> msg: str = _("触发Exception已Stop\n{}").format(traceback.format_exc())
+  Line 636: self.write_log(_("创建策略失败，存在重名{}").format(strategy_name)) -> self.write_log(_("CreateStrategyFailed，Exist重名{}").format(strategy_name))
+  Line 641: self.write_log(_("创建策略失败，找不到策略类{}").format(class_name)) -> self.write_log(_("CreateStrategyFailed，Not foundStrategyClass{}").format(class_name))
+  Line 645: self.write_log(_("创建策略失败，本地代码缺失交易所后缀")) -> self.write_log(_("CreateStrategyFailed，Local code缺失交易所后缀"))
+  Line 650: self.write_log(_("创建策略失败，本地代码的交易所后缀不正确")) -> self.write_log(_("CreateStrategyFailed，Local code交易所后缀不正确"))
+  Line 678: self.write_log(_("{}已经完成初始化，禁止重复操作").format(strategy_name)) -> self.write_log(_("{}已经CompletedInitialize，禁止Duplicate操作").format(strategy_name))
+  Line 681: self.write_log(_("{}开始执行初始化").format(strategy_name)) -> self.write_log(_("{}Start执行Initialize").format(strategy_name))
+  Line 701: self.write_log(_("行情订阅失败，找不到合约{}").format(strategy.vt_symbol), strategy) -> self.write_log(_("Market dataSubscribeFailed，Not foundContract{}").format(strategy.vt_symbol), strategy)
+  Line 706: self.write_log(_("{}初始化完成").format(strategy_name)) -> self.write_log(_("{}InitializeCompleted").format(strategy_name))
+  Line 714: self.write_log(_("策略{}启动失败，请先初始化").format(strategy.strategy_name)) -> self.write_log(_("Strategy{}StartFailed，请先Initialize").format(strategy.strategy_name))
+  Line 718: self.write_log(_("{}已经启动，请勿重复操作").format(strategy_name)) -> self.write_log(_("{}已经Start，请勿Duplicate操作").format(strategy_name))
+  Line 765: self.write_log(_("策略{}移除失败，请先停止").format(strategy.strategy_name)) -> self.write_log(_("Strategy{}移除Failed，请先Stop").format(strategy.strategy_name))
+  Line 787: self.write_log(_("策略{}移除成功").format(strategy.strategy_name)) -> self.write_log(_("Strategy{}移除Success").format(strategy.strategy_name))
+  Line 818: # 重载模块，确保如果策略文件中有任何修改，能够立即生效。 -> # 重载模块，确保IfStrategy文件中有任何Modify，能够立即生效。
+  Line 830: msg: str = _("策略文件{}加载失败，触发异常：\n{}").format(module_name, traceback.format_exc()) -> msg: str = _("Strategy文件{}LoadFailed，触发Exception：\n{}").format(module_name, traceback.format_exc())
+  ... and 1 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/atr_rsi_strategy.py:
+  Line 18: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 57: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 71: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 77: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/boll_channel_strategy.py:
+  Line 16: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 57: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 68: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 74: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/double_ma_strategy.py:
+  Line 18: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 35: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 46: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 53: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/dual_thrust_strategy.py:
+  Line 17: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 39: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 53: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 59: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/king_keltner_strategy.py:
+  Line 16: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 35: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 50: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 56: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/multi_signal_strategy.py:
+  Line 137: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 153: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 171: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 177: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/multi_timeframe_strategy.py:
+  Line 15: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 41: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 58: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 64: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/test_strategy.py:
+  Line 16: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 30: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 45: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 51: self.write_log("策略停止") -> self.write_log("StrategyStop")
+  Line 72: self.write_log(f"耗时{time_cost}毫秒") -> self.write_log(f"耗时{time_cost}毫秒")
+  Line 74: self.write_log("测试已全部完成") -> self.write_log("测试已AllCompleted")
+  Line 106: self.write_log("没有最新tick数据") -> self.write_log("没有最NewtickData")
+  Line 110: self.write_log("执行市价单测试") -> self.write_log("执行市价单测试")
+  Line 115: self.write_log("没有最新tick数据") -> self.write_log("没有最NewtickData")
+  Line 119: self.write_log("执行限价单测试") -> self.write_log("执行限价单测试")
+  Line 124: self.write_log("没有最新tick数据") -> self.write_log("没有最NewtickData")
+  Line 128: self.write_log("执行停止单测试") -> self.write_log("执行Stop单测试")
+  Line 133: self.write_log("执行全部撤单测试") -> self.write_log("执行All撤单测试")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/strategies/turtle_signal_strategy.py:
+  Line 16: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 40: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 51: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 57: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/ui/rollover.py:
+  Line 36: self.setWindowTitle(_("移仓助手")) -> self.setWindowTitle(_("移仓助手"))
+  Line 59: button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移仓")) -> button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移仓"))
+  Line 64: form.addRow(_("移仓合约"), self.old_symbol_combo) -> form.addRow(_("移仓Contract"), self.old_symbol_combo)
+  Line 65: form.addRow(_("目标合约"), self.new_symbol_line) -> form.addRow(_("目标Contract"), self.new_symbol_line)
+  Line 66: form.addRow(_("委托超价"), self.payup_spin) -> form.addRow(_("Price offset"), self.payup_spin)
+  Line 67: form.addRow(_("单笔上限"), self.max_volume_spin) -> form.addRow(_("单笔上限"), self.max_volume_spin)
+  Line 100: self.write_log(_("无法获取目标合约{}的盘口数据，请先订阅行情").format(new_symbol)) -> self.write_log(_("无法Get目标Contract{}盘口Data，请先SubscribeMarket data").format(new_symbol))
+  Line 109: self.write_log(_("策略{}尚未初始化，无法执行移仓").format(strategy.strategy_name)) -> self.write_log(_("Strategy{}尚未Initialize，无法执行移仓").format(strategy.strategy_name))
+  Line 113: self.write_log(_("策略{}正在运行中，无法执行移仓").format(strategy.strategy_name)) -> self.write_log(_("Strategy{}正InRunning中，无法执行移仓").format(strategy.strategy_name))
+  Line 187: self.write_log(_("移除老策略{}[{}]").format(name, strategy.vt_symbol)) -> self.write_log(_("移除老Strategy{}[{}]").format(name, strategy.vt_symbol))
+  Line 196: self.write_log(_("创建策略{}[{}]").format(name, vt_symbol)) -> self.write_log(_("CreateStrategy{}[{}]").format(name, vt_symbol))
+  Line 200: self.write_log(_("初始化策略{}[{}]").format(name, vt_symbol)) -> self.write_log(_("InitializeStrategy{}[{}]").format(name, vt_symbol))
+  Line 206: self.write_log(_("更新策略仓位{}[{}]").format(name, vt_symbol)) -> self.write_log(_("UpdateStrategy仓位{}[{}]").format(name, vt_symbol))
+  Line 262: msg: str = _("发出委托{}，{} {}，{}@{}").format( -> msg: str = _("发出Order{}，{} {}，{}@{}").format(
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ctastrategy/vnpy_ctastrategy/ui/widget.py:
+  Line 45: self.setWindowTitle(_("CTA策略")) -> self.setWindowTitle(_("CTAStrategy"))
+  Line 50: add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("添加策略")) -> add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AddStrategy"))
+  Line 53: init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部初始化")) -> init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllInitialize"))
+  Line 56: start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部启动")) -> start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllStart"))
+  Line 59: stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部停止")) -> stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop all"))
+  Line 62: clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("清空日志")) -> clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("清NoneLog"))
+  Line 65: roll_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移仓助手")) -> roll_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移仓助手"))
+  Line 86: find_button = QtWidgets.QPushButton(_("查找")) -> find_button = QtWidgets.QPushButton(_("查找"))
+  Line 225: self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("初始化")) -> self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Initialize"))
+  Line 228: self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("启动")) -> self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Start"))
+  Line 232: self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("停止")) -> self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop"))
+  Line 236: self.edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("编辑")) -> self.edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("编辑"))
+  Line 239: self.remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移除")) -> self.remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移除"))
+  Line 384: "display": _("停止委托号"), -> "display": _("StopOrder ID"),
+  Line 388: "vt_orderids": {"display": _("限价委托号"), "cell": BaseCell, "update": True}, -> "vt_orderids": {"display": _("限价Order ID"), "cell": BaseCell, "update": True},
+  Line 389: "vt_symbol": {"display": _("本地代码"), "cell": BaseCell, "update": False}, -> "vt_symbol": {"display": _("Local code"), "cell": BaseCell, "update": False},
+  Line 390: "direction": {"display": _("方向"), "cell": EnumCell, "update": False}, -> "direction": {"display": _("Direction"), "cell": EnumCell, "update": False},
+  Line 391: "offset": {"display": _("开平"), "cell": EnumCell, "update": False}, -> "offset": {"display": _("Offset"), "cell": EnumCell, "update": False},
+  Line 392: "price": {"display": _("价格"), "cell": BaseCell, "update": False}, -> "price": {"display": _("Price"), "cell": BaseCell, "update": False},
+  Line 393: "volume": {"display": _("数量"), "cell": BaseCell, "update": False}, -> "volume": {"display": _("Volume"), "cell": BaseCell, "update": False},
+  ... and 11 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_datamanager/vnpy_datamanager/__init__.py:
+  Line 45: display_name: str = "数据管理" -> display_name: str = "DataManager"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_datamanager/vnpy_datamanager/ui/widget.py:
+  Line 15: Interval.MINUTE: "分钟线", -> Interval.MINUTE: "分钟线",
+  Line 16: Interval.HOUR: "小时线", -> Interval.HOUR: "小时线",
+  Line 17: Interval.DAILY: "日线", -> Interval.DAILY: "日线",
+  Line 34: self.setWindowTitle("数据管理") -> self.setWindowTitle("DataManager")
+  Line 39: refresh_button: QtWidgets.QPushButton = QtWidgets.QPushButton("刷新") -> refresh_button: QtWidgets.QPushButton = QtWidgets.QPushButton("刷New")
+  Line 42: import_button: QtWidgets.QPushButton = QtWidgets.QPushButton("导入数据") -> import_button: QtWidgets.QPushButton = QtWidgets.QPushButton("ImportData")
+  Line 45: update_button: QtWidgets.QPushButton = QtWidgets.QPushButton("更新数据") -> update_button: QtWidgets.QPushButton = QtWidgets.QPushButton("UpdateData")
+  Line 48: download_button: QtWidgets.QPushButton = QtWidgets.QPushButton("下载数据") -> download_button: QtWidgets.QPushButton = QtWidgets.QPushButton("下载Data")
+  Line 71: "数据", -> "Data",
+  Line 72: "本地代码", -> "Local code",
+  Line 73: "代码", -> "Code",
+  Line 74: "交易所", -> "交易所",
+  Line 75: "数据量", -> "Data量",
+  Line 76: "开始时间", -> "Start time",
+  Line 77: "结束时间", -> "End time",
+  Line 90: "时间", -> "Time",
+  Line 91: "开盘价", -> "开盘价",
+  Line 92: "最高价", -> "最高价",
+  Line 93: "最低价", -> "最低价",
+  Line 94: "收盘价", -> "收盘价",
+  ... and 65 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_datarecorder/vnpy_datarecorder/__init__.py:
+  Line 47: display_name: str = "行情记录" -> display_name: str = "Market data记录"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_datarecorder/vnpy_datarecorder/engine.py:
+  Line 54: self.filter_dt: datetime = datetime.now(DB_TZ)      # Tick数据过滤的时间戳 -> self.filter_dt: datetime = datetime.now(DB_TZ)      # TickDataFilterTime戳
+  Line 55: self.filter_window: int = 60                        # Tick数据过滤的时间窗口，默认60秒 -> self.filter_window: int = 60                        # TickDataFilterTime窗口，Default60秒
+  Line 56: self.filter_delta: timedelta                        # Tick数据过滤的时间偏差对象 -> self.filter_delta: timedelta                        # TickDataFilterTime偏差Object
+  Line 101: self.write_log(f"触发异常，录制已停止：\n{info}") -> self.write_log(f"触发Exception，Record已Stop：\n{info}")
+  Line 118: self.write_log(f"已在K线记录列表中：{vt_symbol}") -> self.write_log(f"已InK线记录List中：{vt_symbol}")
+  Line 124: self.write_log(f"找不到合约：{vt_symbol}") -> self.write_log(f"Not foundContract：{vt_symbol}")
+  Line 140: self.write_log(f"添加K线记录成功：{vt_symbol}") -> self.write_log(f"AddK线记录Success：{vt_symbol}")
+  Line 145: self.write_log(f"已在Tick记录列表中：{vt_symbol}") -> self.write_log(f"已InTick记录List中：{vt_symbol}")
+  Line 152: self.write_log(f"找不到合约：{vt_symbol}") -> self.write_log(f"Not foundContract：{vt_symbol}")
+  Line 169: self.write_log(f"添加Tick记录成功：{vt_symbol}") -> self.write_log(f"AddTick记录Success：{vt_symbol}")
+  Line 174: self.write_log(f"不在K线记录列表中：{vt_symbol}") -> self.write_log(f"不InK线记录List中：{vt_symbol}")
+  Line 181: self.write_log(f"移除K线记录成功：{vt_symbol}") -> self.write_log(f"移除K线记录Success：{vt_symbol}")
+  Line 186: self.write_log(f"不在Tick记录列表中：{vt_symbol}") -> self.write_log(f"不InTick记录List中：{vt_symbol}")
+  Line 193: self.write_log(f"移除Tick记录成功：{vt_symbol}") -> self.write_log(f"移除Tick记录Success：{vt_symbol}")
+  Line 204: # 过滤偏离本地时间戳过大的Tick数据 -> # Filter偏离本地Time戳过大TickData
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_datarecorder/vnpy_datarecorder/ui/widget.py:
+  Line 37: self.setWindowTitle("行情记录") -> self.setWindowTitle("Market data记录")
+  Line 47: self.interval_spin.setSuffix("秒") -> self.interval_spin.setSuffix("秒")
+  Line 58: add_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("添加") -> add_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Add")
+  Line 61: remove_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除") -> remove_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除")
+  Line 64: add_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("添加") -> add_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Add")
+  Line 67: remove_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除") -> remove_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除")
+  Line 81: grid.addWidget(QtWidgets.QLabel("K线记录"), 0, 0) -> grid.addWidget(QtWidgets.QLabel("K线记录"), 0, 0)
+  Line 84: grid.addWidget(QtWidgets.QLabel("Tick记录"), 1, 0) -> grid.addWidget(QtWidgets.QLabel("Tick记录"), 1, 0)
+  Line 89: form.addRow("本地代码", self.symbol_line) -> form.addRow("Local code", self.symbol_line)
+  Line 90: form.addRow("写入间隔", self.interval_spin) -> form.addRow("写入间隔", self.interval_spin)
+  Line 99: grid2.addWidget(QtWidgets.QLabel("K线记录列表"), 0, 0) -> grid2.addWidget(QtWidgets.QLabel("K线记录List"), 0, 0)
+  Line 100: grid2.addWidget(QtWidgets.QLabel("Tick记录列表"), 0, 1) -> grid2.addWidget(QtWidgets.QLabel("Tick记录List"), 0, 1)
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ib/script/run.py:
+  Line 9: """主入口函数""" -> """主入口Function"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_ib/vnpy_ib/ib_gateway.py:
+  Line 62: # 委托状态映射 -> # Order status映射
+  Line 74: # 多空方向映射 -> # 多NoneDirection映射
+  Line 80: # 委托类型映射 -> # Order type映射
+  Line 88: # 交易所映射 -> # 交易所映射
+  Line 121: # 产品类型映射 -> # ProductClass型映射
+  Line 134: # 期权类型映射 -> # OptionClass型映射
+  Line 142: # 货币类型映射 -> # 货币Class型映射
+  Line 150: # 切片数据字段映射 -> # 切片Data字段映射
+  Line 170: # 账户类型映射 -> # 账户Class型映射
+  Line 179: # 数据频率映射 -> # Data频率映射
+  Line 186: # 其他常量 -> # Others常量
+  Line 193: VeighNa用于对接IB的交易接口。 -> VeighNa用于对接IB交易Gateway。
+  Line 199: "TWS地址": "127.0.0.1", -> "TWSAddress": "127.0.0.1",
+  Line 200: "TWS端口": 7497, -> "TWSPort": 7497,
+  Line 201: "客户号": 1, -> "客户号": 1,
+  Line 202: "交易账户": "" -> "交易账户": ""
+  Line 208: """构造函数""" -> """Constructor"""
+  Line 215: """连接交易接口""" -> """Connect交易Gateway"""
+  Line 216: host: str = setting["TWS地址"] -> host: str = setting["TWSAddress"]
+  Line 217: port: int = setting["TWS端口"] -> port: int = setting["TWSPort"]
+  ... and 116 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/script/test_ag_option.py:
+  Line 1: """隐含波动率计算测试脚本""" -> """Implied volatilityCalculate测试脚本"""
+  Line 14: # 测试数据 -> # 测试Data
+  Line 16: # 深度虚值期权 -> # 深度虚值Option
+  Line 17: {"symbol": "ag2601P14700", "price": 22.0, "underlying": 16143.0, "strike": 14700, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"}, -> {"symbol": "ag2601P14700", "price": 22.0, "underlying": 16143.0, "strike": 14700, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
+  Line 18: {"symbol": "ag2601P14800", "price": 27.0, "underlying": 16143.0, "strike": 14800, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"}, -> {"symbol": "ag2601P14800", "price": 27.0, "underlying": 16143.0, "strike": 14800, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
+  Line 19: {"symbol": "ag2601P14900", "price": 32.5, "underlying": 16143.0, "strike": 14900, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"}, -> {"symbol": "ag2601P14900", "price": 32.5, "underlying": 16143.0, "strike": 14900, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
+  Line 20: {"symbol": "ag2601P15000", "price": 41.0, "underlying": 16143.0, "strike": 15000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"}, -> {"symbol": "ag2601P15000", "price": 41.0, "underlying": 16143.0, "strike": 15000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度虚值"},
+  Line 21: # 平值期权 -> # 平值Option
+  Line 22: {"symbol": "ag2601P16100", "price": 350.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": -1, "category": "平值"}, -> {"symbol": "ag2601P16100", "price": 350.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": -1, "category": "平值"},
+  Line 23: {"symbol": "ag2601C16100", "price": 340.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": 1, "category": "平值"}, -> {"symbol": "ag2601C16100", "price": 340.0, "underlying": 16143.0, "strike": 16100, "r": 0.02, "t": 0.0167, "cp": 1, "category": "平值"},
+  Line 24: # 深度实值期权 -> # 深度实值Option
+  Line 25: {"symbol": "ag2601C14000", "price": 2200.0, "underlying": 16143.0, "strike": 14000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "深度实值"}, -> {"symbol": "ag2601C14000", "price": 2200.0, "underlying": 16143.0, "strike": 14000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "深度实值"},
+  Line 26: {"symbol": "ag2601C13000", "price": 3200.0, "underlying": 16143.0, "strike": 13000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "深度实值"}, -> {"symbol": "ag2601C13000", "price": 3200.0, "underlying": 16143.0, "strike": 13000, "r": 0.02, "t": 0.0167, "cp": 1, "category": "深度实值"},
+  Line 27: {"symbol": "ag2601P19000", "price": 2920.0, "underlying": 16143.0, "strike": 19000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度实值"}, -> {"symbol": "ag2601P19000", "price": 2920.0, "underlying": 16143.0, "strike": 19000, "r": 0.02, "t": 0.0167, "cp": -1, "category": "深度实值"},
+  Line 32: """验证隐含波动率计算结果""" -> """VerifyImplied volatilityCalculate结果"""
+  Line 36: # 计算隐含波动率 -> # CalculateImplied volatility
+  Line 56: # 反向验证 -> # 反向Verify
+  Line 97: """打印测试结果""" -> """打印测试结果"""
+  Line 99: print(f"{model_name} 测试结果") -> print(f"{model_name} 测试结果")
+  Line 101: print(f"{'合约':15s} {'类别':8s} {'隐含波动率':>12s} {'误差':>10s} {'状态':>6s}") -> print(f"{'Contract':15s} {'Class别':8s} {'Implied volatility':>12s} {'误差':>10s} {'Status':>6s}")
+  ... and 16 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/__init__.py:
+  Line 45: display_name: str = "期权交易" -> display_name: str = "Option交易"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/algo.py:
+  Line 62: self.write_log("启动定价") -> self.write_log("Start定价")
+  Line 85: self.write_log("停止定价") -> self.write_log("Stop定价")
+  Line 95: self.write_log("请先启动定价") -> self.write_log("请先Start定价")
+  Line 105: self.write_log("请先设置最大委托数量") -> self.write_log("请先设置最大Order volume")
+  Line 112: self.write_log("启动交易") -> self.write_log("Start交易")
+  Line 128: self.write_log("停止交易") -> self.write_log("Stop交易")
+  Line 156: f"委托成交，{trade.direction} {trade.offset} {trade.volume}@{trade.price}，" -> f"OrderTrade，{trade.direction} {trade.offset} {trade.volume}@{trade.price}，"
+  Line 157: f"委托号[{trade.vt_orderid}，成交号[{trade.vt_tradeid}]" -> f"Order ID[{trade.vt_orderid}，Trade号[{trade.vt_tradeid}]"
+  Line 186: self.write_log(f"发出委托，{direction} {offset} {volume}@{price} [{vt_orderid}]") -> self.write_log(f"发出Order，{direction} {offset} {volume}@{price} [{vt_orderid}]")
+  Line 236: self.write_log(f"委托撤单：[{vt_orderid}]") -> self.write_log(f"Order撤单：[{vt_orderid}]")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/base.py:
+  Line 277: self.theo_delta: float = self.size                  # 标的物理论Delta固定为1 -> self.theo_delta: float = self.size                  # Underlying物TheoDelta固定为1
+  Line 514: # 推送合成期货的行情 -> # PushSynthetic futuresMarket data
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/engine.py:
+  Line 46: "Black-76 欧式期货期权": black_76, -> "Black-76 欧式FuturesOption": black_76,
+  Line 47: "Black-Scholes 欧式股票期权": black_scholes, -> "Black-Scholes 欧式StockOption": black_scholes,
+  Line 48: "二叉树 美式期货期权": binomial_tree -> "二叉树 美式FuturesOption": binomial_tree
+  Line 722: """期权风控引擎""" -> """OptionRisk controlEngine"""
+  Line 731: # 成交持仓比风控 -> # TradePosition比Risk control
+  Line 735: # 委托撤单比风控 -> # Order撤单比Risk control
+  Line 739: # 定时运行参数 -> # TimerRunningParameter
+  Line 779: """推送事件""" -> """PushEvent"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/ui/chart.py:
+  Line 62: self.setWindowTitle("波动率曲线") -> self.setWindowTitle("Volatility曲线")
+  Line 88: self.impv_chart = graphics_window.addPlot(title="隐含波动率曲线") -> self.impv_chart = graphics_window.addPlot(title="Implied volatility曲线")
+  Line 90: self.impv_chart.setLabel("left", "波动率") -> self.impv_chart.setLabel("left", "Volatility")
+  Line 91: self.impv_chart.setLabel("bottom", "行权价") -> self.impv_chart.setLabel("bottom", "行权价")
+  Line 130: name=symbol + " 看涨", -> name=symbol + " 看涨",
+  Line 137: name=symbol + " 看跌", -> name=symbol + " 看跌",
+  Line 144: name=symbol + " 定价", -> name=symbol + " 定价",
+  Line 210: self.setWindowTitle("情景分析") -> self.setWindowTitle("情景分析")
+  Line 224: self.time_change_spin.setSuffix("日") -> self.time_change_spin.setSuffix("日")
+  Line 230: "盈亏", -> "盈亏",
+  Line 237: button: QtWidgets.QPushButton = QtWidgets.QPushButton("执行分析") -> button: QtWidgets.QPushButton = QtWidgets.QPushButton("执行分析")
+  Line 246: self.ax.set_xlabel("价格涨跌 %") -> self.ax.set_xlabel("Price涨跌 %")
+  Line 247: self.ax.set_ylabel("波动率涨跌 %") -> self.ax.set_ylabel("Volatility涨跌 %")
+  Line 248: self.ax.set_zlabel("盈亏") -> self.ax.set_zlabel("盈亏")
+  Line 252: hbox1.addWidget(QtWidgets.QLabel("目标数据")) -> hbox1.addWidget(QtWidgets.QLabel("目标Data"))
+  Line 254: hbox1.addWidget(QtWidgets.QLabel("时间衰减")) -> hbox1.addWidget(QtWidgets.QLabel("Time衰减"))
+  Line 259: hbox2.addWidget(QtWidgets.QLabel("价格变动")) -> hbox2.addWidget(QtWidgets.QLabel("Price变动"))
+  Line 261: hbox2.addWidget(QtWidgets.QLabel("波动率变动")) -> hbox2.addWidget(QtWidgets.QLabel("Volatility变动"))
+  Line 292: "无法执行情景分析", -> "无法执Market data景分析",
+  Line 293: f"标的物{underlying.symbol}当前中间价为{underlying.mid_price}", -> f"Underlying物{underlying.symbol}Current中间价为{underlying.mid_price}",
+  ... and 2 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/ui/manager.py:
+  Line 100: "双向", -> "双向",
+  Line 101: "做多", -> "做多",
+  Line 102: "做空" -> "做None"
+  Line 107: if self.currentText() == "双向": -> if self.currentText() == "双向":
+  Line 112: elif self.currentText() == "做多": -> elif self.currentText() == "做多":
+  Line 210: {"name": "bid_volume", "display": "买量", "cell": BidCell}, -> {"name": "bid_volume", "display": "买量", "cell": BidCell},
+  Line 211: {"name": "bid_price", "display": "买价", "cell": BidCell}, -> {"name": "bid_price", "display": "买价", "cell": BidCell},
+  Line 212: {"name": "ask_price", "display": "卖价", "cell": AskCell}, -> {"name": "ask_price", "display": "卖价", "cell": AskCell},
+  Line 213: {"name": "ask_volume", "display": "卖量", "cell": AskCell}, -> {"name": "ask_volume", "display": "卖量", "cell": AskCell},
+  Line 214: {"name": "algo_bid_price", "display": "目标\n买价", "cell": BidCell}, -> {"name": "algo_bid_price", "display": "目标\n买价", "cell": BidCell},
+  Line 215: {"name": "algo_ask_price", "display": "目标\n卖价", "cell": AskCell}, -> {"name": "algo_ask_price", "display": "目标\n卖价", "cell": AskCell},
+  Line 216: {"name": "algo_spread", "display": "价差", "cell": MonitorCell}, -> {"name": "algo_spread", "display": "价差", "cell": MonitorCell},
+  Line 217: {"name": "ref_price", "display": "理论价", "cell": MonitorCell}, -> {"name": "ref_price", "display": "Theo价", "cell": MonitorCell},
+  Line 218: {"name": "pricing_impv", "display": "定价\n隐波", "cell": MonitorCell}, -> {"name": "pricing_impv", "display": "定价\n隐波", "cell": MonitorCell},
+  Line 219: {"name": "net_pos", "display": "净持仓", "cell": PosCell}, -> {"name": "net_pos", "display": "净Position", "cell": PosCell},
+  Line 221: {"name": "price_spread", "display": "价格\n价差", "cell": AlgoDoubleSpinBox}, -> {"name": "price_spread", "display": "Price\n价差", "cell": AlgoDoubleSpinBox},
+  Line 222: {"name": "volatility_spread", "display": "隐波\n价差", "cell": AlgoDoubleSpinBox}, -> {"name": "volatility_spread", "display": "隐波\n价差", "cell": AlgoDoubleSpinBox},
+  Line 223: {"name": "max_pos", "display": "持仓\n范围", "cell": AlgoPositiveSpinBox}, -> {"name": "max_pos", "display": "Position\n范围", "cell": AlgoPositiveSpinBox},
+  Line 224: {"name": "target_pos", "display": "目标\n持仓", "cell": AlgoSpinBox}, -> {"name": "target_pos", "display": "目标\nPosition", "cell": AlgoSpinBox},
+  Line 225: {"name": "max_order_size", "display": "最大\n委托", "cell": AlgoPositiveSpinBox}, -> {"name": "max_order_size", "display": "最大\nOrder", "cell": AlgoPositiveSpinBox},
+  ... and 29 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/ui/monitor.py:
+  Line 101: resize_action = QtGui.QAction("调整列宽", self) -> resize_action = QtGui.QAction("Adjust column width", self)
+  Line 119: {"name": "symbol", "display": "代码", "cell": MonitorCell}, -> {"name": "symbol", "display": "Code", "cell": MonitorCell},
+  Line 124: {"name": "open_interest", "display": "持仓量", "cell": MonitorCell}, -> {"name": "open_interest", "display": "Position量", "cell": MonitorCell},
+  Line 125: {"name": "volume", "display": "成交量", "cell": MonitorCell}, -> {"name": "volume", "display": "Trade量", "cell": MonitorCell},
+  Line 126: {"name": "bid_impv", "display": "买隐波", "cell": BidCell}, -> {"name": "bid_impv", "display": "买隐波", "cell": BidCell},
+  Line 127: {"name": "bid_volume", "display": "买量", "cell": BidCell}, -> {"name": "bid_volume", "display": "买量", "cell": BidCell},
+  Line 128: {"name": "bid_price", "display": "买价", "cell": BidCell}, -> {"name": "bid_price", "display": "买价", "cell": BidCell},
+  Line 129: {"name": "ask_price", "display": "卖价", "cell": AskCell}, -> {"name": "ask_price", "display": "卖价", "cell": AskCell},
+  Line 130: {"name": "ask_volume", "display": "卖量", "cell": AskCell}, -> {"name": "ask_volume", "display": "卖量", "cell": AskCell},
+  Line 131: {"name": "ask_impv", "display": "卖隐波", "cell": AskCell}, -> {"name": "ask_impv", "display": "卖隐波", "cell": AskCell},
+  Line 132: {"name": "net_pos", "display": "净持仓", "cell": PosCell}, -> {"name": "net_pos", "display": "净Position", "cell": PosCell},
+  Line 152: self.setWindowTitle("T型报价") -> self.setWindowTitle("T型报价")
+  Line 178: labels: list = call_labels + ["行权价"] + put_labels -> labels: list = call_labels + ["行权价"] + put_labels
+  Line 334: {"name": "long_pos", "display": "多仓", "cell": PosCell}, -> {"name": "long_pos", "display": "多仓", "cell": PosCell},
+  Line 335: {"name": "short_pos", "display": "空仓", "cell": PosCell}, -> {"name": "short_pos", "display": "None仓", "cell": PosCell},
+  Line 336: {"name": "net_pos", "display": "净仓", "cell": PosCell}, -> {"name": "net_pos", "display": "净仓", "cell": PosCell},
+  Line 362: self.setWindowTitle("希腊值风险") -> self.setWindowTitle("GreeksRisk")
+  Line 391: labels: list = ["类别", "代码"] + [d["display"] for d in self.headers] -> labels: list = ["Class别", "Code"] + [d["display"] for d in self.headers]
+  Line 396: row_settings.append((self.portfolio_name, "组合")) -> row_settings.append((self.portfolio_name, "Portfolio"))
+  Line 402: row_settings.append((underlying_symbol, "标的")) -> row_settings.append((underlying_symbol, "Underlying"))
+  ... and 12 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_optionmaster/vnpy_optionmaster/ui/widget.py:
+  Line 59: self.portfolio_button = QtWidgets.QPushButton("配置") -> self.portfolio_button = QtWidgets.QPushButton("Config")
+  Line 62: self.market_button = QtWidgets.QPushButton("T型报价") -> self.market_button = QtWidgets.QPushButton("T型报价")
+  Line 63: self.greeks_button = QtWidgets.QPushButton("持仓希腊值") -> self.greeks_button = QtWidgets.QPushButton("PositionGreeks")
+  Line 64: self.chain_button = QtWidgets.QPushButton("升贴水监控") -> self.chain_button = QtWidgets.QPushButton("升贴水Monitor")
+  Line 65: self.manual_button = QtWidgets.QPushButton("快速交易") -> self.manual_button = QtWidgets.QPushButton("快速交易")
+  Line 66: self.volatility_button = QtWidgets.QPushButton("波动率曲线") -> self.volatility_button = QtWidgets.QPushButton("Volatility曲线")
+  Line 67: self.hedge_button = QtWidgets.QPushButton("Delta对冲") -> self.hedge_button = QtWidgets.QPushButton("Delta对冲")
+  Line 68: self.scenario_button = QtWidgets.QPushButton("情景分析") -> self.scenario_button = QtWidgets.QPushButton("情景分析")
+  Line 69: self.eye_button = QtWidgets.QPushButton("电子眼") -> self.eye_button = QtWidgets.QPushButton("电子眼")
+  Line 70: self.pricing_button = QtWidgets.QPushButton("波动率管理") -> self.pricing_button = QtWidgets.QPushButton("VolatilityManager")
+  Line 71: self.risk_button = QtWidgets.QPushButton("风险监控") -> self.risk_button = QtWidgets.QPushButton("RiskMonitor")
+  Line 88: hbox.addWidget(QtWidgets.QLabel("期权产品")) -> hbox.addWidget(QtWidgets.QLabel("OptionProduct"))
+  Line 211: self.setWindowTitle(f"{self.portfolio_name}组合配置") -> self.setWindowTitle(f"{self.portfolio_name}PortfolioConfig")
+  Line 229: form.addRow("定价模型", self.model_name_combo) -> form.addRow("定价模型", self.model_name_combo)
+  Line 241: form.addRow("年化利率", self.interest_rate_spin) -> form.addRow("年化利率", self.interest_rate_spin)
+  Line 251: form.addRow("Greeks小数位", self.precision_spin) -> form.addRow("Greeks小数位", self.precision_spin)
+  Line 283: button: QtWidgets.QPushButton = QtWidgets.QPushButton("确定") -> button: QtWidgets.QPushButton = QtWidgets.QPushButton("确定")
+  Line 341: self.setWindowTitle("期权交易") -> self.setWindowTitle("Option交易")
+  Line 371: order_button: QtWidgets.QPushButton = QtWidgets.QPushButton("委托") -> order_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Order")
+  Line 374: cancel_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全撤") -> cancel_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全撤")
+  ... and 33 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_paperaccount/vnpy_paperaccount/__init__.py:
+  Line 46: display_name: str = "模拟交易" -> display_name: str = "模拟交易"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_paperaccount/vnpy_paperaccount/engine.py:
+  Line 169: self.write_log(f"订阅行情失败，找不到该合约{req.vt_symbol}") -> self.write_log(f"SubscribeMarket dataFailed，Not found该Contract{req.vt_symbol}")
+  Line 186: self.write_log("PaperAccount模拟交易运行中，所有委托请求将不会发往交易接口") -> self.write_log("PaperAccount模拟交易Running中，所有OrderRequest将不会发往交易Gateway")
+  Line 190: self.write_log("委托数量非法，请检查") -> self.write_log("Order volume非法，请Check")
+  Line 195: self.write_log(f"委托失败，找不到该合约{req.vt_symbol}") -> self.write_log(f"OrderFailed，Not found该Contract{req.vt_symbol}")
+  Line 276: self.write_log(f"报价失败，找不到该合约{req.vt_symbol}") -> self.write_log(f"报价Failed，Not found该Contract{req.vt_symbol}")
+  Line 340: self.write_log(f"委托被拒单，不支持的委托类型{order.type.value}") -> self.write_log(f"Order被拒单，Not supportedOrder type{order.type.value}")
+  Line 352: self.write_log("委托被拒单，可平仓位不足") -> self.write_log("Order被拒单，可Close位不足")
+  Line 362: self.write_log("委托被拒单，可平仓位不足") -> self.write_log("Order被拒单，可Close位不足")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_paperaccount/vnpy_paperaccount/ui/widget.py:
+  Line 27: self.setWindowTitle("模拟交易") -> self.setWindowTitle("模拟交易")
+  Line 35: interval_spin.setSuffix(" 秒") -> interval_spin.setSuffix(" 秒")
+  Line 42: slippage_spin.setSuffix(" 跳") -> slippage_spin.setSuffix(" 跳")
+  Line 50: clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton("清空所有持仓") -> clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton("清None所有Position")
+  Line 55: form.addRow("市价委托和停止委托的成交滑点", slippage_spin) -> form.addRow("市价Order和StopOrderTrade滑点", slippage_spin)
+  Line 56: form.addRow("模拟交易持仓盈亏的计算频率", interval_spin) -> form.addRow("模拟交易Position PnLCalculate频率", interval_spin)
+  Line 57: form.addRow("下单后立即使用当前盘口撮合", instant_check) -> form.addRow("下单后立即使用Current盘口撮合", instant_check)
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_polygon/vnpy_polygon/polygon_datafeed.py:
+  Line 23: """Polygon.io数据服务接口""" -> """Polygon.ioDataServiceGateway"""
+  Line 33: """初始化""" -> """Initialize"""
+  Line 38: output("Polygon.io数据服务初始化失败：API密钥为空！") -> output("Polygon.ioDataServiceInitializeFailed：API密钥Is empty！")
+  Line 46: output(f"Polygon.io数据服务初始化失败：{e}") -> output(f"Polygon.ioDataServiceInitializeFailed：{e}")
+  Line 53: """查询K线数据""" -> """QueryK线Data"""
+  Line 67: output(f"Polygon.io查询K线数据失败：不支持的时间周期{interval.value}") -> output(f"Polygon.ioQueryK线DataFailed：Not supportedTime周期{interval.value}")
+  Line 71: symbol = "O:" + symbol  # Polygon要求期权代码前加O:前缀 -> symbol = "O:" + symbol  # Polygon要求OptionCode前加O:前缀
+  Line 73: # polygon客户端的list_aggs方法返回一个处理分页的迭代器 -> # polygonClientlist_aggsMethodReturn一个Process分页Iteration器
+  Line 80: limit=5000      # 每次查5000条 -> limit=5000      # 每次查5000条
+  Line 85: # Polygon时间戳是毫秒，转换为datetime -> # PolygonTime戳是毫秒，转换为datetime
+  Line 88: # list_aggs可能返回超出请求范围的数据，所以需要过滤 -> # list_aggs可能Return超出Request范围Data，所以需要Filter
+  Line 110: """查询Tick数据""" -> """QueryTickData"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliomanager/vnpy_portfoliomanager/__init__.py:
+  Line 47: display_name: str = "投资组合" -> display_name: str = "Portfolio"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliomanager/vnpy_portfoliomanager/base.py:
+  Line 132: """获取数据字典""" -> """GetDataDict"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliomanager/vnpy_portfoliomanager/engine.py:
+  Line 97: # 添加成交数据 -> # AddTrade data
+  Line 101: # 自动订阅tick数据 -> # AutoSubscribetickData
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliomanager/vnpy_portfoliomanager/ui/widget.py:
+  Line 52: self.setWindowTitle("投资组合") -> self.setWindowTitle("Portfolio")
+  Line 55: "组合名称", -> "Portfolio name",
+  Line 56: "本地代码", -> "Local code",
+  Line 57: "开盘仓位", -> "Opening position",
+  Line 58: "当前仓位", -> "Current position",
+  Line 59: "交易盈亏", -> "Trading PnL",
+  Line 60: "持仓盈亏", -> "Position PnL",
+  Line 61: "总盈亏", -> "Total PnL",
+  Line 62: "多头成交", -> "Long trade",
+  Line 63: "空头成交" -> "Short trade"
+  Line 78: expand_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部展开") -> expand_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Expand all")
+  Line 81: collapse_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部折叠") -> collapse_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Collapse all")
+  Line 84: resize_button: QtWidgets.QPushButton = QtWidgets.QPushButton("调整列宽") -> resize_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Adjust column width")
+  Line 90: interval_spin.setSuffix("秒") -> interval_spin.setSuffix("秒")
+  Line 104: hbox1.addWidget(QtWidgets.QLabel("刷新频率")) -> hbox1.addWidget(QtWidgets.QLabel("Refresh frequency"))
+  Line 107: hbox1.addWidget(QtWidgets.QLabel("组合成交")) -> hbox1.addWidget(QtWidgets.QLabel("Portfolio trade"))
+  Line 133: # 过滤掉没有用reference的成交 -> # Filter掉没有用referenceTrade
+  Line 254: "组合", -> "Portfolio",
+  Line 255: "成交号", -> "Trade号",
+  Line 256: "委托号", -> "Order ID",
+  ... and 8 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/__init__.py:
+  Line 63: display_name: str = _("组合策略") -> display_name: str = _("PortfolioStrategy")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/backtesting.py:
+  Line 37: """组合策略回测引擎""" -> """PortfolioStrategyBacktestEngine"""
+  Line 43: """构造函数""" -> """Constructor"""
+  Line 80: """清理上次回测缓存数据""" -> """清理上次Backtest缓存Data"""
+  Line 106: """设置参数""" -> """设置Parameter"""
+  Line 126: """增加策略""" -> """增加Strategy"""
+  Line 133: """加载历史数据""" -> """LoadHistoricalData"""
+  Line 134: self.output(_("开始加载历史数据")) -> self.output(_("StartLoadHistoricalData"))
+  Line 140: self.output(_("起始日期必须小于结束日期")) -> self.output(_("起始日期Must小于Finished日期"))
+  Line 143: # 清理上次加载的历史数据 -> # 清理上次LoadHistoricalData
+  Line 147: # 每次加载30天历史数据 -> # 每次Load30天HistoricalData
+  Line 177: self.output(_("{}加载进度：{} [{:.0%}]").format( -> self.output(_("{}Load进度：{} [{:.0%}]").format(
+  Line 197: self.output(_("{}历史数据加载完成，数据量：{}").format(vt_symbol, data_count)) -> self.output(_("{}HistoricalDataLoadCompleted，Data量：{}").format(vt_symbol, data_count))
+  Line 199: self.output(_("所有历史数据加载完成")) -> self.output(_("所有HistoricalDataLoadCompleted"))
+  Line 202: """开始回测""" -> """StartBacktest"""
+  Line 208: # 使用指定时间的历史数据初始化策略 -> # 使用指定TimeHistoricalDataInitializeStrategy
+  Line 221: self.output(_("触发异常，回测终止")) -> self.output(_("触发Exception，Backtest终止"))
+  Line 226: self.output(_("策略初始化完成")) -> self.output(_("StrategyInitializeCompleted"))
+  Line 230: self.output(_("开始回放历史数据")) -> self.output(_("Start回放HistoricalData"))
+  Line 232: # 使用剩余历史数据进行策略回测 -> # 使用剩余HistoricalData进行StrategyBacktest
+  Line 237: self.output(_("触发异常，回测终止")) -> self.output(_("触发Exception，Backtest终止"))
+  ... and 88 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/base.py:
+  Line 8: LIVE = _("实盘") -> LIVE = _("实盘")
+  Line 9: BACKTESTING = _("回测") -> BACKTESTING = _("Backtest")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/engine.py:
+  Line 52: """组合策略引擎""" -> """PortfolioStrategyEngine"""
+  Line 75: # 数据库和数据服务 -> # Database和DataService
+  Line 80: """初始化引擎""" -> """InitializeEngine"""
+  Line 86: self.write_log(_("组合策略引擎初始化成功")) -> self.write_log(_("PortfolioStrategyEngineInitializeSuccess"))
+  Line 89: """关闭""" -> """Close"""
+  Line 93: """注册事件引擎""" -> """RegisterEventEngine"""
+  Line 102: """初始化数据服务""" -> """InitializeDataService"""
+  Line 105: self.write_log(_("数据服务初始化成功")) -> self.write_log(_("DataServiceInitializeSuccess"))
+  Line 110: """通过数据服务获取历史数据""" -> """通过DataServiceGetHistoricalData"""
+  Line 122: """行情数据推送""" -> """Market dataDataPush"""
+  Line 134: """委托数据推送""" -> """OrderDataPush"""
+  Line 144: """成交数据推送""" -> """Trade dataPush"""
+  Line 147: # 过滤重复的成交推送 -> # FilterDuplicateTradePush
+  Line 152: # 推送给策略 -> # Push给Strategy
+  Line 170: """发送委托""" -> """SendOrder"""
+  Line 173: self.write_log(_("委托失败，找不到合约：{}").format(vt_symbol), strategy) -> self.write_log(_("OrderFailed，Not foundContract：{}").format(vt_symbol), strategy)
+  Line 215: """委托撤单""" -> """Order撤单"""
+  Line 218: self.write_log(f"撤单失败，找不到委托{vt_orderid}", strategy) -> self.write_log(f"撤单Failed，Not foundOrder{vt_orderid}", strategy)
+  Line 225: """委托撤单""" -> """Order撤单"""
+  Line 230: """获取引擎类型""" -> """GetEngineClass型"""
+  ... and 60 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/strategies/pair_trading_strategy.py:
+  Line 13: """配对交易策略""" -> """配对交易Strategy"""
+  Line 15: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 55: """构造函数""" -> """Constructor"""
+  Line 75: """策略初始化回调""" -> """StrategyInitializeCallback"""
+  Line 76: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 81: """策略启动回调""" -> """StrategyStartCallback"""
+  Line 82: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 85: """策略停止回调""" -> """StrategyStopCallback"""
+  Line 86: self.write_log("策略停止") -> self.write_log("StrategyStop")
+  Line 89: """行情推送回调""" -> """Market dataPushCallback"""
+  Line 105: """K线切片回调""" -> """K线切片Callback"""
+  Line 106: # 获取期权腿K线 -> # GetOption腿K线
+  Line 110: # 必须两条期权腿行情都存在 -> # Must两条Option腿Market data都Exist
+  Line 114: # 每5分钟运行一次 -> # 每5分钟Running一次
+  Line 118: # 计算当前价差 -> # CalculateCurrent价差
+  Line 121: # 更新到价差序列 -> # UpdateTo价差序列
+  Line 129: # 计算布林带 -> # Calculate布林带
+  Line 137: # 计算目标持仓 -> # Calculate目标Position
+  Line 156: # 执行调仓交易 -> # 执行调仓交易
+  Line 159: # 推送更新事件 -> # PushUpdateEvent
+  ... and 1 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/strategies/pcp_arbitrage_strategy.py:
+  Line 11: """期权平价套利策略""" -> """Option平价套利Strategy"""
+  Line 13: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 55: """构造函数""" -> """Constructor"""
+  Line 61: # 绑定合约代码 -> # 绑定ContractCode
+  Line 81: """策略初始化回调""" -> """StrategyInitializeCallback"""
+  Line 82: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 87: """策略启动回调""" -> """StrategyStartCallback"""
+  Line 88: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 91: """策略停止回调""" -> """StrategyStopCallback"""
+  Line 92: self.write_log("策略停止") -> self.write_log("StrategyStop")
+  Line 95: """行情推送回调""" -> """Market dataPushCallback"""
+  Line 111: """K线切片回调""" -> """K线切片Callback"""
+  Line 114: # 计算PCP价差 -> # CalculatePCP价差
+  Line 123: # 计算目标仓位 -> # Calculate目标仓位
+  Line 146: # 执行调仓交易 -> # 执行调仓交易
+  Line 149: # 更新策略状态 -> # UpdateStrategyStatus
+  Line 161: """计算调仓委托价格（支持按需重载实现）""" -> """Calculate调仓OrderPrice（支持按需重载实现）"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/strategies/portfolio_boll_channel_strategy.py:
+  Line 11: """组合布林带通道策略""" -> """Portfolio布林带通道Strategy"""
+  Line 13: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 41: """构造函数""" -> """Constructor"""
+  Line 54: # 获取合约信息 -> # GetContract信息
+  Line 63: """策略初始化回调""" -> """StrategyInitializeCallback"""
+  Line 64: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 69: """策略启动回调""" -> """StrategyStartCallback"""
+  Line 70: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 73: """策略停止回调""" -> """StrategyStopCallback"""
+  Line 74: self.write_log("策略停止") -> self.write_log("StrategyStop")
+  Line 77: """行情推送回调""" -> """Market dataPushCallback"""
+  Line 81: """K线切片回调""" -> """K线切片Callback"""
+  Line 85: """2小时K线回调""" -> """2小时K线Callback"""
+  Line 88: # 更新到缓存序列 -> # UpdateTo缓存序列
+  Line 102: # 计算目标仓位 -> # Calculate目标仓位
+  Line 131: # 基于目标仓位进行委托 -> # Based on目标仓位进行Order
+  Line 158: # 推送界面更新 -> # Push界面Update
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/strategies/trend_following_strategy.py:
+  Line 12: """ATR-RSI趋势跟踪策略""" -> """ATR-RSI趋势跟踪Strategy"""
+  Line 14: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 48: """构造函数""" -> """Constructor"""
+  Line 59: # 创建每个合约的ArrayManager -> # Create每个ContractArrayManager
+  Line 67: """策略初始化回调""" -> """StrategyInitializeCallback"""
+  Line 68: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 76: """策略启动回调""" -> """StrategyStartCallback"""
+  Line 77: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 80: """策略停止回调""" -> """StrategyStopCallback"""
+  Line 81: self.write_log("策略停止") -> self.write_log("StrategyStop")
+  Line 84: """行情推送回调""" -> """Market dataPushCallback"""
+  Line 88: """K线切片回调""" -> """K线切片Callback"""
+  Line 89: # 更新K线计算RSI数值 -> # UpdateK线CalculateRSI数值
+  Line 140: """计算调仓委托价格（支持按需重载实现）""" -> """Calculate调仓OrderPrice（支持按需重载实现）"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/template.py:
+  Line 13: """组合策略模板""" -> """PortfolioStrategy模板"""
+  Line 26: """构造函数""" -> """Constructor"""
+  Line 31: # 状态控制变量 -> # Status控制变量
+  Line 35: # 持仓数据字典 -> # PositionDataDict
+  Line 36: self.pos_data: dict[str, int] = defaultdict(int)        # 实际持仓 -> self.pos_data: dict[str, int] = defaultdict(int)        # ActualPosition
+  Line 37: self.target_data: dict[str, int] = defaultdict(int)     # 目标持仓 -> self.target_data: dict[str, int] = defaultdict(int)     # 目标Position
+  Line 39: # 委托缓存容器 -> # Order缓存容器
+  Line 43: # 复制变量名列表，插入默认变量内容 -> # 复制变量名List，插入Default变量内容
+  Line 50: # 设置策略参数 -> # 设置StrategyParameter
+  Line 54: """设置策略参数""" -> """设置StrategyParameter"""
+  Line 61: """查取策略默认参数""" -> """查取StrategyDefaultParameter"""
+  Line 68: """查询策略参数""" -> """QueryStrategyParameter"""
+  Line 75: """查询策略变量""" -> """QueryStrategy变量"""
+  Line 82: """查询策略状态数据""" -> """QueryStrategyStatusData"""
+  Line 95: """策略初始化回调""" -> """StrategyInitializeCallback"""
+  Line 99: """策略启动回调""" -> """StrategyStartCallback"""
+  Line 103: """策略停止回调""" -> """StrategyStopCallback"""
+  Line 107: """行情推送回调""" -> """Market dataPushCallback"""
+  Line 112: """K线切片回调""" -> """K线切片Callback"""
+  Line 116: """成交数据更新""" -> """Trade dataUpdate"""
+  ... and 33 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/ui/widget.py:
+  Line 19: """组合策略界面""" -> """PortfolioStrategy界面"""
+  Line 25: """构造函数""" -> """Constructor"""
+  Line 40: """初始化界面""" -> """Initialize interface"""
+  Line 41: self.setWindowTitle(_("组合策略")) -> self.setWindowTitle(_("PortfolioStrategy"))
+  Line 46: add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("添加策略")) -> add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AddStrategy"))
+  Line 49: init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部初始化")) -> init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllInitialize"))
+  Line 52: start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部启动")) -> start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllStart"))
+  Line 55: stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部停止")) -> stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop all"))
+  Line 58: clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("清空日志")) -> clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("清NoneLog"))
+  Line 93: """更新策略类名显示控件""" -> """UpdateStrategyClass名Display控件"""
+  Line 99: """注册事件引擎""" -> """RegisterEventEngine"""
+  Line 107: """策略事件推送""" -> """StrategyEventPush"""
+  Line 120: """移除策略""" -> """移除Strategy"""
+  Line 125: """添加策略""" -> """AddStrategy"""
+  Line 144: """清除日志""" -> """清除Log"""
+  Line 148: """最大化显示""" -> """最大化Display"""
+  Line 153: """策略控制控件""" -> """Strategy控制控件"""
+  Line 161: """构造函数""" -> """Constructor"""
+  Line 173: """初始化界面""" -> """Initialize interface"""
+  Line 178: self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("初始化")) -> self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Initialize"))
+  ... and 29 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_portfoliostrategy/vnpy_portfoliostrategy/utility.py:
+  Line 8: """组合K线生成器""" -> """PortfolioK线生成器"""
+  Line 18: """构造函数""" -> """Constructor"""
+  Line 41: raise RuntimeError("合成日K线必须传入每日收盘时间") -> raise RuntimeError("Synthetic日K线Must传入每日收盘Time")
+  Line 44: """更新行情切片数据""" -> """UpdateMarket data切片Data"""
+  Line 86: """更新一分钟K线""" -> """Update一分钟K线"""
+  Line 95: """更新N分钟K线""" -> """UpdateN分钟K线"""
+  Line 99: # 如果没有N分钟K线则创建 -> # If没有N分钟K线则Create
+  Line 113: # 更新K线内最高价及最低价 -> # UpdateK线内最高价及最低价
+  Line 124: # 更新K线内收盘价、数量、成交额、持仓量 -> # UpdateK线内收盘价、Volume、Turnover、Position量
+  Line 130: # 检查K线是否合成完毕 -> # CheckK线是否Synthetic完毕
+  Line 137: """更新小时K线""" -> """Update小时K线"""
+  Line 141: # 如果没有小时K线则创建 -> # If没有小时K线则Create
+  Line 160: # 如果收到59分的分钟K线，更新小时K线并推送 -> # If收To59分分钟K线，Update小时K线并Push
+  Line 179: # 如果收到新的小时的分钟K线，直接推送当前的小时K线 -> # If收ToNew小时分钟K线，直接PushCurrent小时K线
+  Line 199: # 否则直接更新小时K线 -> # Else直接Update小时K线
+  Line 215: # 推送合成完毕的小时K线 -> # PushSynthetic完毕小时K线
+  Line 221: """更新日K线""" -> """Update日K线"""
+  Line 225: # 如果没有日K线则创建 -> # If没有日K线则Create
+  Line 237: # 否则更新最高价和最低价 -> # ElseUpdate最高价和最低价
+  Line 248: # 更新收盘价、成交量、成交额、持仓量 -> # Update收盘价、Trade量、Turnover、Position量
+  ... and 3 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/script/benchmark_performance.py:
+  Line 2: 性能测试：Python版本 vs Cython版本 -> 性能测试：Python版本 vs Cython版本
+  Line 3: 对比所有风控规则的 check_allowed 函数的性能差异 -> 对比所有Risk controlRule check_allowed Function性能差异
+  Line 11: """模拟合约对象""" -> """模拟ContractObject"""
+  Line 21: """模拟风控引擎""" -> """模拟Risk controlEngine"""
+  Line 29: """记录日志""" -> """记录Log"""
+  Line 33: """推送规则事件""" -> """PushRuleEvent"""
+  Line 37: """查询合约""" -> """QueryContract"""
+  Line 44: """模拟委托请求""" -> """模拟OrderRequest"""
+  Line 58: # 模拟枚举类型 -> # 模拟枚举Class型
+  Line 80: """性能测试函数""" -> """性能测试Function"""
+  Line 82: print(f"测试 {rule_name} - {config['name']}") -> print(f"测试 {rule_name} - {config['name']}")
+  Line 85: # 创建规则实例 -> # CreateRuleInstance
+  Line 90: # 预热 -> # 预热
+  Line 95: print(f"迭代次数: {iterations:,}") -> print(f"Iteration次数: {iterations:,}")
+  Line 97: # --- 场景1: 检查通过 --- -> # --- 场景1: Check通过 ---
+  Line 98: print("\n场景1: 检查通过 (快速路径)") -> print("\n场景1: Check通过 (快速路径)")
+  Line 110: print(f"  总耗时: {elapsed_time:.4f} 秒") -> print(f"  Total耗时: {elapsed_time:.4f} 秒")
+  Line 111: print(f"  每次调用: {time_per_call_ns:.2f} 纳秒") -> print(f"  每次调用: {time_per_call_ns:.2f} 纳秒")
+  Line 112: print(f"  吞吐量: {ops_per_sec:,.0f} 次/秒") -> print(f"  吞吐量: {ops_per_sec:,.0f} 次/秒")
+  Line 120: # --- 场景2: 检查失败 --- -> # --- 场景2: CheckFailed ---
+  ... and 43 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/script/test_cython_rules.py:
+  Line 2: vnpy_riskmanager模块一致性测试 -> vnpy_riskmanager模块一致性测试
+  Line 11: # 导入Python规则 -> # ImportPythonRule
+  Line 18: # 导入Cython规则 -> # ImportCythonRule
+  Line 26: print("未找到Cython规则，请先编译") -> print("未FoundCythonRule，请先编译")
+  Line 31: """模拟合约数据""" -> """模拟ContractData"""
+  Line 41: """模拟风控引擎""" -> """模拟Risk controlEngine"""
+  Line 59: """模拟委托请求""" -> """模拟OrderRequest"""
+  Line 82: """模拟委托数据""" -> """模拟OrderData"""
+  Line 99: """模拟成交数据""" -> """模拟Trade data"""
+  Line 107: """规则一致性测试的基类""" -> """Rule一致性测试基Class"""
+  Line 112: """为每个测试设置新的Python和Cython规则实例""" -> """为每个测试设置NewPython和CythonRuleInstance"""
+  Line 114: self.skipTest("规则一致性测试的基类") -> self.skipTest("Rule一致性测试基Class")
+  Line 121: """用于比较两个规则内部状态的辅助方法""" -> """用于比较两个Rule内部Status辅助Method"""
+  Line 125: # defaultdict无法直接比较 -> # defaultdict无法直接比较
+  Line 143: """测试on_order的一致性""" -> """测试on_order一致性"""
+  Line 144: self.assert_state_equal("初始状态应相同") -> self.assert_state_equal("初始Status应相同")
+  Line 146: # 活动委托 -> # 活动Order
+  Line 150: self.assert_state_equal("收到活动委托后状态应相同") -> self.assert_state_equal("收To活动Order后Status应相同")
+  Line 152: # 非活动委托 -> # 非活动Order
+  Line 156: self.assert_state_equal("委托变为非活动后状态应相同") -> self.assert_state_equal("Order变为非活动后Status应相同")
+  ... and 22 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/setup.py:
+  Line 9: """从 __init__.py 读取版本号""" -> """From __init__.py 读取版本号"""
+  Line 17: # 定义需要编译的 Cython 扩展 -> # 定义需要编译 Cython 扩展
+  Line 45: # Cython 编译配置 -> # Cython 编译Config
+  Line 47: "language_level": "3",              # Python 3 语法 -> "language_level": "3",              # Python 3 语法
+  Line 48: "boundscheck": False,               # 禁用边界检查（性能优化） -> "boundscheck": False,               # Disable边界Check（性能Optimization）
+  Line 49: "wraparound": False,                # 禁用负索引（性能优化） -> "wraparound": False,                # Disable负索引（性能Optimization）
+  Line 50: "cdivision": True,                  # C 风格除法（不检查除零） -> "cdivision": True,                  # C 风格除法（不Check除零）
+  Line 51: "initializedcheck": False,          # 禁用初始化检查 -> "initializedcheck": False,          # DisableInitializeCheck
+  Line 52: "embedsignature": True,             # 嵌入函数签名（便于调试） -> "embedsignature": True,             # 嵌入FunctionSign（便于调试）
+  Line 62: annotate=False,     # 设为 True 可生成 HTML 性能分析文件 -> annotate=False,     # 设为 True 可生成 HTML 性能分析文件
+  Line 65: "vnpy_riskmanager": ["*.pxd", "*.pyx"],  # 包含 Cython 源文件 -> "vnpy_riskmanager": ["*.pxd", "*.pyx"],  # 包含 Cython 源文件
+  Line 67: zip_safe=False,         # Cython 扩展不支持 zip 打包 -> zip_safe=False,         # Cython 扩展Not supported zip 打包
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/__init__.py:
+  Line 44: display_name: str = "交易风控" -> display_name: str = "交易Risk control"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/base.py:
+  Line 1: # 模块名称 -> # 模块Name
+  Line 4: # 事件类型 -> # EventClass型
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/engine.py:
+  Line 39: """风控引擎""" -> """Risk controlEngine"""
+  Line 44: """构造函数""" -> """Constructor"""
+  Line 47: # 规则类收集字典：key为规则名称，value为(规则类, 模块名) -> # RuleClass收集Dict：key为RuleName，value为(RuleClass, 模块名)
+  Line 50: # 风控规则实例（遍历执行检查） -> # Risk controlRuleInstance（遍历执行Check）
+  Line 53: # 风控规则配置（从文件加载） -> # Risk controlRuleConfig（From文件Load）
+  Line 56: # 风控规则字段名称映射（用于UI显示） -> # Risk controlRule字段Name映射（用于UIDisplay）
+  Line 59: # 缓存：记录哪些规则需要哪些回调 -> # 缓存：记录哪些Rule需要哪些Callback
+  Line 70: """加载本地工具""" -> """Load本地工具"""
+  Line 71: # 收集所有规则类 -> # 收集所有RuleClass
+  Line 78: # 实例化收集到的规则类 -> # Instance化收集ToRuleClass
+  Line 83: msg=f"风控规则[{class_name}]加载成功，模块：{module_name}", -> msg=f"Risk controlRule[{class_name}]LoadSuccess，模块：{module_name}",
+  Line 88: """从文件夹加载本地工具""" -> """From文件夹Load本地工具"""
+  Line 96: filename = filename.split(".")[0]       # 去掉特定版本后缀 -> filename = filename.split(".")[0]       # 去掉特定版本后缀
+  Line 102: """从模块加载本地工具""" -> """From模块Load本地工具"""
+  Line 114: msg: str = f"风控规则[{module_name}]加载失败：{traceback.format_exc()}" -> msg: str = f"Risk controlRule[{module_name}]LoadFailed：{traceback.format_exc()}"
+  Line 118: """注册规则""" -> """RegisterRule"""
+  Line 123: # 更新字段名称映射 -> # Update字段Name映射
+  Line 128: """动态替换主引擎函数""" -> """动态替换主EngineFunction"""
+  Line 133: """检测规则需要的事件类型并注册""" -> """检测Rule需要EventClass型并Register"""
+  Line 134: # 遍历所有规则，检测并缓存需要回调的规则 -> # 遍历所有Rule，检测并缓存需要CallbackRule
+  ... and 22 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/rules/active_order_rule.py:
+  Line 7: """活动委托数量检查风控规则""" -> """活动Order volumeCheckRisk controlRule"""
+  Line 9: name: str = "活动委托检查" -> name: str = "活动OrderCheck"
+  Line 12: "active_order_limit": "活动委托上限" -> "active_order_limit": "活动Order上限"
+  Line 16: "active_order_count": "活动委托数量" -> "active_order_count": "活动Order volume"
+  Line 20: """初始化""" -> """Initialize"""
+  Line 21: # 默认参数 -> # DefaultParameter
+  Line 24: # 活动委托 -> # 活动Order
+  Line 27: # 数量统计 -> # Volume统计
+  Line 31: """检查是否允许委托""" -> """Check是否允许Order"""
+  Line 33: self.write_log(f"活动委托数量{self.active_order_count}达到上限{self.active_order_limit}：{req}") -> self.write_log(f"活动Order volume{self.active_order_count}达To上限{self.active_order_limit}：{req}")
+  Line 39: """委托推送""" -> """OrderPush"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/rules/daily_limit_rule.py:
+  Line 10: """每日上限检查风控规则""" -> """每日上限CheckRisk controlRule"""
+  Line 12: name: str = "每日上限检查" -> name: str = "每日上限Check"
+  Line 15: "total_order_limit": "汇总委托上限", -> "total_order_limit": "汇TotalOrder上限",
+  Line 16: "total_cancel_limit": "汇总撤单上限", -> "total_cancel_limit": "汇Total撤单上限",
+  Line 17: "total_trade_limit": "汇总成交上限", -> "total_trade_limit": "汇TotalTrade上限",
+  Line 18: "contract_order_limit": "合约委托上限", -> "contract_order_limit": "ContractOrder上限",
+  Line 19: "contract_cancel_limit": "合约撤单上限", -> "contract_cancel_limit": "Contract撤单上限",
+  Line 20: "contract_trade_limit": "合约成交上限" -> "contract_trade_limit": "ContractTrade上限"
+  Line 24: "total_order_count": "汇总委托笔数", -> "total_order_count": "汇TotalOrder笔数",
+  Line 25: "total_cancel_count": "汇总撤单笔数", -> "total_cancel_count": "汇Total撤单笔数",
+  Line 26: "total_trade_count": "汇总成交笔数", -> "total_trade_count": "汇TotalTrade笔数",
+  Line 27: "contract_order_count": "合约委托笔数", -> "contract_order_count": "ContractOrder笔数",
+  Line 28: "contract_cancel_count": "合约撤单笔数", -> "contract_cancel_count": "Contract撤单笔数",
+  Line 29: "contract_trade_count": "合约成交笔数" -> "contract_trade_count": "ContractTrade笔数"
+  Line 33: """初始化""" -> """Initialize"""
+  Line 34: # 默认参数 -> # DefaultParameter
+  Line 42: # 委托号记录 -> # Order ID记录
+  Line 46: # 成交号记录 -> # Trade号记录
+  Line 49: # 数量统计 -> # Volume统计
+  Line 59: """检查是否允许委托""" -> """Check是否允许Order"""
+  ... and 8 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/rules/duplicate_order_rule.py:
+  Line 9: """重复报单检查风控规则""" -> """Duplicate报单CheckRisk controlRule"""
+  Line 11: name: str = "重复报单检查" -> name: str = "Duplicate报单Check"
+  Line 14: "duplicate_order_limit": "重复报单上限", -> "duplicate_order_limit": "Duplicate报单上限",
+  Line 18: "duplicate_order_count": "重复报单笔数" -> "duplicate_order_count": "Duplicate报单笔数"
+  Line 22: """初始化""" -> """Initialize"""
+  Line 23: # 默认参数 -> # DefaultParameter
+  Line 26: # 重复报单统计 -> # Duplicate报单统计
+  Line 30: """检查是否允许委托""" -> """Check是否允许Order"""
+  Line 37: self.write_log(f"重复报单笔数{duplicate_order_count}达到上限{self.duplicate_order_limit}：{req}") -> self.write_log(f"Duplicate报单笔数{duplicate_order_count}达To上限{self.duplicate_order_limit}：{req}")
+  Line 43: """将委托请求转为字符串""" -> """将OrderRequest转为String"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/rules/order_size_rule.py:
+  Line 7: """委托规模检查风控规则""" -> """Order规模CheckRisk controlRule"""
+  Line 9: name: str = "委托规模检查" -> name: str = "Order规模Check"
+  Line 12: "order_volume_limit": "委托数量上限", -> "order_volume_limit": "Order volume上限",
+  Line 13: "order_value_limit": "委托价值上限", -> "order_value_limit": "Order价值上限",
+  Line 17: """初始化""" -> """Initialize"""
+  Line 22: """检查是否允许委托""" -> """Check是否允许Order"""
+  Line 24: self.write_log(f"委托数量{req.volume}超过上限{self.order_volume_limit}：{req}") -> self.write_log(f"Order volume{req.volume}超过上限{self.order_volume_limit}：{req}")
+  Line 28: if contract and req.price:      # 只考虑限价单 -> if contract and req.price:      # 只考虑限价单
+  Line 31: self.write_log(f"委托价值{order_value}超过上限{self.order_value_limit}：{req}") -> self.write_log(f"Order价值{order_value}超过上限{self.order_value_limit}：{req}")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/rules/order_validity_rule.py:
+  Line 7: """委托指令检查风控规则""" -> """Order指令CheckRisk controlRule"""
+  Line 9: name: str = "委托指令检查" -> name: str = "Order指令Check"
+  Line 12: """检查是否允许委托""" -> """Check是否允许Order"""
+  Line 13: # 检查合约存在 -> # CheckContractExist
+  Line 16: self.write_log(f"合约代码{req.vt_symbol}不存在：{req}") -> self.write_log(f"ContractCode{req.vt_symbol}不Exist：{req}")
+  Line 19: # 检查最小价格变动 -> # Check最小Price变动
+  Line 23: # 计算价格与最小变动价位的余数 -> # CalculatePriceAnd最小变动价位余数
+  Line 26: # 检查价格与最小变动价位的余数，确保价格为pricetick的整数倍（允许极小误差，适应浮点数精度问题） -> # CheckPriceAnd最小变动价位余数，确保Price为pricetickInteger倍（允许极小误差，适应Float精度问题）
+  Line 28: self.write_log(f"价格{req.price}不是合约最小变动价位{pricetick}的整数倍：{req}") -> self.write_log(f"Price{req.price}不是Contract最小变动价位{pricetick}Integer倍：{req}")
+  Line 31: # 检查委托数量上限 -> # CheckOrder volume上限
+  Line 33: self.write_log(f"委托数量{req.volume}大于合约委托数量上限{contract.max_volume}：{req}") -> self.write_log(f"Order volume{req.volume}大于ContractOrder volume上限{contract.max_volume}：{req}")
+  Line 36: # 检查委托数量下限 -> # CheckOrder volume下限
+  Line 38: self.write_log(f"委托数量{req.volume}小于合约委托数量下限{contract.min_volume}：{req}") -> self.write_log(f"Order volume{req.volume}小于ContractOrder volume下限{contract.min_volume}：{req}")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/template.py:
+  Line 10: """风控规则模板""" -> """Risk controlRule模板"""
+  Line 12: # 风控规则名称 -> # Risk controlRuleName
+  Line 15: # 参数字段和名称 -> # Parameter字段和Name
+  Line 18: # 变量字段和名称 -> # 变量字段和Name
+  Line 22: """构造函数""" -> """Constructor"""
+  Line 23: # 绑定风控引擎对象 -> # 绑定Risk controlEngineObject
+  Line 26: # 添加启用状态参数 -> # AddEnableStatusParameter
+  Line 30: "active": "启用规则" -> "active": "EnableRule"
+  Line 35: # 初始化规则 -> # InitializeRule
+  Line 38: # 更新规则参数 -> # UpdateRuleParameter
+  Line 42: """输出风控日志""" -> """OutputRisk controlLog"""
+  Line 46: """更新风控规则参数""" -> """UpdateRisk controlRuleParameter"""
+  Line 53: """检查是否允许委托""" -> """Check是否允许Order"""
+  Line 57: """初始化""" -> """Initialize"""
+  Line 61: """行情推送""" -> """Market dataPush"""
+  Line 65: """委托推送""" -> """OrderPush"""
+  Line 69: """成交推送""" -> """TradePush"""
+  Line 73: """定时推送（每秒触发）""" -> """TimerPush（每秒触发）"""
+  Line 77: """查询合约信息""" -> """QueryContract信息"""
+  Line 81: """推送数据更新事件""" -> """PushDataUpdateEvent"""
+  ... and 1 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_riskmanager/vnpy_riskmanager/ui/widget.py:
+  Line 12: """用于设置参数和显示变量的规则控件。""" -> """用于设置Parameter和Display变量Rule控件。"""
+  Line 15: """构造函数""" -> """Constructor"""
+  Line 29: """初始化UI界面""" -> """InitializeUI界面"""
+  Line 30: self.tree.setHeaderLabels(["分类", "名称", " ", " "]) -> self.tree.setHeaderLabels(["分Class", "Name", " ", " "])
+  Line 36: editor_button: QtWidgets.QPushButton = QtWidgets.QPushButton("修改风控参数") -> editor_button: QtWidgets.QPushButton = QtWidgets.QPushButton("ModifyRisk controlParameter")
+  Line 45: """初始化树状图结构""" -> """Initialize树状图结构"""
+  Line 46: # 参数部分 -> # ParameterPartial
+  Line 47: parameter_root: QtWidgets.QTreeWidgetItem = QtWidgets.QTreeWidgetItem(self.tree, ["参数"]) -> parameter_root: QtWidgets.QTreeWidgetItem = QtWidgets.QTreeWidgetItem(self.tree, ["Parameter"])
+  Line 54: # 变量部分 -> # 变量Partial
+  Line 55: variable_root = QtWidgets.QTreeWidgetItem(self.tree, ["变量"]) -> variable_root = QtWidgets.QTreeWidgetItem(self.tree, ["变量"])
+  Line 72: """更新规则数据""" -> """UpdateRuleData"""
+  Line 77: # 参数部分 -> # ParameterPartial
+  Line 84: # 变量部分 -> # 变量Partial
+  Line 105: """打开参数编辑对话框""" -> """打开Parameter编辑对话框"""
+  Line 119: """用于编辑规则参数的对话框""" -> """用于编辑RuleParameter对话框"""
+  Line 134: """初始化UI界面""" -> """InitializeUI界面"""
+  Line 135: self.setWindowTitle(f"{self.rule_name} - 参数编辑") -> self.setWindowTitle(f"{self.rule_name} - Parameter编辑")
+  Line 143: # 布尔值使用下拉框 -> # Boolean值使用下拉框
+  Line 151: # 整数使用SpinBox -> # Integer使用SpinBox
+  Line 156: # 浮点数使用DoubleSpinBox -> # Float使用DoubleSpinBox
+  ... and 14 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rpcservice/script/rpc_datafeed/run_trader.py:
+  Line 11: # 实际使用时，请将这三行配置代码注释掉，并写入vt_setting.json -> # Actual使用时，请将这三行ConfigCode注释掉，并写入vt_setting.json
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rpcservice/vnpy_rpcservice/rpc_datafeed/rpc_datafeed.py:
+  Line 14: """RPC数据服务""" -> """RPCDataService"""
+  Line 25: """对象析构""" -> """Object析构"""
+  Line 31: """初始化""" -> """Initialize"""
+  Line 36: output("RPC数据服务初始化失败，请检查连接地址！") -> output("RPCDataServiceInitializeFailed，请CheckConnectAddress！")
+  Line 47: """查询K线数据""" -> """QueryK线Data"""
+  Line 62: """查询Tick数据""" -> """QueryTickData"""
+  Line 78: """RPC数据服务器""" -> """RPCDataServer"""
+  Line 81: """构造函数""" -> """Constructor"""
+  Line 94: """注册事件监听""" -> """Register event listener"""
+  Line 98: """发送服务端心跳""" -> """SendService端心跳"""
+  Line 103: """查询K线数据""" -> """QueryK线Data"""
+  Line 113: """查询Tick数据""" -> """QueryTickData"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rpcservice/vnpy_rpcservice/rpc_gateway/rpc_gateway.py:
+  Line 24: VeighNa用于连接rpc服务的接口。 -> VeighNa用于ConnectrpcServiceGateway。
+  Line 30: "主动请求地址": "tcp://127.0.0.1:2014", -> "主动RequestAddress": "tcp://127.0.0.1:2014",
+  Line 31: "推送订阅地址": "tcp://127.0.0.1:4102" -> "PushSubscribeAddress": "tcp://127.0.0.1:4102"
+  Line 37: """构造函数""" -> """Constructor"""
+  Line 46: """连接交易接口""" -> """Connect交易Gateway"""
+  Line 47: req_address: str = setting["主动请求地址"] -> req_address: str = setting["主动RequestAddress"]
+  Line 48: pub_address: str = setting["推送订阅地址"] -> pub_address: str = setting["PushSubscribeAddress"]
+  Line 53: self.write_log("服务器连接成功，开始初始化查询") -> self.write_log("ServerConnectSuccess，StartInitializeQuery")
+  Line 58: """订阅行情""" -> """SubscribeMarket data"""
+  Line 63: """委托下单""" -> """Order下单"""
+  Line 74: """委托撤单""" -> """Order撤单"""
+  Line 79: """查询资金""" -> """QueryAccount"""
+  Line 83: """查询持仓""" -> """QueryPosition"""
+  Line 87: """查询历史数据""" -> """QueryHistoricalData"""
+  Line 93: """查询基础信息""" -> """Query基础信息"""
+  Line 99: self.write_log("合约信息查询成功") -> self.write_log("Contract信息QuerySuccess")
+  Line 106: self.write_log("资金信息查询成功") -> self.write_log("Account信息QuerySuccess")
+  Line 113: self.write_log("持仓信息查询成功") -> self.write_log("Position信息QuerySuccess")
+  Line 120: self.write_log("委托信息查询成功") -> self.write_log("Order信息QuerySuccess")
+  Line 127: self.write_log("成交信息查询成功") -> self.write_log("Trade信息QuerySuccess")
+  ... and 2 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rpcservice/vnpy_rpcservice/rpc_service/__init__.py:
+  Line 20: display_name: str = "RPC服务" -> display_name: str = "RPCService"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rpcservice/vnpy_rpcservice/rpc_service/engine.py:
+  Line 18: VeighNa的rpc服务引擎。 -> VeighNarpcServiceEngine。
+  Line 23: """构造函数""" -> """Constructor"""
+  Line 36: """初始化服务器""" -> """InitializeServer"""
+  Line 59: """读取配置文件""" -> """读取Config文件"""
+  Line 65: """保存配置文件""" -> """SaveConfig文件"""
+  Line 73: """启动rpc服务""" -> """StartrpcService"""
+  Line 75: self.write_log("RPC服务运行中") -> self.write_log("RPCServiceRunning中")
+  Line 85: self.write_log(f"RPC服务启动失败：{msg}") -> self.write_log(f"RPCServiceStartFailed：{msg}")
+  Line 89: self.write_log("RPC服务启动成功") -> self.write_log("RPCServiceStartSuccess")
+  Line 93: """停止rpc服务""" -> """StoprpcService"""
+  Line 95: self.write_log("RPC服务未启动") -> self.write_log("RPCService未Start")
+  Line 100: self.write_log("RPC服务已停止") -> self.write_log("RPCService已Stop")
+  Line 104: """关闭rpc服务""" -> """CloserpcService"""
+  Line 108: """注册事件""" -> """RegisterEvent"""
+  Line 112: """调用事件""" -> """调用Event"""
+  Line 119: """输出日志""" -> """OutputLog"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rpcservice/vnpy_rpcservice/rpc_service/ui/widget.py:
+  Line 14: """构造函数""" -> """Constructor"""
+  Line 26: """初始化界面""" -> """Initialize interface"""
+  Line 27: self.setWindowTitle("RPC服务") -> self.setWindowTitle("RPCService")
+  Line 31: self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动") -> self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
+  Line 34: self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("停止") -> self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop")
+  Line 53: form.addRow("请求响应地址", self.rep_line) -> form.addRow("RequestResponseAddress", self.rep_line)
+  Line 54: form.addRow("事件广播地址", self.pub_line) -> form.addRow("Event广播Address", self.pub_line)
+  Line 69: """注册事件""" -> """RegisterEvent"""
+  Line 75: """调用事件""" -> """调用Event"""
+  Line 81: """启动服务""" -> """StartService"""
+  Line 91: """停止服务""" -> """StopService"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rqdata/vnpy_rqdata/rqdata_datafeed.py:
+  Line 46: """将交易所代码转换为米筐代码""" -> """将交易所Code转换为米筐Code"""
+  Line 47: # 股票 -> # Stock
+  Line 53: # 金交所现货 -> # 金交所现货
+  Line 59: # 期货和期权 -> # Futures和Option
+  Line 75: # 期货 -> # Futures
+  Line 77: # 只有郑商所需要特殊处理 -> # 只有CZCE需要特殊Process
+  Line 81: # 检查是否为连续合约或者指数合约 -> # Check是否为连续ContractOr指数Contract
+  Line 85: # 提取年月 -> # 提取年月
+  Line 92: # 优先尝试20年后的合约 -> # 优先尝试20年后Contract
+  Line 97: # 期权以及期货次主力连续合约 -> # Option以及Futures次主力连续Contract
+  Line 117: # 优先尝试20年后的合约 -> # 优先尝试20年后Contract
+  Line 129: """米筐RQData数据服务接口""" -> """米筐RQDataDataServiceGateway"""
+  Line 139: """初始化""" -> """Initialize"""
+  Line 144: output("RQData数据服务初始化失败：用户名为空！") -> output("RQDataDataServiceInitializeFailed：UsernameIs empty！")
+  Line 148: output("RQData数据服务初始化失败：密码为空！") -> output("RQDataDataServiceInitializeFailed：PasswordIs empty！")
+  Line 164: output(f"RQData数据服务初始化失败：{ex}") -> output(f"RQDataDataServiceInitializeFailed：{ex}")
+  Line 167: output(f"发生运行时错误：{ex}") -> output(f"发生Running时Error：{ex}")
+  Line 170: output(f"发生未知异常：{ex}") -> output(f"发生未知Exception：{ex}")
+  Line 177: """查询K线数据""" -> """QueryK线Data"""
+  Line 178: # 期货品种且代码中没有数字（非具体合约），则查询主力连续 -> # Futures品种且Code中没有数字（非具体Contract），则Query主力连续
+  ... and 25 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_rqdata/vnpy_rqdata/rqdata_gateway.py:
+  Line 56: VeighNa框架用于对接RQData实时行情的接口。 -> VeighNa框架用于对接RQDataReal-timeMarket dataGateway。
+  Line 62: "用户名": "", -> "Username": "",
+  Line 63: "密码": "" -> "Password": ""
+  Line 75: self.futures_map: dict[str, tuple[str, Exchange]] = {}      # 期货代码交易所映射信息 -> self.futures_map: dict[str, tuple[str, Exchange]] = {}      # FuturesCode交易所映射信息
+  Line 79: """连接交易接口""" -> """Connect交易Gateway"""
+  Line 83: # 初始化rqdatac -> # Initializerqdatac
+  Line 84: username: str = setting["用户名"] -> username: str = setting["Username"]
+  Line 85: password: str = setting["密码"] -> password: str = setting["Password"]
+  Line 90: self.write_log(f"RQData接口初始化失败：{ex}") -> self.write_log(f"RQDataGatewayInitializeFailed：{ex}")
+  Line 93: # 查询合约信息 -> # QueryContract信息
+  Line 96: # 创建实时行情客户端 -> # CreateReal-timeMarket dataClient
+  Line 99: # 启动运行线程 -> # StartRunning线程
+  Line 102: # 订阅之前行情 -> # SubscribeBeforeMarket data
+  Line 106: self.write_log("RQData接口初始化成功") -> self.write_log("RQDataGatewayInitializeSuccess")
+  Line 109: """订阅行情""" -> """SubscribeMarket data"""
+  Line 110: # 证券 -> # 证券
+  Line 114: # 期货 -> # Futures
+  Line 127: """委托下单""" -> """Order下单"""
+  Line 131: """委托撤单""" -> """Order撤单"""
+  Line 135: """查询资金""" -> """QueryAccount"""
+  ... and 10 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_scripttrader/vnpy_scripttrader/__init__.py:
+  Line 49: display_name: str = "脚本策略" -> display_name: str = "脚本Strategy"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_scripttrader/vnpy_scripttrader/cli.py:
+  Line 13: """打印日志输出""" -> """打印LogOutput"""
+  Line 19: """初始化命令行交易""" -> """Initialize命令行交易"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_scripttrader/vnpy_scripttrader/engine.py:
+  Line 57: """启动策略引擎""" -> """StartStrategyEngine"""
+  Line 60: self.write_log("数据服务初始化成功") -> self.write_log("DataServiceInitializeSuccess")
+  Line 63: """运行策略线程中的策略方法""" -> """RunningStrategy线程中StrategyMethod"""
+  Line 72: self.write_log("策略交易脚本启动") -> self.write_log("Strategy交易脚本Start")
+  Line 75: """加载策略脚本并调用run函数""" -> """LoadStrategy脚本并调用runFunction"""
+  Line 87: msg: str = f"触发异常已停止\n{traceback.format_exc()}" -> msg: str = f"触发Exception已Stop\n{traceback.format_exc()}"
+  Line 91: """停止运行中的策略""" -> """StopRunning中Strategy"""
+  Line 100: self.write_log("策略交易脚本停止") -> self.write_log("Strategy交易脚本Stop")
+  Line 313: subject: str = "脚本策略引擎通知" -> subject: str = "脚本StrategyEngine通知"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_scripttrader/vnpy_scripttrader/ui/widget.py:
+  Line 32: self.setWindowTitle("脚本策略") -> self.setWindowTitle("脚本Strategy")
+  Line 34: start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动") -> start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
+  Line 37: stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("停止") -> stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop")
+  Line 40: select_button: QtWidgets.QPushButton = QtWidgets.QPushButton("打开") -> select_button: QtWidgets.QPushButton = QtWidgets.QPushButton("打开")
+  Line 48: clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton("清空") -> clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton("清None")
+  Line 96: "载入策略脚本", -> "LoadStrategy脚本",
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/script/run.py:
+  Line 10: """主入口函数""" -> """主入口Function"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/__init__.py:
+  Line 68: display_name: str = "价差交易" -> display_name: str = "价差交易"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/backtesting.py:
+  Line 156: self.output("开始加载历史数据") -> self.output("StartLoadHistoricalData")
+  Line 162: self.output("起始日期必须小于结束日期") -> self.output("起始日期Must小于Finished日期")
+  Line 181: self.output(f"历史数据加载完成，数据量：{len(self.history_data)}") -> self.output(f"HistoricalDataLoadCompleted，Data量：{len(self.history_data)}")
+  Line 192: self.output("策略初始化完成") -> self.output("StrategyInitializeCompleted")
+  Line 196: self.output("开始回放历史数据") -> self.output("Start回放HistoricalData")
+  Line 202: self.output("触发异常，回测终止") -> self.output("触发Exception，Backtest终止")
+  Line 206: self.output("历史数据回放结束") -> self.output("HistoricalData回放Finished")
+  Line 210: self.output("开始计算逐日盯市盈亏") -> self.output("StartCalculate逐日盯市盈亏")
+  Line 213: self.output("回测成交记录为空") -> self.output("BacktestTrade记录Is empty")
+  Line 247: self.output("逐日盯市盈亏计算完成") -> self.output("逐日盯市盈亏CalculateCompleted")
+  Line 252: self.output("开始计算策略统计指标") -> self.output("StartCalculateStrategy统计指标")
+  Line 303: self.output("回测中出现爆仓（资金小于等于0），无法计算策略统计指标") -> self.output("Backtest中出现爆仓（Account小于等于0），无法CalculateStrategy统计指标")
+  Line 352: self.output(f"首个交易日：\t{start_date}") -> self.output(f"首个交易日：\t{start_date}")
+  Line 353: self.output(f"最后交易日：\t{end_date}") -> self.output(f"最后交易日：\t{end_date}")
+  Line 355: self.output(f"总交易日：\t{total_days}") -> self.output(f"Total交易日：\t{total_days}")
+  Line 356: self.output(f"盈利交易日：\t{profit_days}") -> self.output(f"盈利交易日：\t{profit_days}")
+  Line 357: self.output(f"亏损交易日：\t{loss_days}") -> self.output(f"亏损交易日：\t{loss_days}")
+  Line 359: self.output(f"起始资金：\t{self.capital:,.2f}") -> self.output(f"起始Account：\t{self.capital:,.2f}")
+  Line 360: self.output(f"结束资金：\t{end_balance:,.2f}") -> self.output(f"FinishedAccount：\t{end_balance:,.2f}")
+  Line 362: self.output(f"总收益率：\t{total_return:,.2f}%") -> self.output(f"Total收益率：\t{total_return:,.2f}%")
+  ... and 19 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/base.py:
+  Line 199: # 价差计算公式相关 -> # 价差Calculate公式相关
+  Line 204: # 实盘时编译公式，加速计算 -> # 实盘时编译公式，加速Calculate
+  Line 207: # 回测时不编译公式，从而支持多进程优化 -> # Backtest时不编译公式，From而支持多进程Optimization
+  Line 218: 计算价差盘口 -> Calculate价差盘口
+  Line 220: 1. 如果各条腿价格均有效，则计算成功，返回True -> 1. If各条腿Price均Valid，则CalculateSuccess，ReturnTrue
+  Line 221: 2. 反之只要有一条腿的价格无效，则计算失败，返回False -> 2. 反之只要有一条腿PriceInvalid，则CalculateFailed，ReturnFalse
+  Line 297: """更新委托成交""" -> """UpdateOrderTrade"""
+  Line 391: """获取数据对象""" -> """GetDataObject"""
+  Line 407: LIVE = "实盘" -> LIVE = "实盘"
+  Line 408: BACKTESTING = "回测" -> BACKTESTING = "Backtest"
+  Line 434: # 初始化K线列表 -> # InitializeK线List
+  Line 437: # 只有实盘才优先尝试从数据服务查询 -> # 只有实盘才优先尝试FromDataServiceQuery
+  Line 443: # 如果查询失败，则尝试从数据库中读取 -> # IfQueryFailed，则尝试FromDatabase中读取
+  Line 465: # 缓存该腿当前的价格 -> # 缓存该腿CurrentPrice
+  Line 468: # 基于交易乘数累计价值 -> # Based on交易乘数累计价值
+  Line 535: """价差数据容器""" -> """价差Data容器"""
+  Line 550: """算法数据容器""" -> """AlgoData容器"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/engine.py:
+  Line 62: """初始化数据引擎""" -> """InitializeDataEngine"""
+  Line 71: """初始化算法引擎""" -> """InitializeAlgoEngine"""
+  Line 78: """初始化策略引擎""" -> """InitializeStrategyEngine"""
+  Line 159: self.write_log("价差数据引擎启动成功") -> self.write_log("价差DataEngineStartSuccess")
+  Line 210: """保存价差持仓""" -> """Save价差Position"""
+  Line 219: """加载价差持仓""" -> """Load价差Position"""
+  Line 244: # 只有能成功计算出价差盘口时，才会送事件 -> # 只有能SuccessCalculate出价差盘口时，才会送Event
+  Line 269: # 查询该笔成交，对应的价差，并更新计算价差持仓 -> # Query该笔Trade，Corresponding价差，并UpdateCalculate价差Position
+  Line 344: self.write_log(f"价差创建失败，名称重复：{name}") -> self.write_log(f"价差CreateFailed，NameDuplicate：{name}")
+  Line 380: self.write_log(f"价差创建成功：{name}") -> self.write_log(f"价差CreateSuccess：{name}")
+  Line 394: self.write_log(f"价差移除成功：{name}，重启后生效") -> self.write_log(f"价差移除Success：{name}，重启后生效")
+  Line 406: """更新委托号对应的价差映射关系""" -> """UpdateOrder IDCorresponding价差映射关系"""
+  Line 436: self.write_log("价差算法引擎启动成功") -> self.write_log("价差AlgoEngineStartSuccess")
+  Line 513: self.write_log(f"创建价差算法失败，找不到价差：{spread_name}") -> self.write_log(f"Create价差AlgoFailed，Not found价差：{spread_name}")
+  Line 552: self.write_log(f"停止价差算法失败，找不到算法：{algoid}") -> self.write_log(f"Stop价差AlgoFailed，Not foundAlgo：{algoid}")
+  Line 580: # 创建原始委托请求 -> # Create原始OrderRequest
+  Line 601: # 判断使用净仓还是锁仓模式 -> # 判断使用净仓还是锁仓模式
+  Line 604: # 执行委托转换 -> # 执行Order转换
+  Line 630: # 将委托号和价差的关系缓存下来 -> # 将Order ID和价差关系缓存下来
+  Line 639: self.write_algo_log(algo, f"撤单失败，找不到委托{vt_orderid}") -> self.write_algo_log(algo, f"撤单Failed，Not foundOrder{vt_orderid}")
+  ... and 12 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/strategies/basic_spread_strategy.py:
+  Line 12: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 53: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 62: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 68: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/strategies/statistical_arbitrage_strategy.py:
+  Line 13: author = "用Python的交易员" -> author = "用Python交易员"
+  Line 44: self.write_log("策略初始化") -> self.write_log("StrategyInitialize")
+  Line 55: self.write_log("策略启动") -> self.write_log("StrategyStart")
+  Line 61: self.write_log("策略停止") -> self.write_log("StrategyStop")
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/template.py:
+  Line 57: self.status: Status = Status.NOTTRADED  # 算法状态 -> self.status: Status = Status.NOTTRADED  # Algo status
+  Line 58: self.count: int = 0                     # 读秒计数 -> self.count: int = 0                     # 读秒计数
+  Line 59: self.traded: float = 0                  # 成交数量 -> self.traded: float = 0                  # Trade volume
+  Line 60: self.traded_volume: float = 0           # 成交数量（绝对值） -> self.traded_volume: float = 0           # Trade volume（绝对值）
+  Line 61: self.traded_price: float = 0            # 成交价格 -> self.traded_price: float = 0            # TradePrice
+  Line 62: self.stopped: bool = False              # 是否已被用户停止算法 -> self.stopped: bool = False              # 是否已被UserStop algo
+  Line 71: self.write_log("算法已启动") -> self.write_log("Algo已Start")
+  Line 74: """获取数据对象""" -> """GetDataObject"""
+  Line 91: """判断算法是否处于运行中""" -> """判断Algo是否处于Running中"""
+  Line 98: """检查委托是否全部结束""" -> """CheckOrder是否AllFinished"""
+  Line 111: """检查当前各条腿是否平衡""" -> """CheckCurrent各条腿是否平衡"""
+  Line 140: """检查算法是否已停止""" -> """CheckAlgo是否已Stop"""
+  Line 147: self.write_log("算法已停止") -> self.write_log("Algo已Stop")
+  Line 155: self.write_log("算法停止中") -> self.write_log("AlgoStop中")
+  Line 197: msg: str = f"委托成交[{trade.vt_orderid}]，{trade.vt_symbol}，{trade.direction.value}，{trade.volume}@{trade.price}" -> msg: str = f"OrderTrade[{trade.vt_orderid}]，{trade.vt_symbol}，{trade.direction.value}，{trade.volume}@{trade.price}"
+  Line 213: msg: str = f"委托{order.status.value}[{order.vt_orderid}]" -> msg: str = f"Order{order.status.value}[{order.vt_orderid}]"
+  Line 218: # 如果在停止任务，则检查是否已经可以停止算法 -> # IfInStop任务，则Check是否已经CanStop algo
+  Line 247: # 如果已经进入停止任务，禁止主动腿发单 -> # If已经进入Stop任务，禁止Active leg发单
+  Line 256: # 检查价格是否超过涨跌停板 -> # CheckPrice是否超过涨跌停板
+  Line 277: msg: str = "发出委托[{}]，{}，{}，{}@{}".format( -> msg: str = "发出Order[{}]，{}，{}，{}@{}".format(
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_spreadtrading/vnpy_spreadtrading/ui/widget.py:
+  Line 45: self.setWindowTitle("价差交易") -> self.setWindowTitle("价差交易")
+  Line 48: algo_group: QtWidgets.QGroupBox = self.create_group("交易", self.algo_dialog) -> algo_group: QtWidgets.QGroupBox = self.create_group("交易", self.algo_dialog)
+  Line 70: grid.addWidget(self.create_group("价差", self.data_monitor), 0, 0) -> grid.addWidget(self.create_group("价差", self.data_monitor), 0, 0)
+  Line 71: grid.addWidget(self.create_group("日志", self.log_monitor), 1, 0) -> grid.addWidget(self.create_group("Log", self.log_monitor), 1, 0)
+  Line 72: grid.addWidget(self.create_group("算法", self.algo_monitor), 0, 1) -> grid.addWidget(self.create_group("Algo", self.algo_monitor), 0, 1)
+  Line 73: grid.addWidget(self.create_group("策略", self.strategy_monitor), 1, 1) -> grid.addWidget(self.create_group("Strategy", self.strategy_monitor), 1, 1)
+  Line 110: "name": {"display": "名称", "cell": BaseCell, "update": False}, -> "name": {"display": "Name", "cell": BaseCell, "update": False},
+  Line 111: "bid_volume": {"display": "买量", "cell": BidCell, "update": True}, -> "bid_volume": {"display": "买量", "cell": BidCell, "update": True},
+  Line 112: "bid_price": {"display": "买价", "cell": BidCell, "update": True}, -> "bid_price": {"display": "买价", "cell": BidCell, "update": True},
+  Line 113: "ask_price": {"display": "卖价", "cell": AskCell, "update": True}, -> "ask_price": {"display": "卖价", "cell": AskCell, "update": True},
+  Line 114: "ask_volume": {"display": "卖量", "cell": AskCell, "update": True}, -> "ask_volume": {"display": "卖量", "cell": AskCell, "update": True},
+  Line 115: "net_pos": {"display": "净仓", "cell": PnlCell, "update": True}, -> "net_pos": {"display": "净仓", "cell": PnlCell, "update": True},
+  Line 116: "datetime": {"display": "时间", "cell": TimeCell, "update": True}, -> "datetime": {"display": "Time", "cell": TimeCell, "update": True},
+  Line 117: "price_formula": {"display": "定价", "cell": BaseCell, "update": False}, -> "price_formula": {"display": "定价", "cell": BaseCell, "update": False},
+  Line 118: "trading_formula": {"display": "交易", "cell": BaseCell, "update": False}, -> "trading_formula": {"display": "交易", "cell": BaseCell, "update": False},
+  Line 172: "algoid": {"display": "算法", "cell": BaseCell, "update": False}, -> "algoid": {"display": "Algo", "cell": BaseCell, "update": False},
+  Line 173: "spread_name": {"display": "价差", "cell": BaseCell, "update": False}, -> "spread_name": {"display": "价差", "cell": BaseCell, "update": False},
+  Line 174: "direction": {"display": "方向", "cell": DirectionCell, "update": False}, -> "direction": {"display": "Direction", "cell": DirectionCell, "update": False},
+  Line 175: "price": {"display": "价格", "cell": BaseCell, "update": False}, -> "price": {"display": "Price", "cell": BaseCell, "update": False},
+  Line 176: "payup": {"display": "超价", "cell": BaseCell, "update": False}, -> "payup": {"display": "超价", "cell": BaseCell, "update": False},
+  ... and 60 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_sqlite/vnpy_sqlite/sqlite_database.py:
+  Line 34: """K线数据表映射对象""" -> """K线Data表映射Object"""
+  Line 57: """TICK数据表映射对象""" -> """TICKData表映射Object"""
+  Line 111: """K线汇总数据表映射对象""" -> """K线汇TotalData表映射Object"""
+  Line 128: """Tick汇总数据表映射对象""" -> """Tick汇TotalData表映射Object"""
+  Line 144: """SQLite数据库接口""" -> """SQLiteDatabaseGateway"""
+  Line 153: """保存K线数据""" -> """SaveK线Data"""
+  Line 154: # 读取主键参数 -> # 读取主键Parameter
+  Line 160: # 将BarData数据转换为字典，并调整时区 -> # 将BarDataData转换为Dict，并调整时区
+  Line 174: # 使用upsert操作将数据更新到数据库中 -> # 使用upsert操作将DataUpdateToDatabase中
+  Line 179: # 更新K线汇总数据 -> # UpdateK线汇TotalData
+  Line 213: """保存TICK数据""" -> """SaveTICKData"""
+  Line 214: # 读取主键参数 -> # 读取主键Parameter
+  Line 219: # 将TickData数据转换为字典，并调整时区 -> # 将TickDataData转换为Dict，并调整时区
+  Line 232: # 使用upsert操作将数据更新到数据库中 -> # 使用upsert操作将DataUpdateToDatabase中
+  Line 237: # 更新Tick汇总数据 -> # UpdateTick汇TotalData
+  Line 275: """读取K线数据""" -> """读取K线Data"""
+  Line 313: """读取TICK数据""" -> """读取TICKData"""
+  Line 374: """删除K线数据""" -> """DeleteK线Data"""
+  Line 382: # 删除K线汇总数据 -> # DeleteK线汇TotalData
+  Line 397: """删除TICK数据""" -> """DeleteTICKData"""
+  ... and 5 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_webtrader/vnpy_webtrader/__init__.py:
+  Line 46: display_name: str = "Web服务" -> display_name: str = "WebService"
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_webtrader/vnpy_webtrader/engine.py:
+  Line 17: """Web服务引擎""" -> """WebServiceEngine"""
+  Line 29: """初始化RPC服务器""" -> """InitializeRPCServer"""
+  Line 49: """启动RPC服务器""" -> """StartRPCServer"""
+  Line 56: """注册事件监听""" -> """Register event listener"""
+  Line 64: """处理事件""" -> """ProcessEvent"""
+  Line 68: """关闭""" -> """Close"""
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_webtrader/vnpy_webtrader/ui/widget.py:
+  Line 13: """网页服务器管理界面""" -> """Web serverManagement interface"""
+  Line 29: """初始化界面""" -> """Initialize interface"""
+  Line 30: self.setWindowTitle("Web服务") -> self.setWindowTitle("WebService")
+  Line 47: self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动") -> self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
+  Line 50: self.end_button: QtWidgets.QPushButton = QtWidgets.QPushButton("停止") -> self.end_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop")
+  Line 57: form.addRow("用户名", self.username_line) -> form.addRow("Username", self.username_line)
+  Line 58: form.addRow("密码", self.password_line) -> form.addRow("Password", self.password_line)
+  Line 59: form.addRow("请求地址", self.req_line) -> form.addRow("RequestAddress", self.req_line)
+  Line 60: form.addRow("订阅地址", self.sub_line) -> form.addRow("SubscribeAddress", self.sub_line)
+  Line 61: form.addRow("监听地址", self.host_line) -> form.addRow("ListenerAddress", self.host_line)
+  Line 62: form.addRow("监听端口", self.port_line) -> form.addRow("ListenerPort", self.port_line)
+  Line 76: """启动引擎""" -> """Start engine"""
+  Line 84: # 保存配置 -> # SaveConfig
+  Line 95: # 启动RPC -> # StartRPC
+  Line 99: # 初始化Web服务子进程 -> # InitializeWebService子进程
+  Line 108: # 启动子进程 -> # Start子进程
+  Line 119: """终止引擎""" -> """Stop engine"""
+  Line 123: """Web进程启动""" -> """WebProcess started"""
+  Line 124: self.text_edit.append("Web服务器启动") -> self.text_edit.append("WebServerStart")
+  Line 140: """Web进程结束""" -> """WebProcess ended"""
+  ... and 2 more translations
+
+/Users/apurv/Desktop/algo-trading/vnpy/vnpy_webtrader/vnpy_webtrader/web.py:
+  Line 37: # Web服务运行配置 -> # WebServiceRunningConfig
+  Line 42: USERNAME = setting["username"]              # 用户名 -> USERNAME = setting["username"]              # Username
+  Line 43: PASSWORD = setting["password"]              # 密码 -> PASSWORD = setting["password"]              # Password
+  Line 44: REQ_ADDRESS = setting["req_address"]        # 请求服务地址 -> REQ_ADDRESS = setting["req_address"]        # RequestServiceAddress
+  Line 45: SUB_ADDRESS = setting["sub_address"]        # 订阅服务地址 -> SUB_ADDRESS = setting["sub_address"]        # SubscribeServiceAddress
+  Line 48: SECRET_KEY = "test"                     # 数据加密密钥 -> SECRET_KEY = "test"                     # DataEncrypt密钥
+  Line 49: ALGORITHM = "HS256"                     # 加密算法 -> ALGORITHM = "HS256"                     # EncryptAlgo
+  Line 50: ACCESS_TOKEN_EXPIRE_MINUTES = 30        # 令牌超时（分钟） -> ACCESS_TOKEN_EXPIRE_MINUTES = 30        # 令牌超时（分钟）
+  Line 53: # 实例化CryptContext用于处理哈希密码 -> # Instance化CryptContext用于Process哈希Password
+  Line 56: # FastAPI密码鉴权工具 -> # FastAPIPassword鉴权工具
+  Line 59: # RPC客户端 -> # RPCClient
+  Line 64: """将对象转换为字典""" -> """将Object转换为Dict"""
+  Line 77: """令牌数据""" -> """令牌Data"""
+  Line 83: """校验用户""" -> """校验User"""
+  Line 96: """创建令牌""" -> """Create令牌"""
+  Line 110: """REST鉴权""" -> """REST鉴权"""
+  Line 131: # 创建FastAPI应用 -> # CreateFastAPI应用
+  Line 137: """获取主页面""" -> """GetMain page"""
+  Line 147: """用户登录""" -> """User login"""
+  Line 164: """订阅行情""" -> """SubscribeMarket data"""
+  ... and 21 more translations

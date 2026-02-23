@@ -1,4 +1,4 @@
-# VeighNa框架的InteractiveBrokers交易接口
+# Interactive Brokers Gateway for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,60 +11,64 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-基于ibapi的10.40.1版本开发的InteractiveBrokers交易接口。
+Interactive Brokers trading gateway developed based on ibapi version 10.40.1.
 
-IbGateway中的合约代码支持两种风格：数字代码和字符串代码。
+IbGateway supports two contract code styles: numeric codes and string codes.
 
-数字代码基于IB平台的ConId，查询方式：在TWS软件中【右键点击任意合约】->【金融产品信息】->【详情】，然后在弹出的网页上即可找到合约的ConId。
+### Numeric Codes (ConId)
 
-字符串代码基于合约的具体描述信息，命名规则和举例：
+Based on IB platform ConId. To find ConId: In TWS software, right-click any contract → Financial Product Info → Details, then find the contract's ConId on the popup webpage.
 
-|合约类型|代码规则|代码（symbol）|交易所（exchange）|
-|---|---|---|---|
-|股票|名称-货币-类别|SPY-USD-STK|SMART|
-|外汇|名称-货币-类别|EUR-USD-CASH|IDEALPRO|
-|贵金属|名称-货币-类别|XAUUSD-USD-CMDTY|SMART|
-|期货|名称-到期年月-货币-类别|ES-202002-USD-FUT|GLOBEX|
-|期货（指定乘数）|名称-到期年月-合约乘数-类别|SI-202006-1000-USD-FUT|NYMEX|
-|期货期权|名称-到期年月-期权类型-行权价-合约乘数-货币-类别|ES-2020006-C-2430-50-USD-FOP|GLOBEX|
+### String Codes
 
-委托、成交、持仓信息中的合约代码，默认采用数字代码。如果用户使用字符串代码订阅过行情，则使用字符串代码。
+Based on contract description information. Naming rules and examples:
 
-## 安装
+| Contract Type | Code Rule | Code (symbol) | Exchange |
+|---------------|-----------|---------------|----------|
+| Stock | Name-Currency-Type | SPY-USD-STK | SMART |
+| Forex | Name-Currency-Type | EUR-USD-CASH | IDEALPRO |
+| Precious Metals | Name-Currency-Type | XAUUSD-USD-CMDTY | SMART |
+| Futures | Name-Expiry-Currency-Type | ES-202002-USD-FUT | GLOBEX |
+| Futures (Specify Multiplier) | Name-Expiry-Multiplier-Type | SI-202006-1000-USD-FUT | NYMEX |
+| Futures Options | Name-Expiry-Type-Strike-Multiplier-Currency-Type | ES-2020006-C-2430-50-USD-FOP | GLOBEX |
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+Order, trade, and position contract codes default to numeric codes (ConId). If user subscribed to market data using string codes, string codes are used.
 
-### 安装ibapi
+## Installation
 
-在[IB官网](https://interactivebrokers.github.io/#)下载TWS API的msi安装文件，并运行安装。
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-找到安装目录下的source\pythonclient文件夹，在cmd中运行下述命令安装：
+### Install ibapi
 
-```
+1. Download TWS API .msi installer from [IBKR website](https://interactivebrokers.github.io/#)
+2. Run the installer
+3. Find `source\pythonclient` folder in installation directory
+4. Run in cmd:
+```bash
 python setup.py install
 ```
 
-### 安装vnpy_ib
+### Install vnpy_ib
 
-直接使用pip命令：
-
-```
+**Via pip:**
+```bash
 pip install vnpy_ib
 ```
 
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**From source:**
+```bash
+# Download and extract source code
+cd vnpy_ib
 pip install .
 ```
 
-## 使用
+## Usage
 
-以脚本方式启动（script/run.py）：
+Start with script (script/run.py):
 
-```
+```python
 from vnpy.event import EventEngine
 from vnpy.trader.engine import MainEngine
 from vnpy.trader.ui import MainWindow, create_qapp
@@ -73,7 +77,7 @@ from vnpy_ib import IbGateway
 
 
 def main():
-    """主入口函数"""
+    """Main entry function"""
     qapp = create_qapp()
 
     event_engine = EventEngine()
@@ -89,3 +93,28 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+## Supported Assets
+
+| Asset | Symbol Format | Exchange |
+|-------|--------------|----------|
+| Stock | SPY-USD-STK | SMART |
+| Forex | EUR-USD-CASH | IDEALPRO |
+| Commodity | XAUUSD-USD-CMDTY | SMART |
+| Futures | ES-202002-USD-FUT | GLOBEX |
+| Futures Options | ES-2020006-C-2430-50-USD-FOP | GLOBEX |
+
+## Features
+
+- **Global Markets:** Access to stocks, futures, options, forex worldwide
+- **Real-time Data:** Real-time market data streaming
+- **Historical Data:** Query historical K-line data
+- **Order Types:** Market, limit, stop orders
+- **Account Management:** Real-time account updates
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_ib
+- **IBKR:** https://www.interactivebrokers.com/

@@ -44,7 +44,7 @@ class DataRecorderApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = "行情记录"
+    display_name: str = "Market datalog"
     engine_class: type[RecorderEngine] = RecorderEngine
     widget_name: str = "RecorderManager"
     icon_name: str = str(app_path.joinpath("ui", "recorder.ico"))

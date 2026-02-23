@@ -1,7 +1,7 @@
-# 模块名称
+# moduleName
 APP_NAME = "RiskManager"
 
-# 事件类型
+# EventClasstype
 EVENT_RISK_RULE = "eRiskRule"
 
 EVENT_RISK_NOTIFY = "eRiskNotify"

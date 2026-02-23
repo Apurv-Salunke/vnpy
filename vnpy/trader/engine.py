@@ -171,7 +171,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.gateways.get(gateway_name, None)
         if not gateway:
-            self.write_log(_("找不到底层接口：{}").format(gateway_name))
+            self.write_log(_("Gateway not found: {}").format(gateway_name))
         return gateway
 
     def get_engine(self, engine_name: str) -> BaseEngine | None:
@@ -180,7 +180,7 @@ class MainEngine:
         """
         engine: BaseEngine | None = self.engines.get(engine_name, None)
         if not engine:
-            self.write_log(_("找不到引擎：{}").format(engine_name))
+            self.write_log(_("Engine not found: {}").format(engine_name))
         return engine
 
     def get_default_setting(self, gateway_name: str) -> dict[str, str | bool | int | float] | None:
@@ -216,7 +216,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("连接登录 -> {}").format(gateway_name))
+            self.write_log(_("Connect gateway -> {}").format(gateway_name))
 
             gateway.connect(setting)
 
@@ -226,7 +226,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("订阅行情 -> {}：{}").format(gateway_name, req))
+            self.write_log(_("Subscribe market data -> {}：{}").format(gateway_name, req))
 
             gateway.subscribe(req)
 
@@ -236,7 +236,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("委托下单 -> {}：{}").format(gateway_name, req))
+            self.write_log(_("Send new order -> {}：{}").format(gateway_name, req))
 
             return gateway.send_order(req)
         else:
@@ -248,7 +248,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("委托撤单 -> {}：{}").format(gateway_name, req))
+            self.write_log(_("Cancel existing order -> {}：{}").format(gateway_name, req))
 
             gateway.cancel_order(req)
 
@@ -258,7 +258,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("报价下单 -> {}：{}").format(gateway_name, req))
+            self.write_log(_("Send new quote -> {}：{}").format(gateway_name, req))
 
             return gateway.send_quote(req)
         else:
@@ -270,7 +270,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("报价撤单 -> {}：{}").format(gateway_name, req))
+            self.write_log(_("Cancel existing quote -> {}：{}").format(gateway_name, req))
 
             gateway.cancel_quote(req)
 
@@ -280,7 +280,7 @@ class MainEngine:
         """
         gateway: BaseGateway | None = self.get_gateway(gateway_name)
         if gateway:
-            self.write_log(_("查询K线 -> {}：{}").format(gateway_name, req))
+            self.write_log(_("Query history data -> {}：{}").format(gateway_name, req))
 
             return gateway.query_history(req)
         else:
@@ -614,7 +614,7 @@ class EmailEngine(BaseEngine):
                         smtp.send_message(msg)
                         smtp.close()
                 except Exception:
-                    log_msg: str = _("邮件发送失败: {}").format(traceback.format_exc())
+                    log_msg: str = _("Sending email failed: {}").format(traceback.format_exc())
                     self.main_engine.write_log(log_msg, "EmailEngine")
             except Empty:
                 pass

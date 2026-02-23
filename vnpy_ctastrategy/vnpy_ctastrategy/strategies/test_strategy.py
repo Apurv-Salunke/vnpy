@@ -13,7 +13,7 @@ from vnpy_ctastrategy import (
 
 class TestStrategy(CtaTemplate):
     """"""
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     test_trigger: int = 10
 
@@ -27,7 +27,7 @@ class TestStrategy(CtaTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.test_funcs: list[Callable[[], None]] = [
             self.test_market_order,
@@ -42,13 +42,13 @@ class TestStrategy(CtaTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
         """
@@ -69,9 +69,9 @@ class TestStrategy(CtaTemplate):
                 start: float = time()
                 test_func()
                 time_cost: float = (time() - start) * 1000
-                self.write_log(f"耗时{time_cost}毫秒")
+                self.write_log(f"consumetime{time_cost}milliseconds")
             else:
-                self.write_log("测试已全部完成")
+                self.write_log("TestalreadyAllCompleted")
                 self.test_all_done = True
 
         self.put_event()
@@ -103,31 +103,31 @@ class TestStrategy(CtaTemplate):
     def test_market_order(self) -> None:
         """"""
         if not self.last_tick:
-            self.write_log("没有最新tick数据")
+            self.write_log("nomostNewtickData")
             return
 
         self.buy(self.last_tick.limit_up, 1)
-        self.write_log("执行市价单测试")
+        self.write_log("executemarket priceorderTest")
 
     def test_limit_order(self) -> None:
         """"""
         if not self.last_tick:
-            self.write_log("没有最新tick数据")
+            self.write_log("nomostNewtickData")
             return
 
         self.buy(self.last_tick.limit_down, 1)
-        self.write_log("执行限价单测试")
+        self.write_log("executelimit priceorderTest")
 
     def test_stop_order(self) -> None:
         """"""
         if not self.last_tick:
-            self.write_log("没有最新tick数据")
+            self.write_log("nomostNewtickData")
             return
 
         self.buy(self.last_tick.ask_price_1, 1, True)
-        self.write_log("执行停止单测试")
+        self.write_log("executeStoporderTest")
 
     def test_cancel_all(self) -> None:
         """"""
         self.cancel_all()
-        self.write_log("执行全部撤单测试")
+        self.write_log("executeAllcancel orderTest")

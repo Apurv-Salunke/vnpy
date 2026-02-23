@@ -31,7 +31,7 @@ db: PeeweeSqliteDatabase = PeeweeSqliteDatabase(path)
 
 
 class DbBarData(Model):
-    """K线数据表映射对象"""
+    """KlineDatatablemapObject"""
 
     id: AutoField = AutoField()
 
@@ -54,7 +54,7 @@ class DbBarData(Model):
 
 
 class DbTickData(Model):
-    """TICK数据表映射对象"""
+    """TICKDatatablemapObject"""
 
     id: AutoField = AutoField()
 
@@ -108,7 +108,7 @@ class DbTickData(Model):
 
 
 class DbBarOverview(Model):
-    """K线汇总数据表映射对象"""
+    """Kline summaryTotalDatatablemapObject"""
 
     id: AutoField = AutoField()
 
@@ -125,7 +125,7 @@ class DbBarOverview(Model):
 
 
 class DbTickOverview(Model):
-    """Tick汇总数据表映射对象"""
+    """TicksummaryTotalDatatablemapObject"""
 
     id: AutoField = AutoField()
 
@@ -141,7 +141,7 @@ class DbTickOverview(Model):
 
 
 class SqliteDatabase(BaseDatabase):
-    """SQLite数据库接口"""
+    """SQLiteDatabaseGateway"""
 
     def __init__(self) -> None:
         """"""
@@ -150,14 +150,14 @@ class SqliteDatabase(BaseDatabase):
         self.db.create_tables([DbBarData, DbTickData, DbBarOverview, DbTickOverview])
 
     def save_bar_data(self, bars: list[BarData], stream: bool = False) -> bool:
-        """保存K线数据"""
-        # 读取主键参数
+        """SaveKlineData"""
+        # readmainkeyParameter
         bar: BarData = bars[0]
         symbol: CharField = bar.symbol
         exchange: Exchange = bar.exchange
         interval: Interval = bar.interval
 
-        # 将BarData数据转换为字典，并调整时区
+        # willBarDataDataconvertasDict，andadjusttimezone
         data: list = []
 
         for bar in bars:
@@ -171,12 +171,12 @@ class SqliteDatabase(BaseDatabase):
             d.pop("extra", None)
             data.append(d)
 
-        # 使用upsert操作将数据更新到数据库中
+        # useupsertoperatewillDataUpdateToDatabasein
         with self.db.atomic():
             for c in chunked(data, 50):
                 DbBarData.insert_many(c).on_conflict_replace().execute()
 
-        # 更新K线汇总数据
+        # UpdateKline summaryTotalData
         overview: DbBarOverview = DbBarOverview.get_or_none(
             DbBarOverview.symbol == symbol,
             DbBarOverview.exchange == exchange.value,
@@ -210,13 +210,13 @@ class SqliteDatabase(BaseDatabase):
         return True
 
     def save_tick_data(self, ticks: list[TickData], stream: bool = False) -> bool:
-        """保存TICK数据"""
-        # 读取主键参数
+        """SaveTICKData"""
+        # readmainkeyParameter
         tick: TickData = ticks[0]
         symbol: CharField = tick.symbol
         exchange: Exchange = tick.exchange
 
-        # 将TickData数据转换为字典，并调整时区
+        # willTickDataDataconvertasDict，andadjusttimezone
         data: list = []
 
         for tick in ticks:
@@ -229,12 +229,12 @@ class SqliteDatabase(BaseDatabase):
             d.pop("extra", None)
             data.append(d)
 
-        # 使用upsert操作将数据更新到数据库中
+        # useupsertoperatewillDataUpdateToDatabasein
         with self.db.atomic():
             for c in chunked(data, 10):
                 DbTickData.insert_many(c).on_conflict_replace().execute()
 
-        # 更新Tick汇总数据
+        # UpdateTicksummaryTotalData
         overview: DbTickOverview = DbTickOverview.get_or_none(
             DbTickOverview.symbol == symbol,
             DbTickOverview.exchange == exchange.value,
@@ -272,7 +272,7 @@ class SqliteDatabase(BaseDatabase):
         start: datetime,
         end: datetime
     ) -> list[BarData]:
-        """读取K线数据"""
+        """readKlineData"""
         s: ModelSelect = (
             DbBarData.select().where(
                 (DbBarData.symbol == symbol)
@@ -310,7 +310,7 @@ class SqliteDatabase(BaseDatabase):
         start: datetime,
         end: datetime
     ) -> list[TickData]:
-        """读取TICK数据"""
+        """readTICKData"""
         s: ModelSelect = (
             DbTickData.select().where(
                 (DbTickData.symbol == symbol)
@@ -371,7 +371,7 @@ class SqliteDatabase(BaseDatabase):
         exchange: Exchange,
         interval: Interval
     ) -> int:
-        """删除K线数据"""
+        """DeleteKlineData"""
         d: ModelDelete = DbBarData.delete().where(
             (DbBarData.symbol == symbol)
             & (DbBarData.exchange == exchange.value)
@@ -379,7 +379,7 @@ class SqliteDatabase(BaseDatabase):
         )
         count: int = d.execute()
 
-        # 删除K线汇总数据
+        # DeleteKline summaryTotalData
         d2: ModelDelete = DbBarOverview.delete().where(
             (DbBarOverview.symbol == symbol)
             & (DbBarOverview.exchange == exchange.value)
@@ -394,14 +394,14 @@ class SqliteDatabase(BaseDatabase):
         symbol: str,
         exchange: Exchange
     ) -> int:
-        """删除TICK数据"""
+        """DeleteTICKData"""
         d: ModelDelete = DbTickData.delete().where(
             (DbTickData.symbol == symbol)
             & (DbTickData.exchange == exchange.value)
         )
         count: int = d.execute()
 
-        # 删除Tick汇总数据
+        # DeleteTicksummaryTotalData
         d2: ModelDelete = DbTickOverview.delete().where(
             (DbTickOverview.symbol == symbol)
             & (DbTickOverview.exchange == exchange.value)
@@ -411,8 +411,8 @@ class SqliteDatabase(BaseDatabase):
         return count
 
     def get_bar_overview(self) -> list[BarOverview]:
-        """查询数据库中的K线汇总信息"""
-        # 如果已有K线，但缺失汇总信息，则执行初始化
+        """QueryDatabaseinKline summaryTotalInfo"""
+        # IfalreadyhaveKline，butmissing summaryTotalInfo，thenexecuteInitialize
         data_count: int = DbBarData.select().count()
         overview_count: int = DbBarOverview.select().count()
         if data_count and not overview_count:
@@ -427,7 +427,7 @@ class SqliteDatabase(BaseDatabase):
         return overviews
 
     def get_tick_overview(self) -> list[TickOverview]:
-        """查询数据库中的Tick汇总信息"""
+        """QueryDatabaseinTicksummaryTotalInfo"""
         s: ModelSelect = DbTickOverview.select()
         overviews: list = []
         for overview in s:
@@ -436,7 +436,7 @@ class SqliteDatabase(BaseDatabase):
         return overviews
 
     def init_bar_overview(self) -> None:
-        """初始化数据库中的K线汇总信息"""
+        """InitializeDatabaseinKline summaryTotalInfo"""
         s: ModelSelect = (
             DbBarData.select(
                 DbBarData.symbol,

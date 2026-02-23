@@ -8,9 +8,9 @@ from vnpy_portfoliostrategy import StrategyTemplate, StrategyEngine
 
 
 class PcpArbitrageStrategy(StrategyTemplate):
-    """期权平价套利策略"""
+    """OptionflatpricearbitrageStrategy"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     entry_level = 20
     price_add = 5
@@ -52,13 +52,13 @@ class PcpArbitrageStrategy(StrategyTemplate):
         vt_symbols: list[str],
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(strategy_engine, strategy_name, vt_symbols, setting)
 
         self.bgs: dict[str, BarGenerator] = {}
         self.last_tick_time: datetime | None = None
 
-        # 绑定合约代码
+        # bindContractCode
         for vt_symbol in self.vt_symbols:
             symbol, _ = extract_vt_symbol(vt_symbol)
 
@@ -78,21 +78,21 @@ class PcpArbitrageStrategy(StrategyTemplate):
             self.bgs[vt_symbol] = BarGenerator(on_bar)
 
     def on_init(self) -> None:
-        """策略初始化回调"""
-        self.write_log("策略初始化")
+        """StrategyInitializeCallback"""
+        self.write_log("StrategyInitialize")
 
         self.load_bars(1)
 
     def on_start(self) -> None:
-        """策略启动回调"""
-        self.write_log("策略启动")
+        """StrategyStartCallback"""
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
-        """策略停止回调"""
-        self.write_log("策略停止")
+        """StrategyStopCallback"""
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
-        """行情推送回调"""
+        """Market dataPushCallback"""
         if (
             self.last_tick_time
             and self.last_tick_time.minute != tick.datetime.minute
@@ -108,10 +108,10 @@ class PcpArbitrageStrategy(StrategyTemplate):
         self.last_tick_time = tick.datetime
 
     def on_bars(self, bars: dict[str, BarData]) -> None:
-        """K线切片回调"""
+        """KlinesliceCallback"""
         self.cancel_all()
 
-        # 计算PCP价差
+        # CalculatePCPSpread
         call_bar = bars[self.call_symbol]
         put_bar = bars[self.put_symbol]
         futures_bar = bars[self.futures_symbol]
@@ -120,7 +120,7 @@ class PcpArbitrageStrategy(StrategyTemplate):
         self.synthetic_price = call_bar.close_price - put_bar.close_price + self.strike_price
         self.current_spread = self.synthetic_price - self.futures_price
 
-        # 计算目标仓位
+        # Calculatetargetposition
         futures_target: int = self.get_target(self.futures_symbol)
 
         if not futures_target:
@@ -143,10 +143,10 @@ class PcpArbitrageStrategy(StrategyTemplate):
                 self.set_target(self.put_symbol, 0)
                 self.set_target(self.futures_symbol, 0)
 
-        # 执行调仓交易
+        # executeadjustpositionTrading
         self.rebalance_portfolio(bars)
 
-        # 更新策略状态
+        # UpdateStrategyStatus
         self.call_pos = self.get_pos(self.call_symbol)
         self.put_pos = self.get_pos(self.put_symbol)
         self.futures_pos = self.get_pos(self.futures_symbol)
@@ -158,7 +158,7 @@ class PcpArbitrageStrategy(StrategyTemplate):
         self.put_event()
 
     def calculate_price(self, vt_symbol: str, direction: Direction, reference: float) -> float:
-        """计算调仓委托价格（支持按需重载实现）"""
+        """CalculateadjustpositionOrderPrice（supportpressneedreloadimplement）"""
         if direction == Direction.LONG:
             price: float = reference + self.price_add
         else:

@@ -60,7 +60,7 @@ class PortfolioStrategyApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = _("组合策略")
+    display_name: str = _("PortfolioStrategy")
     engine_class: type[StrategyEngine] = StrategyEngine
     widget_name: str = "PortfolioStrategyManager"
     icon_name: str = str(app_path.joinpath("ui", "strategy.ico"))

@@ -42,10 +42,10 @@ class SpreadManager(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("价差交易")
+        self.setWindowTitle("SpreadTrading")
 
         self.algo_dialog: SpreadAlgoWidget = SpreadAlgoWidget(self.spread_engine)
-        algo_group: QtWidgets.QGroupBox = self.create_group("交易", self.algo_dialog)
+        algo_group: QtWidgets.QGroupBox = self.create_group("Trading", self.algo_dialog)
         algo_group.setMaximumWidth(300)
 
         self.data_monitor: SpreadDataMonitor = SpreadDataMonitor(
@@ -67,10 +67,10 @@ class SpreadManager(QtWidgets.QWidget):
         )
 
         grid: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
-        grid.addWidget(self.create_group("价差", self.data_monitor), 0, 0)
-        grid.addWidget(self.create_group("日志", self.log_monitor), 1, 0)
-        grid.addWidget(self.create_group("算法", self.algo_monitor), 0, 1)
-        grid.addWidget(self.create_group("策略", self.strategy_monitor), 1, 1)
+        grid.addWidget(self.create_group("Spread", self.data_monitor), 0, 0)
+        grid.addWidget(self.create_group("Log", self.log_monitor), 1, 0)
+        grid.addWidget(self.create_group("Algo", self.algo_monitor), 0, 1)
+        grid.addWidget(self.create_group("Strategy", self.strategy_monitor), 1, 1)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
         hbox.addWidget(algo_group)
@@ -107,15 +107,15 @@ class SpreadDataMonitor(BaseMonitor):
     sorting: bool = False
 
     headers: dict = {
-        "name": {"display": "名称", "cell": BaseCell, "update": False},
-        "bid_volume": {"display": "买量", "cell": BidCell, "update": True},
-        "bid_price": {"display": "买价", "cell": BidCell, "update": True},
-        "ask_price": {"display": "卖价", "cell": AskCell, "update": True},
-        "ask_volume": {"display": "卖量", "cell": AskCell, "update": True},
-        "net_pos": {"display": "净仓", "cell": PnlCell, "update": True},
-        "datetime": {"display": "时间", "cell": TimeCell, "update": True},
-        "price_formula": {"display": "定价", "cell": BaseCell, "update": False},
-        "trading_formula": {"display": "交易", "cell": BaseCell, "update": False},
+        "name": {"display": "Name", "cell": BaseCell, "update": False},
+        "bid_volume": {"display": "Bid Volume", "cell": BidCell, "update": True},
+        "bid_price": {"display": "Bid Price", "cell": BidCell, "update": True},
+        "ask_price": {"display": "Ask Price", "cell": AskCell, "update": True},
+        "ask_volume": {"display": "Ask Volume", "cell": AskCell, "update": True},
+        "net_pos": {"display": "Net Position", "cell": PnlCell, "update": True},
+        "datetime": {"display": "Time", "cell": TimeCell, "update": True},
+        "price_formula": {"display": "Pricing", "cell": BaseCell, "update": False},
+        "trading_formula": {"display": "Trading", "cell": BaseCell, "update": False},
     }
 
     def register_event(self) -> None:
@@ -169,17 +169,17 @@ class SpreadAlgoMonitor(BaseMonitor):
     sorting: bool = False
 
     headers: dict = {
-        "algoid": {"display": "算法", "cell": BaseCell, "update": False},
-        "spread_name": {"display": "价差", "cell": BaseCell, "update": False},
-        "direction": {"display": "方向", "cell": DirectionCell, "update": False},
-        "price": {"display": "价格", "cell": BaseCell, "update": False},
-        "payup": {"display": "超价", "cell": BaseCell, "update": False},
-        "volume": {"display": "数量", "cell": BaseCell, "update": False},
-        "traded_volume": {"display": "成交数量", "cell": BaseCell, "update": True},
-        "traded_price": {"display": "成交均价", "cell": BaseCell, "update": True},
-        "interval": {"display": "间隔", "cell": BaseCell, "update": False},
-        "count": {"display": "计数", "cell": BaseCell, "update": True},
-        "status": {"display": "状态", "cell": EnumCell, "update": True},
+        "algoid": {"display": "Algo", "cell": BaseCell, "update": False},
+        "spread_name": {"display": "Spread", "cell": BaseCell, "update": False},
+        "direction": {"display": "Direction", "cell": DirectionCell, "update": False},
+        "price": {"display": "Price", "cell": BaseCell, "update": False},
+        "payup": {"display": "exceedprice", "cell": BaseCell, "update": False},
+        "volume": {"display": "Volume", "cell": BaseCell, "update": False},
+        "traded_volume": {"display": "Trade volume", "cell": BaseCell, "update": True},
+        "traded_price": {"display": "Avg trade price", "cell": BaseCell, "update": True},
+        "interval": {"display": "interval", "cell": BaseCell, "update": False},
+        "count": {"display": "countnumber", "cell": BaseCell, "update": True},
+        "status": {"display": "Status", "cell": EnumCell, "update": True},
     }
 
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine) -> None:
@@ -194,7 +194,7 @@ class SpreadAlgoMonitor(BaseMonitor):
         """
         super().init_ui()
 
-        self.setToolTip("双击单元格停止算法")
+        self.setToolTip("double-clickcellgridStop algo")
         self.itemDoubleClicked.connect(self.stop_algo)
 
     def stop_algo(self, cell: QtWidgets.QTableWidgetItem) -> None:
@@ -219,7 +219,7 @@ class SpreadAlgoWidget(QtWidgets.QFrame):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("启动算法")
+        self.setWindowTitle("StartAlgo")
         self.setFrameShape(self.Shape.Box)
         self.setLineWidth(1)
 
@@ -246,42 +246,42 @@ class SpreadAlgoWidget(QtWidgets.QFrame):
         self.interval_line: QtWidgets.QLineEdit = QtWidgets.QLineEdit()
         self.interval_line.setValidator(int_validator)
 
-        button_start: QtWidgets.QPushButton = QtWidgets.QPushButton("启动")
+        button_start: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
         button_start.clicked.connect(self.start_algo)
 
         self.mode_combo: QtWidgets.QComboBox = QtWidgets.QComboBox()
         self.mode_combo.addItems(
-            ["净仓", "锁仓"]
+            ["Net Position", "lockposition"]
         )
 
         self.class_combo: QtWidgets.QComboBox = QtWidgets.QComboBox()
 
-        add_button: QtWidgets.QPushButton = QtWidgets.QPushButton("添加策略")
+        add_button: QtWidgets.QPushButton = QtWidgets.QPushButton("AddStrategy")
         add_button.clicked.connect(self.add_strategy)
 
-        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部初始化")
+        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton("AllInitialize")
         init_button.clicked.connect(self.spread_engine.init_all_strategies)
 
-        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部启动")
+        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("AllStart")
         start_button.clicked.connect(self.spread_engine.start_all_strategies)
 
-        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全部停止")
+        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop all")
         stop_button.clicked.connect(self.spread_engine.stop_all_strategies)
 
-        add_spread_button: QtWidgets.QPushButton = QtWidgets.QPushButton("创建价差")
+        add_spread_button: QtWidgets.QPushButton = QtWidgets.QPushButton("CreateSpread")
         add_spread_button.clicked.connect(self.add_spread)
 
-        remove_spread_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除价差")
+        remove_spread_button: QtWidgets.QPushButton = QtWidgets.QPushButton("removeSpread")
         remove_spread_button.clicked.connect(self.remove_spread)
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form.addRow("价差", self.name_line)
-        form.addRow("方向", self.direction_combo)
-        form.addRow("价格", self.price_line)
-        form.addRow("数量", self.volume_line)
-        form.addRow("超价", self.payup_line)
-        form.addRow("间隔", self.interval_line)
-        form.addRow("模式", self.mode_combo)
+        form.addRow("Spread", self.name_line)
+        form.addRow("Direction", self.direction_combo)
+        form.addRow("Price", self.price_line)
+        form.addRow("Volume", self.volume_line)
+        form.addRow("exceedprice", self.payup_line)
+        form.addRow("interval", self.interval_line)
+        form.addRow("pattern", self.mode_combo)
         form.addRow(button_start)
 
         vbox: QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout()
@@ -301,7 +301,7 @@ class SpreadAlgoWidget(QtWidgets.QFrame):
     def start_algo(self) -> None:
         """"""
         lock_str: str = self.mode_combo.currentText()
-        if lock_str == "锁仓":
+        if lock_str == "lockposition":
             lock: bool = True
         else:
             lock = False
@@ -312,16 +312,16 @@ class SpreadAlgoWidget(QtWidgets.QFrame):
         interval_text = self.interval_line.text()
 
         for text, name in [
-            (price_text, "价格"),
-            (volume_text, "数量"),
-            (payup_text, "超价"),
-            (interval_text, "间隔"),
+            (price_text, "Price"),
+            (volume_text, "Volume"),
+            (payup_text, "exceedprice"),
+            (interval_text, "interval"),
         ]:
             if not text:
                 QtWidgets.QMessageBox.warning(
                     self,
-                    "启动失败",
-                    f"请输入【{name}】",
+                    "StartFailed",
+                    f"pleaseInput【{name}】",
                     QtWidgets.QMessageBox.Ok
                 )
                 return
@@ -393,14 +393,14 @@ class SpreadRemoveDialog(QtWidgets.QDialog):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("移除价差")
+        self.setWindowTitle("removeSpread")
         self.setMinimumWidth(300)
 
         self.name_combo: QtWidgets.QComboBox = QtWidgets.QComboBox()
         names: list = self.spread_engine.get_all_spread_names()
         self.name_combo.addItems(names)
 
-        button_remove: QtWidgets.QPushButton = QtWidgets.QPushButton("移除")
+        button_remove: QtWidgets.QPushButton = QtWidgets.QPushButton("remove")
         button_remove.clicked.connect(self.remove_spread)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
@@ -507,19 +507,19 @@ class SpreadStrategyWidget(QtWidgets.QFrame):
         self.setFrameShape(self.Shape.Box)
         self.setLineWidth(1)
 
-        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton("初始化")
+        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Initialize")
         init_button.clicked.connect(self.init_strategy)
 
-        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动")
+        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
         start_button.clicked.connect(self.start_strategy)
 
-        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("停止")
+        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop")
         stop_button.clicked.connect(self.stop_strategy)
 
-        edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton("编辑")
+        edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton("edit")
         edit_button.clicked.connect(self.edit_strategy)
 
-        remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除")
+        remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton("remove")
         remove_button.clicked.connect(self.remove_strategy)
 
         strategy_name: str = self._data["strategy_name"]
@@ -659,13 +659,13 @@ class SettingEditor(QtWidgets.QDialog):
 
         # Add spread_name and name edit if add new strategy
         if self.class_name:
-            self.setWindowTitle(f"添加策略：{self.class_name}")
-            button_text: str = "添加"
+            self.setWindowTitle(f"AddStrategy：{self.class_name}")
+            button_text: str = "Add"
             parameters: dict = {"strategy_name": "", "spread_name": ""}
             parameters.update(self.parameters)
         else:
-            self.setWindowTitle(f"参数编辑：{self.strategy_name}")
-            button_text = "确定"
+            self.setWindowTitle(f"Parameteredit：{self.strategy_name}")
+            button_text = "OK"
             parameters = self.parameters
 
         for name, value in parameters.items():
@@ -728,7 +728,7 @@ class SpreadDataDialog(QtWidgets.QDialog):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("创建价差")
+        self.setWindowTitle("CreateSpread")
 
         self.name_line: QtWidgets.QLineEdit = QtWidgets.QLineEdit()
         self.active_line: QtWidgets.QLineEdit = QtWidgets.QLineEdit()
@@ -748,24 +748,24 @@ class SpreadDataDialog(QtWidgets.QDialog):
 
         self.grid: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
 
-        button_add: QtWidgets.QPushButton = QtWidgets.QPushButton("创建价差")
+        button_add: QtWidgets.QPushButton = QtWidgets.QPushButton("CreateSpread")
         button_add.clicked.connect(self.add_spread)
 
         Label: QtWidgets.QLabel = QtWidgets.QLabel
 
         grid: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
-        grid.addWidget(Label("价差名称"), 0, 0)
+        grid.addWidget(Label("SpreadName"), 0, 0)
         grid.addWidget(self.name_line, 0, 1, 1, 4)
-        grid.addWidget(Label("主动腿代码"), 1, 0)
+        grid.addWidget(Label("Active legCode"), 1, 0)
         grid.addWidget(self.active_line, 1, 1, 1, 4)
-        grid.addWidget(Label("最小交易量"), 2, 0)
+        grid.addWidget(Label("minTradingvolume"), 2, 0)
         grid.addWidget(self.min_volume_combo, 2, 1, 1, 4)
-        grid.addWidget(Label("价格公式"), 3, 0)
+        grid.addWidget(Label("Priceformula"), 3, 0)
         grid.addWidget(self.formula_line, 3, 1, 1, 4)
 
-        grid.addWidget(Label("合约代码"), 4, 1)
-        grid.addWidget(Label("交易方向"), 4, 2)
-        grid.addWidget(Label("交易乘数"), 4, 3)
+        grid.addWidget(Label("ContractCode"), 4, 1)
+        grid.addWidget(Label("TradingDirection"), 4, 2)
+        grid.addWidget(Label("Tradingmultiplier"), 4, 3)
 
         int_validator: QtGui.QIntValidator = QtGui.QIntValidator()
         int_validator.setBottom(0)
@@ -776,7 +776,7 @@ class SpreadDataDialog(QtWidgets.QDialog):
             symbol_line: QtWidgets.QLineEdit = QtWidgets.QLineEdit()
 
             direction_combo: QtWidgets.QComboBox = QtWidgets.QComboBox()
-            direction_combo.addItems(["买入", "卖出"])
+            direction_combo.addItems(["Buy", "Sell"])
 
             trading_line: QtWidgets.QLineEdit = QtWidgets.QLineEdit()
             trading_line.setValidator(int_validator)
@@ -805,8 +805,8 @@ class SpreadDataDialog(QtWidgets.QDialog):
         if not spread_name:
             QtWidgets.QMessageBox.warning(
                 self,
-                "创建失败",
-                "请输入价差名称",
+                "CreateFailed",
+                "pleaseInputSpreadName",
                 QtWidgets.QMessageBox.Ok
             )
             return
@@ -815,8 +815,8 @@ class SpreadDataDialog(QtWidgets.QDialog):
         if not self.check_formula(price_formula):
             QtWidgets.QMessageBox.warning(
                 self,
-                "创建失败",
-                "请输入正确的计算公式",
+                "CreateFailed",
+                "pleaseInputcorrectCalculateformula",
                 QtWidgets.QMessageBox.Ok
             )
             return
@@ -830,7 +830,7 @@ class SpreadDataDialog(QtWidgets.QDialog):
                 vt_symbol: str = d["symbol"].text()
                 trading_multiplier: int = int(d["trading"].text())
 
-                if d["direction"].currentText() == "买入":
+                if d["direction"].currentText() == "Buy":
                     trading_direction: int = 1
                 else:
                     trading_direction = -1
@@ -848,8 +848,8 @@ class SpreadDataDialog(QtWidgets.QDialog):
         if len(leg_settings) < 2:
             QtWidgets.QMessageBox.warning(
                 self,
-                "创建失败",
-                "价差最少需要2条腿",
+                "CreateFailed",
+                "Spreadminneedneed2leg",
                 QtWidgets.QMessageBox.Ok
             )
             return
@@ -857,8 +857,8 @@ class SpreadDataDialog(QtWidgets.QDialog):
         if active_symbol not in leg_settings:
             QtWidgets.QMessageBox.warning(
                 self,
-                "创建失败",
-                "各条腿中找不到主动腿代码",
+                "CreateFailed",
+                "eachleginNot foundActive legCode",
                 QtWidgets.QMessageBox.Ok
             )
             return

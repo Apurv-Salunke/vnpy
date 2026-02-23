@@ -166,7 +166,7 @@ class PaperEngine(BaseEngine):
         elif self.ib_gateway and req.exchange in self.ib_gateway.exchanges:
             self._subscribe(req, "IB")
         else:
-            self.write_log(f"订阅行情失败，找不到该合约{req.vt_symbol}")
+            self.write_log(f"Subscribe market dataFailed，Not foundthisContract{req.vt_symbol}")
 
     def query_history(self, req: HistoryRequest, gateway_name: str) -> list[BarData] | None:
         """"""
@@ -183,16 +183,16 @@ class PaperEngine(BaseEngine):
     def send_order(self, req: OrderRequest, gateway_name: str) -> str:
         """"""
         if not self.paper_noticed:
-            self.write_log("PaperAccount模拟交易运行中，所有委托请求将不会发往交易接口")
+            self.write_log("PaperAccountmodelsimulateTradingRunningin，allOrderRequestwillwill notsendtoTradingGateway")
             self.paper_noticed = True
 
         if not req.volume:
-            self.write_log("委托数量非法，请检查")
+            self.write_log("Order volumeillegal，pleaseCheck")
             return ""
 
         contract: ContractData | None = self.main_engine.get_contract(req.vt_symbol)
         if not contract:
-            self.write_log(f"委托失败，找不到该合约{req.vt_symbol}")
+            self.write_log(f"OrderFailed，Not foundthisContract{req.vt_symbol}")
             return ""
 
         self.order_count += 1
@@ -273,7 +273,7 @@ class PaperEngine(BaseEngine):
         """"""
         contract: ContractData | None = self.main_engine.get_contract(req.vt_symbol)
         if not contract:
-            self.write_log(f"报价失败，找不到该合约{req.vt_symbol}")
+            self.write_log(f"quoteFailed，Not foundthisContract{req.vt_symbol}")
             return ""
 
         self.quote_count += 1
@@ -337,7 +337,7 @@ class PaperEngine(BaseEngine):
             order.status = Status.REJECTED
 
         if order.status == Status.REJECTED:
-            self.write_log(f"委托被拒单，不支持的委托类型{order.type.value}")
+            self.write_log(f"Orderbyrejectorder，Not supportedOrder type{order.type.value}")
 
         # Reject close order if no more available position
         if contract.net_position or order.offset == Offset.OPEN:
@@ -349,7 +349,7 @@ class PaperEngine(BaseEngine):
 
             if order.volume > available:
                 order.status = Status.REJECTED
-                self.write_log("委托被拒单，可平仓位不足")
+                self.write_log("Orderbyrejectorder，canClosebitnotenough")
             else:
                 short_position.frozen += order.volume
                 return short_position
@@ -359,7 +359,7 @@ class PaperEngine(BaseEngine):
 
             if order.volume > available:
                 order.status = Status.REJECTED
-                self.write_log("委托被拒单，可平仓位不足")
+                self.write_log("Orderbyrejectorder，canClosebitnotenough")
             else:
                 long_position.frozen += order.volume
                 return long_position

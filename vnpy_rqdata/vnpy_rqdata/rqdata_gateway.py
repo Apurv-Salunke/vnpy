@@ -53,14 +53,14 @@ PRODUCT_MAP = {
 
 class RqdataGateway(BaseGateway):
     """
-    VeighNa框架用于对接RQData实时行情的接口。
+    VeighNaframeworkuseatforreceiveRQDataReal-timeMarket dataGateway。
     """
 
     default_name: str = "RQDATA"
 
     default_setting: dict[str, str] = {
-        "用户名": "",
-        "密码": ""
+        "Username": "",
+        "Password": ""
     }
 
     exchanges: list[str] = list(EXCHANGE_VT2RQDATA.keys())
@@ -72,46 +72,46 @@ class RqdataGateway(BaseGateway):
         self.thread: Thread | None = None
 
         self.subscribed: set[str] = set()
-        self.futures_map: dict[str, tuple[str, Exchange]] = {}      # 期货代码交易所映射信息
+        self.futures_map: dict[str, tuple[str, Exchange]] = {}      # FuturesCodeExchangemapInfo
         self.symbol_map: dict[str, str] = {}
 
     def connect(self, setting: dict) -> None:
-        """连接交易接口"""
+        """ConnectTradingGateway"""
         if self.client:
             return
 
-        # 初始化rqdatac
-        username: str = setting["用户名"]
-        password: str = setting["密码"]
+        # Initializerqdatac
+        username: str = setting["Username"]
+        password: str = setting["Password"]
 
         try:
             init(username, password)
         except Exception as ex:
-            self.write_log(f"RQData接口初始化失败：{ex}")
+            self.write_log(f"RQDataGatewayInitializeFailed：{ex}")
             return
 
-        # 查询合约信息
+        # QueryContractInfo
         self.query_contract()
 
-        # 创建实时行情客户端
+        # CreateReal-timeMarket dataClient
         self.client = LiveMarketDataClient()
 
-        # 启动运行线程
+        # StartRunningthread
         self.thread = self.client.listen(handler=self.handle_msg)
 
-        # 订阅之前行情
+        # SubscribeBeforeMarket data
         for rq_channel in self.subscribed:
             self.client.subscribe(rq_channel)
 
-        self.write_log("RQData接口初始化成功")
+        self.write_log("RQDataGatewayInitializeSuccess")
 
     def subscribe(self, req: SubscribeRequest) -> None:
-        """订阅行情"""
-        # 证券
+        """Subscribe market data"""
+        # security
         if req.exchange in {Exchange.SSE, Exchange.SZSE}:
             rq_exchange: str = EXCHANGE_VT2RQDATA[req.exchange]
             rq_channel: str = f"tick_{req.symbol}.{rq_exchange}"
-        # 期货
+        # Futures
         else:
             rq_symbol = req.symbol.upper()
             rq_channel = f"tick_{rq_symbol}"
@@ -124,23 +124,23 @@ class RqdataGateway(BaseGateway):
             self.client.subscribe(rq_channel)
 
     def send_order(self, req: OrderRequest) -> str:
-        """委托下单"""
+        """Orderplace order"""
         return ""
 
     def cancel_order(self, req: CancelRequest) -> None:
-        """委托撤单"""
+        """Ordercancel order"""
         pass
 
     def query_account(self) -> None:
-        """查询资金"""
+        """QueryAccount"""
         pass
 
     def query_position(self) -> None:
-        """查询持仓"""
+        """QueryPosition"""
         pass
 
     def close(self) -> None:
-        """关闭接口"""
+        """CloseGateway"""
         if self.client:
             self.client.close()
 
@@ -148,7 +148,7 @@ class RqdataGateway(BaseGateway):
             self.thread.join()
 
     def query_contract(self) -> None:
-        """查询合约"""
+        """QueryContract"""
         for t in ["CS", "INDX", "ETF", "Future"]:
             df: DataFrame = all_instruments(type=t)
 
@@ -169,19 +169,19 @@ class RqdataGateway(BaseGateway):
                 if product == Product.EQUITY:
                     size: int = 1
                     pricetick: float = 0.01
-                    product_name: str = "股票"
+                    product_name: str = "Stock"
                 elif product == Product.FUND:
                     size = 1
                     pricetick = 0.001
-                    product_name = "基金"
+                    product_name = "fund"
                 elif product == Product.INDEX:
                     size = 1
                     pricetick = 0.01
-                    product_name = "指数"
+                    product_name = "index"
                 elif product == Product.FUTURES:
                     size = cast(int, tp.contract_multiplier)
                     pricetick = 0.01
-                    product_name = "期货"
+                    product_name = "Futures"
 
                 contract = ContractData(
                     symbol=symbol,
@@ -197,13 +197,13 @@ class RqdataGateway(BaseGateway):
 
                 self.symbol_map[cast(str, tp.order_book_id)] = contract
 
-            self.write_log(f"{product_name}合约信息查询成功")
+            self.write_log(f"{product_name}ContractInfoQuerySuccess")
 
     def handle_msg(self, data: dict) -> None:
-        """处理行情推送"""
+        """ProcessMarket dataPush"""
         contract: ContractData = self.symbol_map.get(data["order_book_id"], None)
         if not contract:
-            self.write_log(f"收到不支持合约{data['order_book_id']}的行情推送")
+            self.write_log(f"collectToNot supportedContract{data['order_book_id']}Market dataPush")
             return
 
         dt: datetime = datetime.strptime(str(data["datetime"]), "%Y%m%d%H%M%S%f")

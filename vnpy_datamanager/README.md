@@ -1,4 +1,4 @@
-# VeighNa框架的数据管理模块
+# Data Manager Module for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,23 +11,83 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-通过UI界面直观查询数据库中已有的数据概况，选择任意时间段数据查看字段细节，支持CSV文件的数据导入和导出。
+Intuitively query data overview in database through UI interface. Select any time period to view field details. Supports CSV file data import and export.
 
-## 安装
+## Installation
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-直接使用pip命令：
-
-```
+**Install via pip:**
+```bash
 pip install vnpy_datamanager
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+cd vnpy_datamanager
 pip install .
 ```
+
+## Features
+
+- **Data Tree:** Browse database by symbol and interval
+- **Data View:** View OHLCV data in table format
+- **Import/Export:** CSV import and export
+- **Data Statistics:** Count, date range, missing data detection
+- **Data Update:** Manual data correction and deletion
+- **Download:** Download historical data from datafeed
+
+## Supported Data Types
+
+| Type | Description |
+|------|-------------|
+| **Tick Data** | Level-1 market data (bid/ask, volume) |
+| **1min Bars** | 1-minute OHLCV bars |
+| **Hour Bars** | 1-hour OHLCV bars |
+| **Daily Bars** | Daily OHLCV bars |
+
+## Usage
+
+1. Launch VeighNa Trader
+2. Click "Data Manager" app
+3. Select symbol and interval from tree view
+4. View data in table format
+5. Use toolbar functions:
+   - **Import:** Load data from CSV
+   - **Export:** Save data to CSV
+   - **Delete:** Remove selected data
+   - **Download:** Fetch from datafeed service
+
+## CSV Format
+
+**Bar Data:**
+```csv
+datetime,open,high,low,close,volume,turnover,open_interest
+2024-01-15 09:15:00,3800,3810,3795,3805,10000,38050000,5000
+2024-01-15 09:16:00,3805,3815,3800,3810,8000,30480000,5010
+```
+
+**Tick Data:**
+```csv
+datetime,last_price,volume,bid_price_1,bid_volume_1,ask_price_1,ask_volume_1
+2024-01-15 09:15:30,3805,100,3804,50,3806,75
+```
+
+## Database Support
+
+| Database | Support |
+|----------|---------|
+| SQLite | ✅ Default |
+| MySQL | ✅ Supported |
+| PostgreSQL | ✅ Supported |
+| MongoDB | ✅ Supported |
+| TDengine | ✅ Supported |
+| DolphinDB | ✅ Supported |
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_datamanager

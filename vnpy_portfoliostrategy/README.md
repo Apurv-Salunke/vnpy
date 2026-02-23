@@ -1,4 +1,4 @@
-# VeighNa框架的投资组合策略模块
+# Portfolio Strategy Module for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,23 +11,75 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-针对多合约组合策略实盘的功能模块，用于实现策略历史回测、参数优化和实盘交易等任务。
+Application module for multi-asset portfolio strategies. Used to implement historical backtesting, parameter optimization, and live automated trading for strategies trading multiple contracts simultaneously.
 
-## 安装
+## Installation
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-直接使用pip命令：
-
-```
+**Install via pip:**
+```bash
 pip install vnpy_portfoliostrategy
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+cd vnpy_portfoliostrategy
 pip install .
 ```
+
+## Features
+
+- **Multi-Asset Support:** Trade multiple contracts simultaneously
+- **Backtesting Engine:** Portfolio-level backtesting with daily PnL calculation
+- **Strategy Template:** `StrategyTemplate` with `on_bar()` for any symbol in portfolio
+- **Real-time Trading:** Live portfolio rebalancing
+- **Parameter Optimization:** Grid search and genetic algorithms
+
+## Built-in Strategies (4)
+
+| Strategy | Description |
+|----------|-------------|
+| `PairTradingStrategy` | Pairs trading with cointegration test |
+| `PcpArbitrageStrategy` | Period conversion arbitrage |
+| `PortfolioBollChannelStrategy` | Multi-asset Bollinger Bands strategy |
+| `TrendFollowingStrategy` | Multi-asset trend following |
+
+## Difference from CTA Strategy
+
+| Feature | CTA Strategy | Portfolio Strategy |
+|---------|--------------|-------------------|
+| **Assets** | Single contract | Multiple contracts |
+| **on_bar()** | One symbol only | Any symbol in portfolio |
+| **Position** | `self.pos` | `self.get_pos(vt_symbol)` |
+| **Use Case** | Futures, crypto | Alpha, options arbitrage |
+
+## Strategy Template Example
+
+```python
+from vnpy_portfoliostrategy import StrategyTemplate
+from vnpy.trader.constant import Direction
+
+class MyPortfolioStrategy(StrategyTemplate):
+    def on_init(self):
+        self.write_log("Strategy initialized")
+        
+    def on_bar(self, bar):
+        # Bar can be from ANY symbol in portfolio
+        vt_symbol = bar.vt_symbol
+        
+        # Get position for this symbol
+        pos = self.get_pos(vt_symbol)
+        
+        # Your strategy logic
+        if self.buy_signal(vt_symbol):
+            self.buy(vt_symbol, bar.close_price, 1)
+```
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_portfoliostrategy

@@ -1,12 +1,72 @@
-# RPC数据服务
+# RPC Datafeed Service
 
-用于将某些限制只能单点登录（IP或者进程）的数据服务，共享给多个VeighNa Trader进程，仅建议在本机或者局域网内使用。
+Used to share datafeed services that are limited to single sign-on (IP or process) across multiple VeighNa Trader processes. Only recommended for use on local machine or within LAN.
 
-请将datafeed_server.py和run_trader.py两个启动脚本分别放置在不同的目录中，每个目录包含独立的.vntrader文件夹：
+Place the `datafeed_server.py` and `run_trader.py` startup scripts in separate directories, each containing an independent `.vntrader` folder:
 
-* datafeed_server.py
-    * 所在目录的.vntrader\vt_setting.json中，请配置datafeed相关字段为实际要使用的数据服务（如rqdata）
-* run_trader.py
-    * 所在目录的.vntrader\vt_setting.json中，请参考run_trader.py文件中头部的SETTINGS内容修改datafeed相关字段
+**datafeed_server.py:**
+- In the `.vntrader/vt_setting.json` of its directory, configure datafeed-related fields to the actual datafeed service to use (e.g., rqdata)
 
-注意两边的端口号需要匹配。
+**run_trader.py:**
+- In the `.vntrader/vt_setting.json` of its directory, modify datafeed-related fields referencing the SETTINGS content at the top of `run_trader.py` file
+
+**Note:** Port numbers on both sides must match.
+
+## Usage
+
+### Start Datafeed Server
+
+```bash
+# In datafeed_server directory
+python datafeed_server.py
+```
+
+### Start Trader Clients
+
+```bash
+# In each trader directory
+python run_trader.py
+```
+
+## Configuration
+
+### Datafeed Server Settings
+
+```json
+{
+    "datafeed.name": "rqdata",
+    "datafeed.username": "your_username",
+    "datafeed.password": "your_password"
+}
+```
+
+### Trader Client Settings
+
+```json
+{
+    "datafeed.name": "rpc",
+    "datafeed.username": "rpc",
+    "datafeed.password": "rpc",
+    "datafeed.rpc_address": "tcp://localhost:2013"
+}
+```
+
+## Use Cases
+
+### 1. Single Datafeed License
+
+Share one RQData license across multiple trading strategies running in separate processes.
+
+### 2. Centralized Data Cache
+
+Cache historical data in one process, serve to multiple strategy processes.
+
+### 3. LAN Distribution
+
+Share datafeed from one machine to multiple trading machines on same network.
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_rpcservice

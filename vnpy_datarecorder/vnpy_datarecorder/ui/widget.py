@@ -34,7 +34,7 @@ class RecorderManager(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("行情记录")
+        self.setWindowTitle("Market datalog")
         self.resize(1000, 600)
 
         # Create widgets
@@ -44,7 +44,7 @@ class RecorderManager(QtWidgets.QWidget):
         self.interval_spin.setMinimum(1)
         self.interval_spin.setMaximum(60)
         self.interval_spin.setValue(self.recorder_engine.timer_interval)
-        self.interval_spin.setSuffix("秒")
+        self.interval_spin.setSuffix("seconds")
         self.interval_spin.valueChanged.connect(self.set_interval)
 
         contracts: list[ContractData] = self.main_engine.get_all_contracts()
@@ -55,16 +55,16 @@ class RecorderManager(QtWidgets.QWidget):
         self.symbol_completer.setCompletionMode(self.symbol_completer.CompletionMode.PopupCompletion)
         self.symbol_line.setCompleter(self.symbol_completer)
 
-        add_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("添加")
+        add_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Add")
         add_bar_button.clicked.connect(self.add_bar_recording)
 
-        remove_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除")
+        remove_bar_button: QtWidgets.QPushButton = QtWidgets.QPushButton("remove")
         remove_bar_button.clicked.connect(self.remove_bar_recording)
 
-        add_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("添加")
+        add_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Add")
         add_tick_button.clicked.connect(self.add_tick_recording)
 
-        remove_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("移除")
+        remove_tick_button: QtWidgets.QPushButton = QtWidgets.QPushButton("remove")
         remove_tick_button.clicked.connect(self.remove_tick_recording)
 
         self.bar_recording_edit: QtWidgets.QTextEdit = QtWidgets.QTextEdit()
@@ -78,16 +78,16 @@ class RecorderManager(QtWidgets.QWidget):
 
         # Set layout
         grid: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
-        grid.addWidget(QtWidgets.QLabel("K线记录"), 0, 0)
+        grid.addWidget(QtWidgets.QLabel("Klinelog"), 0, 0)
         grid.addWidget(add_bar_button, 0, 1)
         grid.addWidget(remove_bar_button, 0, 2)
-        grid.addWidget(QtWidgets.QLabel("Tick记录"), 1, 0)
+        grid.addWidget(QtWidgets.QLabel("Ticklog"), 1, 0)
         grid.addWidget(add_tick_button, 1, 1)
         grid.addWidget(remove_tick_button, 1, 2)
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form.addRow("本地代码", self.symbol_line)
-        form.addRow("写入间隔", self.interval_spin)
+        form.addRow("Local code", self.symbol_line)
+        form.addRow("writeinterval", self.interval_spin)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
         hbox.addLayout(form)
@@ -96,8 +96,8 @@ class RecorderManager(QtWidgets.QWidget):
         hbox.addStretch()
 
         grid2: QtWidgets.QGridLayout = QtWidgets.QGridLayout()
-        grid2.addWidget(QtWidgets.QLabel("K线记录列表"), 0, 0)
-        grid2.addWidget(QtWidgets.QLabel("Tick记录列表"), 0, 1)
+        grid2.addWidget(QtWidgets.QLabel("KlinelogList"), 0, 0)
+        grid2.addWidget(QtWidgets.QLabel("TicklogList"), 0, 1)
         grid2.addWidget(self.bar_recording_edit, 1, 0)
         grid2.addWidget(self.tick_recording_edit, 1, 1)
         grid2.addWidget(self.log_edit, 2, 0, 1, 2)

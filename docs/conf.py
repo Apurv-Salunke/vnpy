@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'VeighNa'
-copyright = '2015 - 2024, 上海韦纳软件科技有限公司'
-author = '上海韦纳软件科技有限公司'
+copyright = '2015 - 2024, Shanghai VeighNa Software Technology Co., Ltd.'
+author = 'Shanghai VeighNa Software Technology Co., Ltd.'
 
 # The short X.Y version
 version = '2024.7.18'

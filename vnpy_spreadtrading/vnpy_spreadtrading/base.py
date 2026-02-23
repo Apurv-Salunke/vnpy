@@ -196,15 +196,15 @@ class SpreadData:
 
         self.leg_pos: defaultdict = defaultdict(int)
 
-        # 价差计算公式相关
+        # SpreadCalculateformularelated
         self.variable_symbols: dict = variable_symbols
         self.variable_directions: dict = variable_directions
         self.price_formula = price_formula
 
-        # 实盘时编译公式，加速计算
+        # livetimecompileformula，accelerateCalculate
         if compile_formula:
             self.price_code: Any = compile(price_formula, __name__, "eval")
-        # 回测时不编译公式，从而支持多进程优化
+        # Backtesttimenotcompileformula，FromandsupportlongprocessOptimization
         else:
             self.price_code = price_formula
 
@@ -215,10 +215,10 @@ class SpreadData:
 
     def calculate_price(self) -> bool:
         """
-        计算价差盘口
+        CalculateSpreadorder book
 
-        1. 如果各条腿价格均有效，则计算成功，返回True
-        2. 反之只要有一条腿的价格无效，则计算失败，返回False
+        1. IfeachlegPriceavgValid，thenCalculateSuccess，ReturnTrue
+        2. reverseonlyneedhaveonelegPriceInvalid，thenCalculateFailed，ReturnFalse
         """
         self.clear_price()
 
@@ -294,7 +294,7 @@ class SpreadData:
         return True
 
     def update_trade(self, trade: TradeData) -> None:
-        """更新委托成交"""
+        """UpdateOrder Trade"""
         if trade.direction == Direction.LONG:
             self.leg_pos[trade.vt_symbol] += trade.volume
         else:
@@ -388,7 +388,7 @@ class SpreadData:
         return value
 
     def get_item(self) -> "SpreadItem":
-        """获取数据对象"""
+        """GetDataObject"""
         item: SpreadItem = SpreadItem(
             name=self.name,
             bid_volume=self.bid_volume,
@@ -404,8 +404,8 @@ class SpreadData:
 
 
 class EngineType(Enum):
-    LIVE = "实盘"
-    BACKTESTING = "回测"
+    LIVE = "live"
+    BACKTESTING = "Backtest"
 
 
 class BacktestingMode(Enum):
@@ -431,16 +431,16 @@ def load_bar_data(
     for vt_symbol in spread.legs.keys():
         symbol, exchange = extract_vt_symbol(vt_symbol)
 
-        # 初始化K线列表
+        # InitializeKlineList
         bar_data: list[BarData] = []
 
-        # 只有实盘才优先尝试从数据服务查询
+        # onlyhavelivecanprioritytryFromDataServiceQuery
         if not backtesting:
             bar_data = query_bar_from_datafeed(
                 symbol, exchange, interval, start, end, output
             )
 
-        # 如果查询失败，则尝试从数据库中读取
+        # IfQueryFailed，thentryFromDatabaseinread
         if not bar_data:
             bar_data = database.load_bar_data(
                 symbol, exchange, interval, start, end
@@ -462,10 +462,10 @@ def load_bar_data(
             leg_bar: BarData | None = leg_bars[leg.vt_symbol].get(dt, None)
 
             if leg_bar:
-                # 缓存该腿当前的价格
+                # cachethislegCurrentPrice
                 leg_data[variable] = leg_bar.close_price
 
-                # 基于交易乘数累计价值
+                # Based onTradingmultipliercumulativepricevalue
                 trading_multiplier: int = spread.trading_multipliers[leg.vt_symbol]
                 spread_value += trading_multiplier * leg_bar.close_price
             else:
@@ -532,7 +532,7 @@ def query_bar_from_datafeed(
 
 @dataclass
 class SpreadItem:
-    """价差数据容器"""
+    """SpreadDatacontainerer"""
 
     name: str
     bid_volume: float
@@ -547,7 +547,7 @@ class SpreadItem:
 
 @dataclass
 class AlgoItem:
-    """算法数据容器"""
+    """AlgoDatacontainerer"""
 
     algoid: str
     spread_name: str

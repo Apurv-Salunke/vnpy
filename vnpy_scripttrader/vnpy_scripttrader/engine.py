@@ -54,13 +54,13 @@ class ScriptEngine(BaseEngine):
         log_engine.register_log(EVENT_SCRIPT_LOG)
 
     def init(self) -> None:
-        """启动策略引擎"""
+        """StartStrategyEngine"""
         result: bool = self.datafeed.init()
         if result:
-            self.write_log("数据服务初始化成功")
+            self.write_log("DataServiceInitializeSuccess")
 
     def start_strategy(self, script_path: str) -> None:
-        """运行策略线程中的策略方法"""
+        """RunningStrategythreadinStrategyMethod"""
         if self.strategy_active:
             return
         self.strategy_active = True
@@ -69,10 +69,10 @@ class ScriptEngine(BaseEngine):
             target=self.run_strategy, args=(script_path,))
         self.strategy_thread.start()
 
-        self.write_log("策略交易脚本启动")
+        self.write_log("StrategyTradingscriptStart")
 
     def run_strategy(self, script_path: str) -> None:
-        """加载策略脚本并调用run函数"""
+        """LoadStrategyscriptandcallrunFunction"""
         path: Path = Path(script_path)
         sys.path.append(str(path.parent))
 
@@ -84,11 +84,11 @@ class ScriptEngine(BaseEngine):
             importlib.reload(module)
             module.run(self)
         except Exception:
-            msg: str = f"触发异常已停止\n{traceback.format_exc()}"
+            msg: str = f"triggerExceptionalreadyStop\n{traceback.format_exc()}"
             self.write_log(msg)
 
     def stop_strategy(self) -> None:
-        """停止运行中的策略"""
+        """StopRunninginStrategy"""
         if not self.strategy_active:
             return
         self.strategy_active = False
@@ -97,7 +97,7 @@ class ScriptEngine(BaseEngine):
             self.strategy_thread.join()
         self.strategy_thread = None
 
-        self.write_log("策略交易脚本停止")
+        self.write_log("StrategyTradingscriptStop")
 
     def connect_gateway(self, setting: dict, gateway_name: str) -> None:
         """"""
@@ -310,7 +310,7 @@ class ScriptEngine(BaseEngine):
 
     def send_email(self, msg: str) -> None:
         """"""
-        subject: str = "脚本策略引擎通知"
+        subject: str = "scriptStrategyEnginenotification"
         self.main_engine.send_email(subject, msg)
 
 

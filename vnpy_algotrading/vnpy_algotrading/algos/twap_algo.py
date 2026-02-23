@@ -7,9 +7,9 @@ from ..template import AlgoTemplate
 
 
 class TwapAlgo(AlgoTemplate):
-    """TWAP算法类"""
+    """TWAPAlgoClass"""
 
-    display_name: str = "TWAP 时间加权平均"
+    display_name: str = "TWAP TWAP"
 
     default_setting: dict = {
         "time": 600,
@@ -33,14 +33,14 @@ class TwapAlgo(AlgoTemplate):
         volume: float,
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(algo_engine, algo_name, vt_symbol, direction, offset, price, volume, setting)
 
-        # 参数
+        # Parameter
         self.time: int = setting["time"]
         self.interval: int = setting["interval"]
 
-        # 变量
+        # Variable
         self.order_volume: float = self.volume / (self.time / self.interval)
         contract: ContractData = self.get_contract()
         if contract:
@@ -52,21 +52,21 @@ class TwapAlgo(AlgoTemplate):
         self.put_event()
 
     def on_trade(self, trade: TradeData) -> None:
-        """成交回调"""
+        """Trade callback"""
         if self.traded >= self.volume:
-            self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}")
+            self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
             self.finish()
         else:
             self.put_event()
 
     def on_timer(self) -> None:
-        """定时回调"""
+        """Timer callback"""
         self.timer_count += 1
         self.total_count += 1
         self.put_event()
 
         if self.total_count >= self.time:
-            self.write_log("执行时间已结束，停止算法")
+            self.write_log("Execution time ended, stopping algo")
             self.finish()
             return
 

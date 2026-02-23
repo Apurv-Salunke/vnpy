@@ -42,27 +42,27 @@ class CtaManager(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle(_("CTA策略"))
+        self.setWindowTitle(_("CTAStrategy"))
 
         # Create widgets
         self.class_combo: QtWidgets.QComboBox = QtWidgets.QComboBox()
 
-        add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("添加策略"))
+        add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AddStrategy"))
         add_button.clicked.connect(self.add_strategy)
 
-        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部初始化"))
+        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllInitialize"))
         init_button.clicked.connect(self.cta_engine.init_all_strategies)
 
-        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部启动"))
+        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllStart"))
         start_button.clicked.connect(self.cta_engine.start_all_strategies)
 
-        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部停止"))
+        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop all"))
         stop_button.clicked.connect(self.cta_engine.stop_all_strategies)
 
-        clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("清空日志"))
+        clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("clearNoneLog"))
         clear_button.clicked.connect(self.clear_log)
 
-        roll_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移仓助手"))
+        roll_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("movepositionassistant"))
         roll_button.clicked.connect(self.roll)
 
         self.scroll_layout: QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout()
@@ -83,7 +83,7 @@ class CtaManager(QtWidgets.QWidget):
 
         self.strategy_combo = QtWidgets.QComboBox()
         self.strategy_combo.setMinimumWidth(200)
-        find_button = QtWidgets.QPushButton(_("查找"))
+        find_button = QtWidgets.QPushButton(_("find"))
         find_button.clicked.connect(self.find_strategy)
 
         # Set layout
@@ -222,21 +222,21 @@ class StrategyManager(QtWidgets.QFrame):
         self.setFrameShape(self.Shape.Box)
         self.setLineWidth(1)
 
-        self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("初始化"))
+        self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Initialize"))
         self.init_button.clicked.connect(self.init_strategy)
 
-        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("启动"))
+        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Start"))
         self.start_button.clicked.connect(self.start_strategy)
         self.start_button.setEnabled(False)
 
-        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("停止"))
+        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop"))
         self.stop_button.clicked.connect(self.stop_strategy)
         self.stop_button.setEnabled(False)
 
-        self.edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("编辑"))
+        self.edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("edit"))
         self.edit_button.clicked.connect(self.edit_strategy)
 
-        self.remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移除"))
+        self.remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("remove"))
         self.remove_button.clicked.connect(self.remove_strategy)
 
         strategy_name: str = self._data["strategy_name"]
@@ -381,21 +381,21 @@ class StopOrderMonitor(BaseMonitor):
 
     headers: dict = {
         "stop_orderid": {
-            "display": _("停止委托号"),
+            "display": _("StopOrder ID"),
             "cell": BaseCell,
             "update": False,
         },
-        "vt_orderids": {"display": _("限价委托号"), "cell": BaseCell, "update": True},
-        "vt_symbol": {"display": _("本地代码"), "cell": BaseCell, "update": False},
-        "direction": {"display": _("方向"), "cell": EnumCell, "update": False},
-        "offset": {"display": _("开平"), "cell": EnumCell, "update": False},
-        "price": {"display": _("价格"), "cell": BaseCell, "update": False},
-        "volume": {"display": _("数量"), "cell": BaseCell, "update": False},
-        "status": {"display": _("状态"), "cell": EnumCell, "update": True},
-        "datetime": {"display": _("时间"), "cell": TimeCell, "update": False},
-        "lock": {"display": _("锁仓"), "cell": BaseCell, "update": False},
-        "net": {"display": _("净仓"), "cell": BaseCell, "update": False},
-        "strategy_name": {"display": _("策略名"), "cell": BaseCell, "update": False},
+        "vt_orderids": {"display": _("limit priceOrder ID"), "cell": BaseCell, "update": True},
+        "vt_symbol": {"display": _("Local code"), "cell": BaseCell, "update": False},
+        "direction": {"display": _("Direction"), "cell": EnumCell, "update": False},
+        "offset": {"display": _("Offset"), "cell": EnumCell, "update": False},
+        "price": {"display": _("Price"), "cell": BaseCell, "update": False},
+        "volume": {"display": _("Volume"), "cell": BaseCell, "update": False},
+        "status": {"display": _("Status"), "cell": EnumCell, "update": True},
+        "datetime": {"display": _("Time"), "cell": TimeCell, "update": False},
+        "lock": {"display": _("lockposition"), "cell": BaseCell, "update": False},
+        "net": {"display": _("Net Position"), "cell": BaseCell, "update": False},
+        "strategy_name": {"display": _("Strategyname"), "cell": BaseCell, "update": False},
     }
 
     def __del__(self) -> None:
@@ -413,8 +413,8 @@ class LogMonitor(BaseMonitor):
     sorting: bool = False
 
     headers: dict = {
-        "time": {"display": _("时间"), "cell": TimeCell, "update": False},
-        "msg": {"display": _("信息"), "cell": MsgCell, "update": False},
+        "time": {"display": _("Time"), "cell": TimeCell, "update": False},
+        "msg": {"display": _("Info"), "cell": MsgCell, "update": False},
     }
 
     def init_ui(self) -> None:
@@ -460,13 +460,13 @@ class SettingEditor(QtWidgets.QDialog):
 
         # Add vt_symbol and name edit if add new strategy
         if self.class_name:
-            self.setWindowTitle(_("添加策略：{}").format(self.class_name))
-            button_text: str = _("添加")
+            self.setWindowTitle(_("AddStrategy：{}").format(self.class_name))
+            button_text: str = _("Add")
             parameters: dict = {"strategy_name": "", "vt_symbol": ""}
             parameters.update(self.parameters)
         else:
-            self.setWindowTitle(_("参数编辑：{}").format(self.strategy_name))
-            button_text = _("确定")
+            self.setWindowTitle(_("Parameteredit：{}").format(self.strategy_name))
+            button_text = _("OK")
             parameters = self.parameters
 
         for name, value in parameters.items():

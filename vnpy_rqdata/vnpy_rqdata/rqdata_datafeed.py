@@ -43,20 +43,20 @@ CHINA_TZ = ZoneInfo("Asia/Shanghai")
 
 
 def to_rq_symbol(symbol: str, exchange: Exchange, all_symbols: ndarray) -> str:
-    """将交易所代码转换为米筐代码"""
-    # 股票
+    """willExchangeCodeconvertasRicequantCode"""
+    # Stock
     if exchange in {Exchange.SSE, Exchange.SZSE}:
         if exchange == Exchange.SSE:
             rq_symbol: str = f"{symbol}.XSHG"
         else:
             rq_symbol = f"{symbol}.XSHE"
-    # 金交所现货
+    # SGEspot
     elif exchange == Exchange.SGE:
         for char in ["(", ")", "+"]:
             symbol = symbol.replace(char, "")
         symbol = symbol.upper()
         rq_symbol = f"{symbol}.SGEX"
-    # 期货和期权
+    # FuturesandOption
     elif exchange in {
         Exchange.CFFEX,
         Exchange.SHFE,
@@ -72,29 +72,29 @@ def to_rq_symbol(symbol: str, exchange: Exchange, all_symbols: ndarray) -> str:
         product: str = symbol[:count]
         time_str: str = symbol[count:]
 
-        # 期货
+        # Futures
         if time_str.isdigit():
-            # 只有郑商所需要特殊处理
+            # onlyhaveCZCEneedneedspecialProcess
             if exchange is not Exchange.CZCE:
                 return symbol.upper()
 
-            # 检查是否为连续合约或者指数合约
+            # CheckwhetherascontinuousContractOrindexContract
             if time_str in ["88", "888", "99", "889"]:
                 return symbol
 
-            # 提取年月
+            # liftgetyearmonth
             year: str = symbol[count]
             month: str = symbol[count + 1:]
 
             guess_1: str = f"{product}1{year}{month}".upper()
             guess_2: str = f"{product}2{year}{month}".upper()
 
-            # 优先尝试20年后的合约
+            # prioritytry20yearafterContract
             if guess_2 in all_symbols:
                 rq_symbol = guess_2
             else:
                 rq_symbol = guess_1
-        # 期权以及期货次主力连续合约
+        # OptiontoandFuturestimesmain continuousContract
         else:
             if time_str == "88A2":
                 return symbol.upper()
@@ -114,7 +114,7 @@ def to_rq_symbol(symbol: str, exchange: Exchange, all_symbols: ndarray) -> str:
                 guess_1 = f"{product}1{year}{suffix}".upper()
                 guess_2 = f"{product}2{year}{suffix}".upper()
 
-                # 优先尝试20年后的合约
+                # prioritytry20yearafterContract
                 if guess_2 in all_symbols:
                     rq_symbol = guess_2
                 else:
@@ -126,7 +126,7 @@ def to_rq_symbol(symbol: str, exchange: Exchange, all_symbols: ndarray) -> str:
 
 
 class RqdataDatafeed(BaseDatafeed):
-    """米筐RQData数据服务接口"""
+    """RicequantRQDataDataServiceGateway"""
 
     def __init__(self) -> None:
         """"""
@@ -136,16 +136,16 @@ class RqdataDatafeed(BaseDatafeed):
         self.inited: bool = False
 
     def init(self, output: Callable = print) -> bool:
-        """初始化"""
+        """Initialize"""
         if self.inited:
             return True
 
         if not self.username:
-            output("RQData数据服务初始化失败：用户名为空！")
+            output("RQDataDataServiceInitializeFailed：UsernameIs empty！")
             return False
 
         if not self.password:
-            output("RQData数据服务初始化失败：密码为空！")
+            output("RQDataDataServiceInitializeFailed：PasswordIs empty！")
             return False
 
         try:
@@ -161,28 +161,28 @@ class RqdataDatafeed(BaseDatafeed):
             df: DataFrame = all_instruments()
             self.symbols: ndarray = df["order_book_id"].to_numpy()
         except RQDataError as ex:
-            output(f"RQData数据服务初始化失败：{ex}")
+            output(f"RQDataDataServiceInitializeFailed：{ex}")
             return False
         except RuntimeError as ex:
-            output(f"发生运行时错误：{ex}")
+            output(f"occurRunningtimeError：{ex}")
             return False
         except Exception as ex:
-            output(f"发生未知异常：{ex}")
+            output(f"occurnotknowException：{ex}")
             return False
 
         self.inited = True
         return True
 
     def query_bar_history(self, req: HistoryRequest, output: Callable = print) -> list[BarData] | None:
-        """查询K线数据"""
-        # 期货品种且代码中没有数字（非具体合约），则查询主力连续
+        """QueryKlineData"""
+        # FuturesproductandCodeinnodigital（nonspecificContract），thenQuerymain continuous
         if req.exchange in FUTURES_EXCHANGES and req.symbol.isalpha():
             return self._query_dominant_history(req, output)
         else:
             return self._query_bar_history(req, output)
 
     def _query_bar_history(self, req: HistoryRequest, output: Callable = print) -> list[BarData] | None:
-        """查询K线数据"""
+        """QueryKlineData"""
         if not self.inited:
             n: bool = self.init(output)
             if not n:
@@ -194,31 +194,31 @@ class RqdataDatafeed(BaseDatafeed):
         start: datetime = req.start
         end: datetime = req.end
 
-        # 股票期权不添加交易所后缀
+        # StockOptionnotAddExchangeaftersuffix
         if exchange in [Exchange.SSE, Exchange.SZSE] and symbol in self.symbols:
             rq_symbol: str = symbol
         else:
             rq_symbol = to_rq_symbol(symbol, exchange, self.symbols)
 
-        # 检查查询的代码在范围内
+        # CheckQueryCodeInrangein
         if rq_symbol not in self.symbols:
-            output(f"RQData查询K线数据失败：不支持的合约代码{req.vt_symbol}")
+            output(f"RQDataQueryKlineDataFailed：Not supportedContractCode{req.vt_symbol}")
             return []
 
         rq_interval: str | None = INTERVAL_VT2RQ.get(interval, None)
         if not rq_interval:
-            output(f"RQData查询K线数据失败：不支持的时间周期{req.interval.value}")
+            output(f"RQDataQueryKlineDataFailed：Not supportedTimecycle{req.interval.value}")
             return []
 
-        # 为了将米筐时间戳（K线结束时点）转换为VeighNa时间戳（K线开始时点）
+        # aswillRicequantTimestamp（KlineFinishedtimepoint）convertasVeighNaTimestamp（KlineStarttimepoint）
         adjustment: timedelta = INTERVAL_ADJUSTMENT_MAP[interval]
 
-        # 只对衍生品合约才查询持仓量数据
+        # onlyforderivativeContractcanQueryPositionvolumeData
         fields: list = ["open", "high", "low", "close", "volume", "total_turnover"]
         if not symbol.isdigit():
             fields.append("open_interest")
 
-        # 对于股票查询前复权K线数据
+        # ForStockQuerybeforerepeatauthKlineData
         if rq_symbol.endswith(".XSHG") or rq_symbol.endswith(".XSHE"):
             adjust_type: str = "pre_volume"
         else:
@@ -229,14 +229,14 @@ class RqdataDatafeed(BaseDatafeed):
             frequency=rq_interval,
             fields=fields,
             start_date=start,
-            end_date=get_next_trading_date(end),        # 为了查询夜盘数据
+            end_date=get_next_trading_date(end),        # asQuerynightdiskData
             adjust_type=adjust_type
         )
 
         data: list[BarData] = []
 
         if df is not None:
-            # 填充NaN为0
+            # paddingNaNas0
             df.fillna(0, inplace=True)
 
             for row in df.itertuples():
@@ -267,7 +267,7 @@ class RqdataDatafeed(BaseDatafeed):
         return data
 
     def query_tick_history(self, req: HistoryRequest, output: Callable = print) -> list[TickData] | None:
-        """查询Tick数据"""
+        """QueryTickData"""
         if not self.inited:
             n: bool = self.init(output)
             if not n:
@@ -278,17 +278,17 @@ class RqdataDatafeed(BaseDatafeed):
         start: datetime = req.start
         end: datetime = req.end
 
-        # 股票期权不添加交易所后缀
+        # StockOptionnotAddExchangeaftersuffix
         if exchange in [Exchange.SSE, Exchange.SZSE] and symbol in self.symbols:
             rq_symbol: str = symbol
         else:
             rq_symbol = to_rq_symbol(symbol, exchange, self.symbols)
 
         if rq_symbol not in self.symbols:
-            output(f"RQData查询Tick数据失败：不支持的合约代码{req.vt_symbol}")
+            output(f"RQDataQueryTickDataFailed：Not supportedContractCode{req.vt_symbol}")
             return []
 
-        # 只对衍生品合约才查询持仓量数据
+        # onlyforderivativeContractcanQueryPositionvolumeData
         fields: list = [
             "open",
             "high",
@@ -328,14 +328,14 @@ class RqdataDatafeed(BaseDatafeed):
             frequency="tick",
             fields=fields,
             start_date=start,
-            end_date=get_next_trading_date(end),        # 为了查询夜盘数据
+            end_date=get_next_trading_date(end),        # asQuerynightdiskData
             adjust_type="none"
         )
 
         data: list[TickData] = []
 
         if df is not None:
-            # 填充NaN为0
+            # paddingNaNas0
             df.fillna(0, inplace=True)
 
             for row in df.itertuples():
@@ -388,7 +388,7 @@ class RqdataDatafeed(BaseDatafeed):
         return data
 
     def _query_dominant_history(self, req: HistoryRequest, output: Callable = print) -> list[BarData] | None:
-        """查询期货主力K线数据"""
+        """QueryFuturesmainKlineData"""
         if not self.inited:
             n: bool = self.init(output)
             if not n:
@@ -402,31 +402,31 @@ class RqdataDatafeed(BaseDatafeed):
 
         rq_interval: str | None = INTERVAL_VT2RQ.get(interval, None)
         if not rq_interval:
-            output(f"RQData查询K线数据失败：不支持的时间周期{req.interval.value}")
+            output(f"RQDataQueryKlineDataFailed：Not supportedTimecycle{req.interval.value}")
             return []
 
-        # 为了将米筐时间戳（K线结束时点）转换为VeighNa时间戳（K线开始时点）
+        # aswillRicequantTimestamp（KlineFinishedtimepoint）convertasVeighNaTimestamp（KlineStarttimepoint）
         adjustment: timedelta = INTERVAL_ADJUSTMENT_MAP[interval]
 
-        # 只对衍生品合约才查询持仓量数据
+        # onlyforderivativeContractcanQueryPositionvolumeData
         fields: list = ["open", "high", "low", "close", "volume", "total_turnover"]
         if not symbol.isdigit():
             fields.append("open_interest")
 
         df: DataFrame = get_dominant_price(
-            symbol.upper(),                         # 合约代码用大写
+            symbol.upper(),                         # ContractCodeuseuppercase
             frequency=rq_interval,
             fields=fields,
             start_date=start,
-            end_date=get_next_trading_date(end),    # 为了查询夜盘数据
-            adjust_type="pre",                      # 前复权
-            adjust_method="prev_close_ratio"        # 切换前一日收盘价比例复权
+            end_date=get_next_trading_date(end),    # asQuerynightdiskData
+            adjust_type="pre",                      # beforerepeatauth
+            adjust_method="prev_close_ratio"        # switchbeforeonedaysclose priceratiorepeatauth
         )
 
         data: list[BarData] = []
 
         if df is not None:
-            # 填充NaN为0
+            # paddingNaNas0
             df.fillna(0, inplace=True)
 
             for row in df.itertuples():

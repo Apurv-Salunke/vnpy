@@ -7,31 +7,31 @@ from ..template import RuleTemplate
 
 
 class DailyLimitRule(RuleTemplate):
-    """每日上限检查风控规则"""
+    """eachdaysuplimitCheckRisk controlRule"""
 
-    name: str = "每日上限检查"
+    name: str = "eachdaysuplimitCheck"
 
     parameters: dict[str, str] = {
-        "total_order_limit": "汇总委托上限",
-        "total_cancel_limit": "汇总撤单上限",
-        "total_trade_limit": "汇总成交上限",
-        "contract_order_limit": "合约委托上限",
-        "contract_cancel_limit": "合约撤单上限",
-        "contract_trade_limit": "合约成交上限"
+        "total_order_limit": "summaryTotalOrderuplimit",
+        "total_cancel_limit": "summaryTotalcancel orderuplimit",
+        "total_trade_limit": "summaryTotalTradeuplimit",
+        "contract_order_limit": "ContractOrderuplimit",
+        "contract_cancel_limit": "Contractcancel orderuplimit",
+        "contract_trade_limit": "ContractTradeuplimit"
     }
 
     variables: dict[str, str] = {
-        "total_order_count": "汇总委托笔数",
-        "total_cancel_count": "汇总撤单笔数",
-        "total_trade_count": "汇总成交笔数",
-        "contract_order_count": "合约委托笔数",
-        "contract_cancel_count": "合约撤单笔数",
-        "contract_trade_count": "合约成交笔数"
+        "total_order_count": "summaryTotalOrdercount",
+        "total_cancel_count": "summaryTotalcancel ordercount",
+        "total_trade_count": "summaryTotalTradecount",
+        "contract_order_count": "ContractOrdercount",
+        "contract_cancel_count": "Contractcancel ordercount",
+        "contract_trade_count": "ContractTradecount"
     }
 
     def on_init(self) -> None:
-        """初始化"""
-        # 默认参数
+        """Initialize"""
+        # DefaultParameter
         self.total_order_limit: int = 20_000
         self.total_cancel_limit: int = 10_000
         self.total_trade_limit: int = 10_000
@@ -39,14 +39,14 @@ class DailyLimitRule(RuleTemplate):
         self.contract_cancel_limit: int = 1_000
         self.contract_trade_limit: int = 1_000
 
-        # 委托号记录
+        # Order IDlog
         self.all_orderids: set[str] = set()
         self.cancel_orderids: set[str] = set()
 
-        # 成交号记录
+        # TradeIDlog
         self.all_tradeids: set[str] = set()
 
-        # 数量统计
+        # Volumestatistics
         self.total_order_count: int = 0
         self.total_cancel_count: int = 0
         self.total_trade_count: int = 0
@@ -56,38 +56,38 @@ class DailyLimitRule(RuleTemplate):
         self.contract_trade_count: dict[str, int] = defaultdict(int)
 
     def check_allowed(self, req: OrderRequest, gateway_name: str) -> bool:
-        """检查是否允许委托"""
+        """CheckwhetherallowOrder"""
         contract_order_count: int = self.contract_order_count[req.vt_symbol]
         if contract_order_count >= self.contract_order_limit:
-            self.write_log(f"合约委托笔数{contract_order_count}达到上限{self.contract_order_limit}：{req}")
+            self.write_log(f"ContractOrdercount{contract_order_count}reachTouplimit{self.contract_order_limit}：{req}")
             return False
 
         contract_cancel_count: int = self.contract_cancel_count[req.vt_symbol]
         if contract_cancel_count >= self.contract_cancel_limit:
-            self.write_log(f"合约撤单笔数{contract_cancel_count}达到上限{self.contract_cancel_limit}：{req}")
+            self.write_log(f"Contractcancel ordercount{contract_cancel_count}reachTouplimit{self.contract_cancel_limit}：{req}")
             return False
 
         contract_trade_count: int = self.contract_trade_count[req.vt_symbol]
         if contract_trade_count >= self.contract_trade_limit:
-            self.write_log(f"合约成交笔数{contract_trade_count}达到上限{self.contract_trade_limit}：{req}")
+            self.write_log(f"ContractTradecount{contract_trade_count}reachTouplimit{self.contract_trade_limit}：{req}")
             return False
 
         if self.total_order_count >= self.total_order_limit:
-            self.write_log(f"汇总委托笔数{self.total_order_count}达到上限{self.total_order_limit}：{req}")
+            self.write_log(f"summaryTotalOrdercount{self.total_order_count}reachTouplimit{self.total_order_limit}：{req}")
             return False
 
         if self.total_cancel_count >= self.total_cancel_limit:
-            self.write_log(f"汇总撤单笔数{self.total_cancel_count}达到上限{self.total_cancel_limit}：{req}")
+            self.write_log(f"summaryTotalcancel ordercount{self.total_cancel_count}reachTouplimit{self.total_cancel_limit}：{req}")
             return False
 
         if self.total_trade_count >= self.total_trade_limit:
-            self.write_log(f"汇总成交笔数{self.total_trade_count}达到上限{self.total_trade_limit}：{req}")
+            self.write_log(f"summaryTotalTradecount{self.total_trade_count}reachTouplimit{self.total_trade_limit}：{req}")
             return False
 
         return True
 
     def on_order(self, order: OrderData) -> None:
-        """委托推送"""
+        """OrderPush"""
         if order.vt_orderid not in self.all_orderids:
             self.all_orderids.add(order.vt_orderid)
             self.total_order_count += 1
@@ -107,7 +107,7 @@ class DailyLimitRule(RuleTemplate):
             self.put_event()
 
     def on_trade(self, trade: TradeData) -> None:
-        """成交推送"""
+        """TradePush"""
         if trade.vt_tradeid in self.all_tradeids:
             return
 

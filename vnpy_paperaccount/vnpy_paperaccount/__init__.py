@@ -43,7 +43,7 @@ class PaperAccountApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = "模拟交易"
+    display_name: str = "modelsimulateTrading"
     engine_class: type[PaperEngine] = PaperEngine
     widget_name: str = "PaperManager"
     icon_name: str = str(app_path.joinpath("ui", "paper.ico"))

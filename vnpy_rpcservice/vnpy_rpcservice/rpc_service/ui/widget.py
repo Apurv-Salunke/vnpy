@@ -11,7 +11,7 @@ class RpcManager(QtWidgets.QWidget):
     signal_log: QtCore.Signal = QtCore.Signal(Event)
 
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__()
 
         self.main_engine: MainEngine = main_engine
@@ -23,15 +23,15 @@ class RpcManager(QtWidgets.QWidget):
         self.register_event()
 
     def init_ui(self) -> None:
-        """初始化界面"""
-        self.setWindowTitle("RPC服务")
+        """Initialize interface"""
+        self.setWindowTitle("RPCService")
         self.setFixedWidth(900)
         self.setFixedHeight(500)
 
-        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动")
+        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
         self.start_button.clicked.connect(self.start_server)
 
-        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("停止")
+        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop")
         self.stop_button.clicked.connect(self.stop_server)
         self.stop_button.setEnabled(False)
 
@@ -50,8 +50,8 @@ class RpcManager(QtWidgets.QWidget):
         self.log_monitor.setReadOnly(True)
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form.addRow("请求响应地址", self.rep_line)
-        form.addRow("事件广播地址", self.pub_line)
+        form.addRow("RequestResponseAddress", self.rep_line)
+        form.addRow("EventbroadcastAddress", self.pub_line)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
         hbox.addLayout(form)
@@ -66,19 +66,19 @@ class RpcManager(QtWidgets.QWidget):
         self.setLayout(vbox)
 
     def register_event(self) -> None:
-        """注册事件"""
+        """RegisterEvent"""
         self.signal_log.connect(self.process_log_event)
 
         self.event_engine.register(EVENT_RPC_LOG, self.signal_log.emit)
 
     def process_log_event(self, event: Event) -> None:
-        """调用事件"""
+        """callEvent"""
         log: LogData = event.data
         msg: str = f"{log.time}\t{log.msg}"
         self.log_monitor.append(msg)
 
     def start_server(self) -> None:
-        """启动服务"""
+        """StartService"""
         rep_address: str = self.rep_line.text()
         pub_address: str = self.pub_line.text()
 
@@ -88,7 +88,7 @@ class RpcManager(QtWidgets.QWidget):
             self.stop_button.setEnabled(True)
 
     def stop_server(self) -> None:
-        """停止服务"""
+        """StopService"""
         result: bool = self.rpc_engine.stop()
         if result:
             self.start_button.setEnabled(True)

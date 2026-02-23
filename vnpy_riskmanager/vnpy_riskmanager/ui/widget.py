@@ -9,10 +9,10 @@ from ..engine import RiskEngine, APP_NAME, EVENT_RISK_RULE, EVENT_RISK_NOTIFY
 
 
 class RuleWidget(QtWidgets.QGroupBox):
-    """用于设置参数和显示变量的规则控件。"""
+    """useatsetParameterandDisplayVariableRulecontrolfile。"""
 
     def __init__(self, rule_name: str, risk_engine: RiskEngine) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(rule_name)
 
         self.rule_name: str = rule_name
@@ -26,14 +26,14 @@ class RuleWidget(QtWidgets.QGroupBox):
         self.init_ui()
 
     def init_ui(self) -> None:
-        """初始化UI界面"""
-        self.tree.setHeaderLabels(["分类", "名称", " ", " "])
+        """InitializeUIinterface"""
+        self.tree.setHeaderLabels(["minuteClass", "Name", " ", " "])
         self.tree.setColumnWidth(0, 120)
         self.tree.setColumnWidth(1, 150)
         self.tree.setColumnWidth(2, 100)
         self.tree.setColumnWidth(3, 100)
 
-        editor_button: QtWidgets.QPushButton = QtWidgets.QPushButton("修改风控参数")
+        editor_button: QtWidgets.QPushButton = QtWidgets.QPushButton("ModifyRisk controlParameter")
         editor_button.clicked.connect(self.open_editor)
 
         vbox: QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout()
@@ -42,17 +42,17 @@ class RuleWidget(QtWidgets.QGroupBox):
         self.setLayout(vbox)
 
     def init_tree(self, data: dict) -> None:
-        """初始化树状图结构"""
-        # 参数部分
-        parameter_root: QtWidgets.QTreeWidgetItem = QtWidgets.QTreeWidgetItem(self.tree, ["参数"])
+        """Initializetreestatusgraphstructure"""
+        # ParameterPartial
+        parameter_root: QtWidgets.QTreeWidgetItem = QtWidgets.QTreeWidgetItem(self.tree, ["Parameter"])
         parameters: dict = data["parameters"]
         for field, value in parameters.items():
             name: str = self.risk_engine.get_field_name(field)
             item: QtWidgets.QTreeWidgetItem = QtWidgets.QTreeWidgetItem(parameter_root, ["", name, str(value)])
             self.items[field] = item
 
-        # 变量部分
-        variable_root = QtWidgets.QTreeWidgetItem(self.tree, ["变量"])
+        # VariablePartial
+        variable_root = QtWidgets.QTreeWidgetItem(self.tree, ["Variable"])
         variables: dict = data["variables"]
         for field, value in variables.items():
             name = self.risk_engine.get_field_name(field)
@@ -69,19 +69,19 @@ class RuleWidget(QtWidgets.QGroupBox):
                 self.items[field] = item
 
     def update_data(self, data: dict) -> None:
-        """更新规则数据"""
+        """UpdateRuleData"""
         if not self.data:
             self.init_tree(data)
         self.data = data
 
-        # 参数部分
+        # ParameterPartial
         parameters: dict = data["parameters"]
 
         for field, value in parameters.items():
             item: QtWidgets.QTreeWidgetItem = self.items.get(field)
             item.setText(2, str(value))
 
-        # 变量部分
+        # VariablePartial
         variables: dict = data["variables"]
 
         for field, value in variables.items():
@@ -102,7 +102,7 @@ class RuleWidget(QtWidgets.QGroupBox):
         self.tree.expandAll()
 
     def open_editor(self) -> None:
-        """打开参数编辑对话框"""
+        """OpenParametereditdialog"""
         if not self.data:
             return
 
@@ -116,7 +116,7 @@ class RuleWidget(QtWidgets.QGroupBox):
 
 
 class RuleEditor(QtWidgets.QDialog):
-    """用于编辑规则参数的对话框"""
+    """useateditRuleParameterdialog"""
 
     def __init__(self, rule_name: str, risk_engine: RiskEngine, parameters: dict) -> None:
         """"""
@@ -131,8 +131,8 @@ class RuleEditor(QtWidgets.QDialog):
         self.init_ui()
 
     def init_ui(self) -> None:
-        """初始化UI界面"""
-        self.setWindowTitle(f"{self.rule_name} - 参数编辑")
+        """InitializeUIinterface"""
+        self.setWindowTitle(f"{self.rule_name} - Parameteredit")
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
 
@@ -140,7 +140,7 @@ class RuleEditor(QtWidgets.QDialog):
             name: str = self.risk_engine.get_field_name(field)
             value_type: type = type(value)
 
-            # 布尔值使用下拉框
+            # Booleanvalueusedownpullframe
             if value_type is bool:
                 widget: QtWidgets.QWidget = QtWidgets.QComboBox()
                 widget.addItems(["True", "False"])
@@ -148,28 +148,28 @@ class RuleEditor(QtWidgets.QDialog):
                     widget.setCurrentText("True")
                 else:
                     widget.setCurrentText("False")
-            # 整数使用SpinBox
+            # IntegeruseSpinBox
             elif value_type is int:
                 widget = QtWidgets.QSpinBox()
                 widget.setRange(-1_000_000_000, 1_000_000_000)
                 widget.setValue(value)
-            # 浮点数使用DoubleSpinBox
+            # FloatuseDoubleSpinBox
             elif value_type is float:
                 widget = QtWidgets.QDoubleSpinBox()
                 widget.setDecimals(6)
                 widget.setRange(-1_000_000_000, 1_000_000_000)
                 widget.setValue(value)
-            # 其他类型使用LineEdit
+            # OthersClasstypeuseLineEdit
             else:
                 widget = QtWidgets.QLineEdit(str(value))
 
             form.addRow(name, widget)
             self.widgets[field] = widget
 
-        ok_button: QtWidgets.QPushButton = QtWidgets.QPushButton("确定")
+        ok_button: QtWidgets.QPushButton = QtWidgets.QPushButton("OK")
         ok_button.clicked.connect(self.accept)
 
-        cancel_button: QtWidgets.QPushButton = QtWidgets.QPushButton("取消")
+        cancel_button: QtWidgets.QPushButton = QtWidgets.QPushButton("cancel")
         cancel_button.clicked.connect(self.reject)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
@@ -183,7 +183,7 @@ class RuleEditor(QtWidgets.QDialog):
         self.setLayout(vbox)
 
     def get_setting(self) -> dict:
-        """获取当前所有参数配置"""
+        """GetCurrentallParameterConfig"""
         rule_setting: dict = {}
 
         for field, widget in self.widgets.items():
@@ -201,13 +201,13 @@ class RuleEditor(QtWidgets.QDialog):
 
 
 class RiskManager(QtWidgets.QWidget):
-    """风控管理器"""
+    """Risk controlManagerer"""
 
     signal_rule: QtCore.Signal = QtCore.Signal(Event)
     signal_notify: QtCore.Signal = QtCore.Signal(Event)
 
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__()
 
         self.main_engine: MainEngine = main_engine
@@ -221,8 +221,8 @@ class RiskManager(QtWidgets.QWidget):
         self.register_event()
 
     def init_ui(self) -> None:
-        """初始化UI界面"""
-        self.setWindowTitle("交易风控")
+        """InitializeUIinterface"""
+        self.setWindowTitle("TradingRisk control")
 
         rule_names: list[str] = self.rm_engine.get_all_rule_names()
 
@@ -250,7 +250,7 @@ class RiskManager(QtWidgets.QWidget):
         self.list_widget.setCurrentRow(0)
 
     def init_tray(self) -> None:
-        """初始化系统托盘图标"""
+        """InitializeSystemtraydiskgraphmark"""
         icon_path: str = str(Path(__file__).parent / "rm.ico")
         icon: QtGui.QIcon = QtGui.QIcon(icon_path)
 
@@ -259,7 +259,7 @@ class RiskManager(QtWidgets.QWidget):
         self.tray_icon.show()
 
     def register_event(self) -> None:
-        """注册事件监听"""
+        """Register event listener"""
         self.signal_rule.connect(self.process_rule_event)
         self.signal_notify.connect(self.process_notify_event)
 
@@ -267,7 +267,7 @@ class RiskManager(QtWidgets.QWidget):
         self.event_engine.register(EVENT_RISK_NOTIFY, self.signal_notify.emit)
 
     def process_rule_event(self, event: Event) -> None:
-        """定时更新所有规则控件的监控变量"""
+        """TimerUpdateallRulecontrolfileMonitorVariable"""
         data: dict = event.data
 
         rule_name: str = data["name"]
@@ -276,12 +276,12 @@ class RiskManager(QtWidgets.QWidget):
             rule_widget.update_data(data)
 
     def process_notify_event(self, event: Event) -> None:
-        """显示系统托盘通知"""
+        """DisplaySystemtraydisknotification"""
         message: str = event.data
 
         self.tray_icon.showMessage(
-            "交易风控",
+            "TradingRisk control",
             message,
             QtWidgets.QSystemTrayIcon.MessageIcon.Critical,
-            30000    # 30秒
+            30000    # 30seconds
         )

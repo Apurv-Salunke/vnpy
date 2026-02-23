@@ -6,9 +6,9 @@ from ..template import AlgoTemplate
 
 
 class StopAlgo(AlgoTemplate):
-    """条件委托算法类"""
+    """Conditional order algo class"""
 
-    display_name: str = "Stop 条件委托"
+    display_name: str = "Stop Conditional order"
 
     default_setting: dict = {
         "price_add": 0.0
@@ -30,20 +30,20 @@ class StopAlgo(AlgoTemplate):
         volume: float,
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(algo_engine, algo_name, vt_symbol, direction, offset, price, volume, setting)
 
-        # 参数
+        # Parameter
         self.price_add: float = setting["price_add"]
 
-        # 变量
+        # Variable
         self.vt_orderid: str = ""
         self.order_status: str = ""
 
         self.put_event()
 
     def on_tick(self, tick: TickData) -> None:
-        """Tick行情回调"""
+        """TickMarket dataCallback"""
         if self.vt_orderid:
             return
 
@@ -60,7 +60,7 @@ class StopAlgo(AlgoTemplate):
                     offset=self.offset
                 )
                 self.write_log(
-                    f"停止单已触发，代码：{self.vt_symbol}，方向：{self.direction}, 价格：{self.price}，数量：{self.volume}，开平：{self.offset}")
+                    f"Stop order triggered，Code：{self.vt_symbol}，Direction：{self.direction}, Price：{self.price}，Volume：{self.volume}，Offset：{self.offset}")
 
         else:
             if tick.last_price <= self.price:
@@ -75,17 +75,17 @@ class StopAlgo(AlgoTemplate):
                     offset=self.offset
                 )
                 self.write_log(
-                    f"停止单已触发，代码：{self.vt_symbol}，方向：{self.direction}, 价格：{self.price}，数量：{self.volume}，开平：{self.offset}")
+                    f"Stop order triggered，Code：{self.vt_symbol}，Direction：{self.direction}, Price：{self.price}，Volume：{self.volume}，Offset：{self.offset}")
 
         self.put_event()
 
     def on_order(self, order: OrderData) -> None:
-        """委托回调"""
+        """Order callback"""
         self.order_status = order.status
         self.put_event()
 
     def on_trade(self, trade: TradeData) -> None:
-        """成交回调"""
+        """Trade callback"""
         if self.traded == self.volume:
             self.finish()
         self.put_event()

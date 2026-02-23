@@ -7,82 +7,82 @@ if TYPE_CHECKING:
 
 
 class RuleTemplate:
-    """风控规则模板"""
+    """Risk controlRuletemplate"""
 
-    # 风控规则名称
+    # Risk controlRuleName
     name: str = ""
 
-    # 参数字段和名称
+    # ParameterfieldandName
     parameters: dict[str, str] = {}
 
-    # 变量字段和名称
+    # VariablefieldandName
     variables: dict[str, str] = {}
 
     def __init__(self, risk_engine: "RiskEngine", setting: dict) -> None:
-        """构造函数"""
-        # 绑定风控引擎对象
+        """Constructor"""
+        # bindRisk controlEngineObject
         self.risk_engine: RiskEngine = risk_engine
 
-        # 添加启用状态参数
+        # AddEnableStatusParameter
         self.active: bool = True
 
         parameters: dict[str, str] = {
-            "active": "启用规则"
+            "active": "EnableRule"
         }
         parameters.update(self.parameters)
         self.parameters = parameters
 
-        # 初始化规则
+        # InitializeRule
         self.on_init()
 
-        # 更新规则参数
+        # UpdateRuleParameter
         self.update_setting(setting)
 
     def write_log(self, msg: str) -> None:
-        """输出风控日志"""
+        """OutputRisk controlLog"""
         self.risk_engine.write_log(msg)
 
     def update_setting(self, rule_setting: dict) -> None:
-        """更新风控规则参数"""
+        """UpdateRisk controlRuleParameter"""
         for name in self.parameters.keys():
             if name in rule_setting:
                 value = rule_setting[name]
                 setattr(self, name, value)
 
     def check_allowed(self, req: OrderRequest, gateway_name: str) -> bool:
-        """检查是否允许委托"""
+        """CheckwhetherallowOrder"""
         return True
 
     def on_init(self) -> None:
-        """初始化"""
+        """Initialize"""
         pass
 
     def on_tick(self, tick: TickData) -> None:
-        """行情推送"""
+        """Market dataPush"""
         pass
 
     def on_order(self, order: OrderData) -> None:
-        """委托推送"""
+        """OrderPush"""
         pass
 
     def on_trade(self, trade: TradeData) -> None:
-        """成交推送"""
+        """TradePush"""
         pass
 
     def on_timer(self) -> None:
-        """定时推送（每秒触发）"""
+        """TimerPush（eachsecondstrigger）"""
         pass
 
     def get_contract(self, vt_symbol: str) -> ContractData | None:
-        """查询合约信息"""
+        """QueryContractInfo"""
         return self.risk_engine.get_contract(vt_symbol)
 
     def put_event(self) -> None:
-        """推送数据更新事件"""
+        """PushDataUpdateEvent"""
         self.risk_engine.put_rule_event(self)
 
     def get_data(self) -> dict[str, Any]:
-        """获取数据"""
+        """GetData"""
         parameters: dict[str, Any] = {}
         for name in self.parameters.keys():
             value: Any = getattr(self, name)

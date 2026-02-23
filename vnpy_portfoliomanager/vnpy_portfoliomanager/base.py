@@ -42,7 +42,7 @@ class ContractResult:
 
     def update_trade(self, trade: TradeData) -> None:
         """"""
-        # 过滤重复成交
+        # Filter duplicate trades
         if trade.vt_tradeid in self.trades:
             return
         self.trades[trade.vt_tradeid] = trade
@@ -65,7 +65,7 @@ class ContractResult:
         last_price: float = tick.last_price
         size: float = contract.size
 
-        # 计算新成交额
+        # Calculate new turnover
         for trade in self.new_trades:
             trade_volume: float = trade.volume
             trade_cost: float = trade.price * trade_volume * size
@@ -79,7 +79,7 @@ class ContractResult:
 
         self.new_trades.clear()
 
-        # 计算成交利润
+        # Calculate trade PnL
         long_value: float = self.long_volume * last_price * size
         long_pnl: float = long_value - self.long_cost
 
@@ -88,12 +88,12 @@ class ContractResult:
 
         self.trading_pnl = long_pnl + short_pnl
 
-        # 计算未实现利润和总利润
+        # Calculate unrealized PnL and total PnL
         self.holding_pnl = (last_price - tick.pre_close) * self.open_pos * size
         self.total_pnl = self.holding_pnl + self.trading_pnl
 
     def get_data(self) -> dict:
-        """获取数据字典"""
+        """Get data dict"""
         data: dict = {
             "reference": self.reference,
             "vt_symbol": self.vt_symbol,
@@ -129,7 +129,7 @@ class PortfolioResult:
         self.total_pnl = 0
 
     def get_data(self) -> dict:
-        """获取数据字典"""
+        """GetDataDict"""
         data: dict = {
             "reference": self.reference,
             "trading_pnl": self.trading_pnl,

@@ -1,6 +1,6 @@
 """
-性能测试：Python版本 vs Cython版本
-对比所有风控规则的 check_allowed 函数的性能差异
+performanceTest：Pythonversion vs Cythonversion
+forratioallRisk controlRule check_allowed Functionperformancedifference
 """
 import time
 import sys
@@ -8,7 +8,7 @@ from typing import Any
 
 
 class MockContract:
-    """模拟合约对象"""
+    """modelsimulateContractObject"""
 
     def __init__(self) -> None:
         self.pricetick: float = 0.1
@@ -18,7 +18,7 @@ class MockContract:
 
 
 class MockRiskEngine:
-    """模拟风控引擎"""
+    """modelsimulateRisk controlEngine"""
 
     def __init__(self) -> None:
         self.logs: list[str] = []
@@ -26,22 +26,22 @@ class MockRiskEngine:
         self.contract = MockContract()
 
     def write_log(self, msg: str) -> None:
-        """记录日志"""
+        """logLog"""
         self.logs.append(msg)
 
     def put_rule_event(self, rule: Any) -> None:
-        """推送规则事件"""
+        """PushRuleEvent"""
         pass
 
     def get_contract(self, vt_symbol: str) -> Any | None:
-        """查询合约"""
+        """QueryContract"""
         if "FAIL" in vt_symbol:
             return None
         return self.contract
 
 
 class MockOrderRequest:
-    """模拟委托请求"""
+    """modelsimulateOrderRequest"""
 
     def __init__(
         self,
@@ -55,7 +55,7 @@ class MockOrderRequest:
         self.price: float = price
         self.reference: str = reference or f"{symbol}_{volume}@{price}"
 
-        # 模拟枚举类型
+        # modelsimulate enumClasstype
         class Type:
             value = "LIMIT"
         class Direction:
@@ -77,25 +77,25 @@ def benchmark_rule(
     iterations: int,
     config: dict[str, Any]
 ) -> dict:
-    """性能测试函数"""
+    """performanceTestFunction"""
     print(f"\n{'='*60}")
-    print(f"测试 {rule_name} - {config['name']}")
+    print(f"Test {rule_name} - {config['name']}")
     print(f"{'='*60}")
 
-    # 创建规则实例
+    # CreateRuleInstance
     mock_engine = MockRiskEngine()
     setting = {"active": True, **config["settings"]}
     rule = rule_class(mock_engine, setting)
 
-    # 预热
+    # warmup
     warmup_req = config["requests_pass"][0]
     for _ in range(1000):
         rule.check_allowed(warmup_req, "CTP")
 
-    print(f"迭代次数: {iterations:,}")
+    print(f"Iterationcount: {iterations:,}")
 
-    # --- 场景1: 检查通过 ---
-    print("\n场景1: 检查通过 (快速路径)")
+    # --- scenario1: Checkthroughpast ---
+    print("\nscenario1: Checkthroughpast (fast path)")
     config["setup_pass"](rule)
     requests_pass = config["requests_pass"]
 
@@ -107,9 +107,9 @@ def benchmark_rule(
     ops_per_sec = iterations / elapsed_time
     time_per_call_ns = (elapsed_time / iterations) * 1_000_000_000
 
-    print(f"  总耗时: {elapsed_time:.4f} 秒")
-    print(f"  每次调用: {time_per_call_ns:.2f} 纳秒")
-    print(f"  吞吐量: {ops_per_sec:,.0f} 次/秒")
+    print(f"  Totalconsumetime: {elapsed_time:.4f} seconds")
+    print(f"  eachtimescall: {time_per_call_ns:.2f} acceptseconds")
+    print(f"  throughputvolume: {ops_per_sec:,.0f} times/seconds")
 
     result_1 = {
         "elapsed_time": elapsed_time,
@@ -117,8 +117,8 @@ def benchmark_rule(
         "time_per_call_ns": time_per_call_ns
     }
 
-    # --- 场景2: 检查失败 ---
-    print("\n场景2: 检查失败 (触发日志)")
+    # --- scenario2: CheckFailed ---
+    print("\nscenario2: CheckFailed (triggerLog)")
     config["setup_fail"](rule)
     requests_fail = config["requests_fail"]
     mock_engine.logs.clear()
@@ -132,10 +132,10 @@ def benchmark_rule(
     ops_per_sec = fail_iterations / elapsed_time
     time_per_call_ns = (elapsed_time / fail_iterations) * 1_000_000_000
 
-    print(f"  总耗时: {elapsed_time:.4f} 秒")
-    print(f"  每次调用: {time_per_call_ns:.2f} 纳秒")
-    print(f"  吞吐量: {ops_per_sec:,.0f} 次/秒")
-    print(f"  日志数量: {len(mock_engine.logs):,}")
+    print(f"  Totalconsumetime: {elapsed_time:.4f} seconds")
+    print(f"  eachtimescall: {time_per_call_ns:.2f} acceptseconds")
+    print(f"  throughputvolume: {ops_per_sec:,.0f} times/seconds")
+    print(f"  LogVolume: {len(mock_engine.logs):,}")
 
     result_2 = {
         "elapsed_time": elapsed_time,
@@ -147,58 +147,58 @@ def benchmark_rule(
 
 
 def compare_results(py_results: dict, cy_results: dict, rule_name: str) -> None:
-    """对比并输出结果"""
+    """forratioandOutputresult"""
     print("\n" + "="*60)
-    print(f"性能对比汇总 - {rule_name}")
+    print(f"performanceforcompareTotal - {rule_name}")
     print("="*60)
 
     py_time_1 = py_results["scenario_1"]["time_per_call_ns"]
     cy_time_1 = cy_results["scenario_1"]["time_per_call_ns"]
     speedup_1 = py_time_1 / cy_time_1 if cy_time_1 else float('inf')
 
-    print("\n场景1: 检查通过 (快速路径)")
+    print("\nscenario1: Checkthroughpast (fast path)")
     print("-" * 60)
-    print(f"Python版本:  {py_time_1:>8.2f} 纳秒/次  "
-          f"{py_results['scenario_1']['ops_per_sec']:>12,.0f} 次/秒")
-    print(f"Cython版本:  {cy_time_1:>8.2f} 纳秒/次  "
-          f"{cy_results['scenario_1']['ops_per_sec']:>12,.0f} 次/秒")
-    print(f"性能提升:    {speedup_1:.2f}x")
+    print(f"Pythonversion:  {py_time_1:>8.2f} acceptseconds/times  "
+          f"{py_results['scenario_1']['ops_per_sec']:>12,.0f} times/seconds")
+    print(f"Cythonversion:  {cy_time_1:>8.2f} acceptseconds/times  "
+          f"{cy_results['scenario_1']['ops_per_sec']:>12,.0f} times/seconds")
+    print(f"Performance improvement:    {speedup_1:.2f}x")
 
     py_time_2 = py_results["scenario_2"]["time_per_call_ns"]
     cy_time_2 = cy_results["scenario_2"]["time_per_call_ns"]
     speedup_2 = py_time_2 / cy_time_2 if cy_time_2 else float('inf')
 
-    print("\n场景2: 检查失败 (触发日志)")
+    print("\nscenario2: CheckFailed (triggerLog)")
     print("-" * 60)
-    print(f"Python版本:  {py_time_2:>8.2f} 纳秒/次  "
-          f"{py_results['scenario_2']['ops_per_sec']:>12,.0f} 次/秒")
-    print(f"Cython版本:  {cy_time_2:>8.2f} 纳秒/次  "
-          f"{cy_results['scenario_2']['ops_per_sec']:>12,.0f} 次/秒")
-    print(f"性能提升:    {speedup_2:.2f}x")
+    print(f"Pythonversion:  {py_time_2:>8.2f} acceptseconds/times  "
+          f"{py_results['scenario_2']['ops_per_sec']:>12,.0f} times/seconds")
+    print(f"Cythonversion:  {cy_time_2:>8.2f} acceptseconds/times  "
+          f"{cy_results['scenario_2']['ops_per_sec']:>12,.0f} times/seconds")
+    print(f"Performance improvement:    {speedup_2:.2f}x")
 
     print("\n" + "="*60)
     avg_speedup = (speedup_1 + speedup_2) / 2
-    print(f"平均性能提升: {avg_speedup:.2f}x")
+    print(f"averagePerformance improvement: {avg_speedup:.2f}x")
 
     if avg_speedup >= 3.0:
-        rating = "[+++] 优秀"
+        rating = "[+++] excellent"
     elif avg_speedup >= 2.0:
-        rating = "[++] 良好"
+        rating = "[++] goodgood"
     elif avg_speedup >= 1.5:
-        rating = "[+] 不错"
+        rating = "[+] noterror"
     else:
-        rating = "[=] 适中"
-    print(f"性能评级: {rating}")
+        rating = "[=] adaptin"
+    print(f"performancerating: {rating}")
 
 
 def main() -> bool:
-    """主测试流程"""
+    """mainTestworkflow"""
     print("="*60)
-    print("vnpy_riskmanager 性能基准测试")
-    print("Python版本 vs Cython版本")
+    print("vnpy_riskmanager performancebenchmarkTest")
+    print("Pythonversion vs Cythonversion")
     print("="*60)
 
-    # --- 导入所有规则 ---
+    # --- ImportallRule ---
     try:
         from vnpy_riskmanager.rules.active_order_rule import ActiveOrderRule as PyActiveOrderRule
         from vnpy_riskmanager.rules.active_order_rule_cy import ActiveOrderRule as CyActiveOrderRule
@@ -210,19 +210,19 @@ def main() -> bool:
         from vnpy_riskmanager.rules.order_size_rule_cy import OrderSizeRule as CyOrderSizeRule
         from vnpy_riskmanager.rules.order_validity_rule import OrderValidityRule as PyOrderValidityRule
         from vnpy_riskmanager.rules.order_validity_rule_cy import OrderValidityRule as CyOrderValidityRule
-        print("\n[OK] 成功导入所有规则模块 (Python 和 Cython)")
+        print("\n[OK] SuccessImportallRulemodule (Python and Cython)")
     except ImportError as e:
-        print(f"\n[FAIL] 无法导入规则模块: {e}")
-        print("\n请先编译 Cython 模块:")
+        print(f"\n[FAIL] unableImportRulemodule: {e}")
+        print("\npleasefirstcompile Cython module:")
         print("  python setup.py build_ext --inplace")
         return False
 
-    # --- 测试配置 ---
+    # --- TestConfig ---
     iterations = 100000
 
     rules_to_test = [
         {
-            "name": "活动委托检查",
+            "name": "activeOrderCheck",
             "py_class": PyActiveOrderRule,
             "cy_class": CyActiveOrderRule,
             "settings": {"active_order_limit": 50},
@@ -232,7 +232,7 @@ def main() -> bool:
             "requests_fail": [MockOrderRequest(f"IF{i}") for i in range(100)],
         },
         {
-            "name": "每日上限检查",
+            "name": "eachdaysuplimitCheck",
             "py_class": PyDailyLimitRule,
             "cy_class": CyDailyLimitRule,
             "settings": {"total_order_limit": 200},
@@ -242,7 +242,7 @@ def main() -> bool:
             "requests_fail": [MockOrderRequest(f"RB{i}") for i in range(100)],
         },
         {
-            "name": "重复报单检查",
+            "name": "DuplicateorderCheck",
             "py_class": PyDuplicateOrderRule,
             "cy_class": CyDuplicateOrderRule,
             "settings": {"duplicate_order_limit": 10},
@@ -252,7 +252,7 @@ def main() -> bool:
             "requests_fail": [MockOrderRequest(reference="DUPLICATE_REQ")] * 20,
         },
         {
-            "name": "委托规模检查",
+            "name": "OrderscaleCheck",
             "py_class": PyOrderSizeRule,
             "cy_class": CyOrderSizeRule,
             "settings": {"order_volume_limit": 50, "order_value_limit": 2_000_000},
@@ -262,7 +262,7 @@ def main() -> bool:
             "requests_fail": [MockOrderRequest(volume=60, price=4000)], # Exceeds volume
         },
         {
-            "name": "委托指令检查",
+            "name": "OrderinstructionCheck",
             "py_class": PyOrderValidityRule,
             "cy_class": CyOrderValidityRule,
             "settings": {},
@@ -273,12 +273,12 @@ def main() -> bool:
         },
     ]
 
-    print(f"\n测试配置: {iterations:,} 次迭代/场景")
+    print(f"\nTestConfig: {iterations:,} timesIteration/scenario")
 
-    # --- 运行所有测试 ---
+    # --- RunningallTest ---
     for config in rules_to_test:
-        py_results = benchmark_rule(config["py_class"], "Python 版本", iterations, config)
-        cy_results = benchmark_rule(config["cy_class"], "Cython 版本", iterations, config)
+        py_results = benchmark_rule(config["py_class"], "Python version", iterations, config)
+        cy_results = benchmark_rule(config["cy_class"], "Cython version", iterations, config)
         compare_results(py_results, cy_results, config["name"])
 
     return True
@@ -289,7 +289,7 @@ if __name__ == "__main__":
 
     if success:
         print("\n" + "="*60)
-        print("所有测试完成！")
+        print("allTestCompleted！")
         print("="*60)
         sys.exit(0)
     else:

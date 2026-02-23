@@ -160,13 +160,13 @@ class BacktestingEngine:
 
     def load_data(self) -> None:
         """"""
-        self.output(_("开始加载历史数据"))
+        self.output(_("StartLoadHistoricalData"))
 
         if not self.end:
             self.end = datetime.now()
 
         if self.start >= self.end:
-            self.output(_("起始日期必须小于结束日期"))
+            self.output(_("startdaysperiodMustsmallatFinisheddaysperiod"))
             return
 
         self.history_data.clear()       # Clear previously loaded history data
@@ -183,7 +183,7 @@ class BacktestingEngine:
 
         while start < self.end:
             progress_bar: str = "#" * int(progress * 10 + 1)
-            self.output(_("加载进度：{} [{:.0%}]").format(progress_bar, progress))
+            self.output(_("Loadintodegree：{} [{:.0%}]").format(progress_bar, progress))
 
             end = min(end, self.end)  # Make sure end time stays within set range
 
@@ -211,7 +211,7 @@ class BacktestingEngine:
             start = end + interval_delta
             end += progress_delta
 
-        self.output(_("历史数据加载完成，数据量：{}").format(len(self.history_data)))
+        self.output(_("HistoricalDataLoadCompleted，Datavolume：{}").format(len(self.history_data)))
 
     def run_backtesting(self) -> None:
         """"""
@@ -222,11 +222,11 @@ class BacktestingEngine:
 
         self.strategy.on_init()
         self.strategy.inited = True
-        self.output(_("策略初始化完成"))
+        self.output(_("StrategyInitializeCompleted"))
 
         self.strategy.on_start()
         self.strategy.trading = True
-        self.output(_("开始回放历史数据"))
+        self.output(_("StartreturnputHistoricalData"))
 
         total_size: int = len(self.history_data)
         batch_size: int = max(int(total_size / 10), 1)
@@ -237,23 +237,23 @@ class BacktestingEngine:
                 try:
                     func(data)
                 except Exception:
-                    self.output(_("触发异常，回测终止"))
+                    self.output(_("triggerException，Backtestterminate"))
                     self.output(traceback.format_exc())
                     return
 
             progress = min(ix / 10, 1)
             progress_bar: str = "=" * (ix + 1)
-            self.output(_("回放进度：{} [{:.0%}]").format(progress_bar, progress))
+            self.output(_("returnputintodegree：{} [{:.0%}]").format(progress_bar, progress))
 
         self.strategy.on_stop()
-        self.output(_("历史数据回放结束"))
+        self.output(_("HistoricalDatareturnputFinished"))
 
     def calculate_result(self) -> DataFrame:
         """"""
-        self.output(_("开始计算逐日盯市盈亏"))
+        self.output(_("StartCalculateone by onedayswatchmarketPnL"))
 
         if not self.trades:
-            self.output(_("回测成交记录为空"))
+            self.output(_("BacktestTradelogIs empty"))
 
         # Add trade data into daily reuslt.
         for trade in self.trades.values():
@@ -290,7 +290,7 @@ class BacktestingEngine:
         if results:
             self.daily_df = DataFrame.from_dict(results).set_index("date")
 
-        self.output(_("逐日盯市盈亏计算完成"))
+        self.output(_("one by onedayswatchmarketPnLCalculateCompleted"))
         return self.daily_df
 
     def calculate_statistics(
@@ -299,12 +299,12 @@ class BacktestingEngine:
         output: bool = True
     ) -> dict:
         """"""
-        self.output(_("开始计算策略统计指标"))
+        self.output(_("StartCalculateStrategystatisticsindicator"))
 
         # Check DataFrame input exterior
         if df is None:
             if self.daily_df.empty:
-                self.output(_("回测结果为空，无法计算绩效统计指标"))
+                self.output(_("BacktestresultIs empty，unableCalculateperformanceeffectstatisticsindicator"))
                 return {}
 
             df = self.daily_df
@@ -359,7 +359,7 @@ class BacktestingEngine:
             # All balance value needs to be positive
             positive_balance = bool((df["balance"] > 0).all())
             if not positive_balance:
-                self.output(_("回测中出现爆仓（资金小于等于0），无法计算策略统计指标"))
+                self.output(_("Backtestinoutappearliquidation（Accountsmallatetcat0），unableCalculateStrategystatisticsindicator"))
 
         # Calculate statistics value
         if positive_balance:
@@ -450,39 +450,39 @@ class BacktestingEngine:
         # Output
         if output:
             self.output("-" * 30)
-            self.output(_("首个交易日：\t{}").format(start_date))
-            self.output(_("最后交易日：\t{}").format(end_date))
+            self.output(_("firstTradingdays：\t{}").format(start_date))
+            self.output(_("mostafterTradingdays：\t{}").format(end_date))
 
-            self.output(_("总交易日：\t{}").format(total_days))
-            self.output(_("盈利交易日：\t{}").format(profit_days))
-            self.output(_("亏损交易日：\t{}").format(loss_days))
+            self.output(_("TotalTradingdays：\t{}").format(total_days))
+            self.output(_("profitTradingdays：\t{}").format(profit_days))
+            self.output(_("lossTradingdays：\t{}").format(loss_days))
 
-            self.output(_("起始资金：\t{:,.2f}").format(self.capital))
-            self.output(_("结束资金：\t{:,.2f}").format(end_balance))
+            self.output(_("startAccount：\t{:,.2f}").format(self.capital))
+            self.output(_("FinishedAccount：\t{:,.2f}").format(end_balance))
 
-            self.output(_("总收益率：\t{:,.2f}%").format(total_return))
-            self.output(_("年化收益：\t{:,.2f}%").format(annual_return))
-            self.output(_("最大回撤: \t{:,.2f}").format(max_drawdown))
-            self.output(_("百分比最大回撤: {:,.2f}%").format(max_ddpercent))
-            self.output(_("最大回撤天数: \t{}").format(max_drawdown_duration))
+            self.output(_("Totalreturn rate：\t{:,.2f}%").format(total_return))
+            self.output(_("yearizereturn：\t{:,.2f}%").format(annual_return))
+            self.output(_("max drawdown: \t{:,.2f}").format(max_drawdown))
+            self.output(_("hundredminuteratiomax drawdown: {:,.2f}%").format(max_ddpercent))
+            self.output(_("max drawdowndaynumber: \t{}").format(max_drawdown_duration))
 
-            self.output(_("总盈亏：\t{:,.2f}").format(total_net_pnl))
-            self.output(_("总手续费：\t{:,.2f}").format(total_commission))
-            self.output(_("总滑点：\t{:,.2f}").format(total_slippage))
-            self.output(_("总成交金额：\t{:,.2f}").format(total_turnover))
-            self.output(_("总成交笔数：\t{}").format(total_trade_count))
+            self.output(_("Total PnL：\t{:,.2f}").format(total_net_pnl))
+            self.output(_("Totalfee：\t{:,.2f}").format(total_commission))
+            self.output(_("Totalslippage：\t{:,.2f}").format(total_slippage))
+            self.output(_("TotalTradeamount：\t{:,.2f}").format(total_turnover))
+            self.output(_("TotalTradecount：\t{}").format(total_trade_count))
 
-            self.output(_("日均盈亏：\t{:,.2f}").format(daily_net_pnl))
-            self.output(_("日均手续费：\t{:,.2f}").format(daily_commission))
-            self.output(_("日均滑点：\t{:,.2f}").format(daily_slippage))
-            self.output(_("日均成交金额：\t{:,.2f}").format(daily_turnover))
-            self.output(_("日均成交笔数：\t{}").format(daily_trade_count))
+            self.output(_("daysavgPnL：\t{:,.2f}").format(daily_net_pnl))
+            self.output(_("daysavgfee：\t{:,.2f}").format(daily_commission))
+            self.output(_("daysavgslippage：\t{:,.2f}").format(daily_slippage))
+            self.output(_("daysavgTradeamount：\t{:,.2f}").format(daily_turnover))
+            self.output(_("daysavgTradecount：\t{}").format(daily_trade_count))
 
-            self.output(_("日均收益率：\t{:,.2f}%").format(daily_return))
-            self.output(_("收益标准差：\t{:,.2f}%").format(return_std))
+            self.output(_("daysavgreturn rate：\t{:,.2f}%").format(daily_return))
+            self.output(_("returnstandarddiff：\t{:,.2f}%").format(return_std))
             self.output(f"Sharpe Ratio：\t{sharpe_ratio:,.2f}")
             self.output(f"EWM Sharpe：\t{ewm_sharpe:,.2f}")
-            self.output(_("收益回撤比：\t{:,.2f}").format(return_drawdown_ratio))
+            self.output(_("returndrawdownratio：\t{:,.2f}").format(return_drawdown_ratio))
             self.output(f"RGR Ratio：\t{rgr_ratio:,.2f}")
 
         statistics: dict = {
@@ -522,7 +522,7 @@ class BacktestingEngine:
                 value = 0
             statistics[key] = np.nan_to_num(value)
 
-        self.output(_("策略统计指标计算完成"))
+        self.output(_("StrategystatisticsindicatorCalculateCompleted"))
         return statistics
 
     def show_chart(self, df: DataFrame | None = None) -> go.Figure:
@@ -589,7 +589,7 @@ class BacktestingEngine:
 
         if output:
             for result in results:
-                msg: str = _("参数：{}, 目标：{}").format(result[0], result[1])
+                msg: str = _("Parameter：{}, target：{}").format(result[0], result[1])
                 self.output(msg)
 
         return results
@@ -631,7 +631,7 @@ class BacktestingEngine:
 
         if output:
             for result in results:
-                msg: str = _("参数：{}, 目标：{}").format(result[0], result[1])
+                msg: str = _("Parameter：{}, target：{}").format(result[0], result[1])
                 self.output(msg)
 
         return results

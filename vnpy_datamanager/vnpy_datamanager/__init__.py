@@ -42,7 +42,7 @@ class DataManagerApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = "数据管理"
+    display_name: str = "DataManager"
     engine_class: type[ManagerEngine] = ManagerEngine
     widget_name: str = "ManagerWidget"
     icon_name: str = str(app_path.joinpath("ui", "manager.ico"))

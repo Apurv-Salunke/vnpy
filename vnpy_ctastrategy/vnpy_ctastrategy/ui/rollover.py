@@ -33,7 +33,7 @@ class RolloverTool(QtWidgets.QDialog):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle(_("移仓助手"))
+        self.setWindowTitle(_("movepositionassistant"))
 
         old_symbols: list = []
         for vt_symbol, strategies in self.cta_engine.symbol_strategy_map.items():
@@ -56,15 +56,15 @@ class RolloverTool(QtWidgets.QDialog):
         self.log_edit.setReadOnly(True)
         self.log_edit.setMinimumWidth(500)
 
-        button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移仓"))
+        button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("moveposition"))
         button.clicked.connect(self.roll_all)
         button.setFixedHeight(button.sizeHint().height() * 2)
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form.addRow(_("移仓合约"), self.old_symbol_combo)
-        form.addRow(_("目标合约"), self.new_symbol_line)
-        form.addRow(_("委托超价"), self.payup_spin)
-        form.addRow(_("单笔上限"), self.max_volume_spin)
+        form.addRow(_("movepositionContract"), self.old_symbol_combo)
+        form.addRow(_("targetContract"), self.new_symbol_line)
+        form.addRow(_("Price offset"), self.payup_spin)
+        form.addRow(_("singleuplimit"), self.max_volume_spin)
         form.addRow(button)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
@@ -97,7 +97,7 @@ class RolloverTool(QtWidgets.QDialog):
 
         new_tick: TickData | None = self.main_engine.get_tick(new_symbol)
         if not new_tick:
-            self.write_log(_("无法获取目标合约{}的盘口数据，请先订阅行情").format(new_symbol))
+            self.write_log(_("unableGettargetContract{}order bookData，pleasefirstSubscribe market data").format(new_symbol))
             return
 
         payup: int = self.payup_spin.value()
@@ -106,11 +106,11 @@ class RolloverTool(QtWidgets.QDialog):
         strategies: list = self.cta_engine.symbol_strategy_map[old_symbol]
         for strategy in strategies:
             if not strategy.inited:
-                self.write_log(_("策略{}尚未初始化，无法执行移仓").format(strategy.strategy_name))
+                self.write_log(_("Strategy{}not yetInitialize，unableexecutemoveposition").format(strategy.strategy_name))
                 return
 
             if strategy.trading:
-                self.write_log(_("策略{}正在运行中，无法执行移仓").format(strategy.strategy_name))
+                self.write_log(_("Strategy{}positiveInRunningin，unableexecutemoveposition").format(strategy.strategy_name))
                 return
 
         # Roll position first
@@ -184,7 +184,7 @@ class RolloverTool(QtWidgets.QDialog):
         if result:
             self.cta_manager.remove_strategy(name)
 
-        self.write_log(_("移除老策略{}[{}]").format(name, strategy.vt_symbol))
+        self.write_log(_("removeoldStrategy{}[{}]").format(name, strategy.vt_symbol))
 
         # Add new strategy
         self.cta_engine.add_strategy(
@@ -193,17 +193,17 @@ class RolloverTool(QtWidgets.QDialog):
             vt_symbol,
             parameters
         )
-        self.write_log(_("创建策略{}[{}]").format(name, vt_symbol))
+        self.write_log(_("CreateStrategy{}[{}]").format(name, vt_symbol))
 
         # Init new strategy
         self.cta_engine.init_strategy(name)
-        self.write_log(_("初始化策略{}[{}]").format(name, vt_symbol))
+        self.write_log(_("InitializeStrategy{}[{}]").format(name, vt_symbol))
 
         # Update pos to new strategy
         new_strategy: CtaTemplate = self.cta_engine.strategies[name]
         new_strategy.pos = pos
         new_strategy.sync_data()
-        self.write_log(_("更新策略仓位{}[{}]").format(name, vt_symbol))
+        self.write_log(_("UpdateStrategyposition{}[{}]").format(name, vt_symbol))
 
     def send_order(
         self,
@@ -259,7 +259,7 @@ class RolloverTool(QtWidgets.QDialog):
                 vt_orderids.append(vt_orderid)
                 self.main_engine.update_order_request(req, vt_orderid, contract.gateway_name)
 
-                msg: str = _("发出委托{}，{} {}，{}@{}").format(
+                msg: str = _("sendoutOrder{}，{} {}，{}@{}").format(
                     vt_symbol, direction.value, offset.value, volume, price
                 )
                 self.write_log(msg)

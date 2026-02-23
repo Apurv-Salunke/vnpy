@@ -15,7 +15,7 @@ from vnpy_ctastrategy import (
 class DoubleMaStrategy(CtaTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     fast_window: int = 10
     slow_window: int = 20
@@ -32,7 +32,7 @@ class DoubleMaStrategy(CtaTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.bg: BarGenerator = BarGenerator(self.on_bar)
         self.am: ArrayManager = ArrayManager()
@@ -43,14 +43,14 @@ class DoubleMaStrategy(CtaTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
         self.put_event()
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
         self.put_event()
 

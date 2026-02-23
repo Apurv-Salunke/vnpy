@@ -1,791 +1,839 @@
-# 4.3.0版本
-
-## 新增
-
-1. vnpy.alpha增加WorldQuant的Alpha 101因子特征数据集
-
-## 调整
-
-1. vnpy_sec/vnpy_esunny升级适配4.0版本
-2. vnpy_ctabacktester的策略代码编辑功能支持cursor和pycharm编辑器
-3. vnpy_ctastrategy的回测引擎，增加RGR绩效统计指标（感谢上弦之月贡献）
-4. ArrayManager增加对于指标计算函数重载（Function Overload）的类型提示声明
-5. vnpy_ctp增加特殊情况撤单（非交易时段、资金不足等）的日志输出
-6. DataProxy的所有比较运算，直接返回pl.Int32（而不是Bool）
-7. 重构ts_slope / ts_rsquare / ts_resi算子函数
-
-## 修复
-
-1. vnpy_ib修复查询历史数据问题（query_history函数增加查询锁解决多线程冲突问题）
-2. vnpy_optionmaster修复深度虚值期权的隐含波动率计算收敛问题
-
-
-# 4.2.0版本
-
-## 新增
-
-1. vnpy_riskmanager模块重构
-    a. 采用插件式设计，提供标准化风控规则开发模板
-    b. 支持中国期货程序化交易系统监管要求中的风控规则
-    c. 输出拦截日志后播放提示声音，目前仅支持Windows系统
-    d. 使用系统托盘栏图标，弹出交易风控拦截日志气泡框
-    e. 提供Cython版本的风控规则开发模板以及具体规则实现
-    f. 支持自动扫描加载用户自定义风控规则（放置于Trader目录下的rules文件夹中）
-2. vnpy_polygon数据服务接口，支持海外股票、期货、期权等资产品种的历史数据获取
+# 4.3.0 Release
+
+## New Features
+
+1. vnpy.alpha adds WorldQuant's Alpha 101 factor feature dataset
+
+## Changes
+
+1. vnpy_sec/vnpy_esunny upgraded for v4.0 compatibility
+2. vnpy_ctabacktester strategy code editing now supports Cursor and PyCharm editors
+3. vnpy_ctastrategy backtesting engine adds RGR performance statistics metric (thanks to @上弦之月)
+4. ArrayManager adds type hint declarations for indicator calculation function overloads
+5. vnpy_ctp adds log output for order cancellation in special cases (non-trading hours, insufficient funds, etc.)
+6. DataProxy comparison operations now return pl.Int32 directly (instead of Bool)
+7. Refactored ts_slope / ts_rsquare / ts_resi operator functions
+
+## Bug Fixes
+
+1. vnpy_ib fixed historical data query issue (query_history function now uses query lock to resolve multi-threading conflicts)
+2. vnpy_optionmaster fixed implied volatility calculation convergence issue for deep out-of-the-money options
+
+
+# 4.2.0 Release
+
+## New Features
 
-## 调整
+1. vnpy_riskmanager module refactored
+    a. Plugin-based design with standardized risk rule development templates
+    b. Supports risk control rules required by Chinese futures programmatic trading regulations
+    c. Outputs interception logs with audio alerts (Windows only)
+    d. Uses system tray icon to display trading risk interception log popups
+    e. Provides Cython version risk rule development templates and implementations
+    f. Supports automatic scanning and loading of user-defined risk rules (placed in rules folder under Trader directory)
+2. vnpy_polygon datafeed interface supports historical data for international stocks, futures, and options
 
-1. vnpy_ctp更新底层API到6.7.11（生产和测试统一版本）
-2. vnpy_dolphindb升级适配4.0版本
-3. vnpy_tqsdk简化时间戳的格式化方法，提高效率
-4. vnpy_sqlite支持使用配置文件中声明的数据文件
-5. vnpy_taos优化get_bar_overview和get_tick_overview函数性能（直接访问超级表的tags）
-6. vnpy_spreadtrading / vnpy_portfoliostrategy / vnpy_scripttrader 注册模块日志输出到日志引擎
-7. vnpy_optionmaster优化定价模型中期权最小价值边界判断的逻辑
-8. 全局配置中的log.level改为INFO（10），默认启用详细日志记录输出
-9. MainEngine增加交易功能函数的调用日志输出
-10. vnpy.alpha中的Dataset增加process_data函数，便于测试不同数据处理器的效果
-11. vnpy_ib更新支持ibapi至10.40.1版本
+## Changes
 
+1. vnpy_ctp updated underlying API to 6.7.11 (unified production and test version)
+2. vnpy_dolphindb upgraded for v4.0 compatibility
+3. vnpy_tqsdk simplified timestamp formatting for improved performance
+4. vnpy_sqlite now supports data files declared in configuration
+5. vnpy_taos optimized get_bar_overview and get_tick_overview function performance (direct access to super table tags)
+6. vnpy_spreadtrading / vnpy_portfoliostrategy / vnpy_scripttrader module registration logs now output to log engine
+7. vnpy_optionmaster optimized minimum value boundary logic in pricing model
+8. Global config log.level changed to INFO (10), verbose logging enabled by default
+9. MainEngine added call logging for trading functions
+10. vnpy.alpha Dataset added process_data function for testing different data processors
+11. vnpy_ib updated to support ibapi version 10.40.1
 
-## 修复
+## Bug Fixes
 
-1. vnpy_gm修复中金所和大商所合约代码转换的问题
-2. vnpy_rqdata修复RqdataGateway中的行情订阅函数错误问题
-3. vnpy_optionmaster修复关闭窗口时的异常报错
-4. vnpy_portfoliostrategy修复遗传算法参数优化中的调用传参问题
-5. 修复Linux系统上的sdist安装问题：vnpy_mini / vnpy_sopt / vnpy_rohon / vnpy_tap / vnpy_tts
-6. vnpy_xt修复XtGateway断线重连时的传参错误
-7. vnpy_optionmaster修复black-76模型中theta计算公式的问题
-8. vnpy_postgresql修复写入主键冲突时数据不会更新的问题
+1. vnpy_gm fixed CFFEX and DCE contract code conversion issue
+2. vnpy_rqdata fixed market data subscription function error in RqdataGateway
+3. vnpy_optionmaster fixed exception when closing window
+4. vnpy_portfoliostrategy fixed parameter passing issue in genetic algorithm optimization
+5. Fixed Linux sdist installation issues: vnpy_mini / vnpy_sopt / vnpy_rohon / vnpy_tap / vnpy_tts
+6. vnpy_xt fixed XtGateway parameter error during reconnection
+7. vnpy_optionmaster fixed theta calculation formula in Black-76 model
+8. vnpy_postgresql fixed data not updating on primary key conflict
 
 
-# 4.1.0版本
+# 4.1.0 Release
 
-# 新增
+## New Features
 
-1. vnpy_mcdata新增对于Tick数据查询的支持
-2. OrderType枚举值增加ETF类型，支持ETF申购和赎回业务
-3. 增加遗传算法优化函数run_ga_optimization的入参，允许用户控制优化过程中所使用的全部超参
-4. CTA策略回测引擎，增加对于遗传算法优化函数新入参的支持
+1. vnpy_mcdata adds Tick data query support
+2. OrderType enum added ETF type for ETF subscription and redemption
 
-## 调整
+## Changes
 
-1. 升级扩展模块适配4.0版本：
-    * 交易接口：
-        * 期货类：vnpy_uft/vnpy_mini/vnpy_femas/vnpy_ctptest
-        * 股票类：vnpy_xtp/vnpy_tora
-        * 期权类：vnpy_hts/vnpy_sopt/vnpy_sopttest
-        * 资管类：vnpy_rohon/vnpy_lstar/vnpy_jees
-        * 其他类：vnpy_ksgold/vnpy_tts/vnpy_tap/vnpy_da/vnpy_ib
-    * 策略应用：
-        * 策略类：vnpy_portfoliostrategy/vnpy_ctabacktester/vnpy_spreadtrading/vnpy_scripttrader
-        * 交易类：vnpy_algotrading/vnpy_optionmaster/vnpy_portfoliomanager/vnpy_paperaccount
-        * 数据类：vnpy_datarecorder/vnpy_excelrtd/vnpy_datamanager
-        * 辅助类：vnpy_chartwizard/vnpy_webtrader/vnpy_rpcservice/vnpy_riskmanager
-    * 数据库：vnpy_mysql/vnpy_postgresql/vnpy_mongodb/vnpy_taos
-    * 数据服务：vnpy_gm/vnpy_xt/vnpy_tqsdk/vnpy_ifind/vnpy_tushare/vnpy_wind
-2. 使用close函数替代unbind，来实现vnpy.rpc模块中zmq.Socket的安全关闭
-3. 修改PySide6依赖版本为6.8.2.1，解决部分底层warning输出问题
-4. 修改ta-lib依赖版本为0.6.4，解决Linux和Mac系统的安装问题
-5. 调整Qt层捕捉到全局异常时的日志输出级别为Critical
-6. vnpy_datarecorder移除不必要的行情录制异常抛出，改为记录日志
-7. vnpy_rqdata下载股票数据时，除权方式有pre改为pre_volume
-8. 数据库模块录制行情数据时，默认跳过extra字段
-9. vnpy_ib支持10.30.1版本的ibapi，增加对于新版本撤单函数的传参支持
+1. Upgraded extension modules for v4.0 compatibility:
+    * Trading Gateways:
+        * Futures: vnpy_uft/vnpy_mini/vnpy_femas/vnpy_ctptest
+        * Stocks: vnpy_xtp/vnpy_tora
+        * Options: vnpy_hts/vnpy_sopt/vnpy_sopttest
+        * Asset Management: vnpy_rohon/vnpy_lstar/vnpy_jees
+        * Others: vnpy_ksgold/vnpy_tts/vnpy_tap/vnpy_da/vnpy_ib
+    * Strategy Apps:
+        * Strategy: vnpy_portfoliostrategy/vnpy_ctabacktester/vnpy_spreadtrading/vnpy_scripttrader
+        * Trading: vnpy_algotrading/vnpy_optionmaster/vnpy_portfoliomanager/vnpy_paperaccount
+        * Data: vnpy_datarecorder/vnpy_excelrtd/vnpy_datamanager
+        * Utilities: vnpy_chartwizard/vnpy_webtrader/vnpy_rpcservice/vnpy_riskmanager
+    * Databases: vnpy_mysql/vnpy_postgresql/vnpy_mongodb/vnpy_taos
+    * Datafeeds: vnpy_gm/vnpy_xt/vnpy_tqsdk/vnpy_ifind/vnpy_tushare/vnpy_wind
+2. Replaced unbind with close function for safe zmq.Socket shutdown in vnpy.rpc
+3. Changed PySide6 dependency to 6.8.2.1 to resolve底层 warning issues
+4. Changed ta-lib dependency to 0.6.4 to fix Linux and Mac installation issues
+5. Adjusted Qt global exception log level to Critical
+6. vnpy_datarecorder removed unnecessary quote recording exceptions, changed to logging
+7. vnpy_rqdata changed stock data adjustment method from pre to pre_volume
+8. Database module defaults to skipping extra field when recording market data
+9. vnpy_ib supports ibapi 10.30.1, added support for new cancel order function parameters
 
-## 修复
+## Bug Fixes
 
-1. 修复新版本ta-lib中，MA_Type类不再是枚举值导致的部分指标计算问题
-2. 修复补全MainEngine缺失的get_tick函数
-3. 修复邮件发送引擎在使用QQ邮箱时出现的发送后报错问题
-4. 修复日志模块由于缺失默认gateway_name参数，在Qt层捕捉到全局异常时输出错误的问题
-5. vnpy_rohon新增Linux安装脚本，解决动态库找不到的问题
-6. vnpy_rqdata修复品种代码为小写合约的次主力88A2历史数据查询问题
+1. Fixed indicator calculation issues due to MA_Type class no longer being an enum in new ta-lib version
+2. Fixed missing get_tick function in MainEngine
+3. Fixed email sending issue with QQ email provider
+4. Fixed log module missing default gateway_name parameter causing Qt global exception error
+5. vnpy_rohon added Linux installation script to resolve missing dynamic library issue
+6. vnpy_rqdata fixed lowercase contract code secondary continuous 88A2 historical data query issue
 
-# 4.0.0版本
 
-## 新增
+# 4.0.0 Release
 
-1. 新增面向机器学习多因子策略的vnpy.alpha模块
-2. MultiCharts数据服务模块vnpy_mcdata
+## New Features
 
-## 调整
+1. Added vnpy.alpha module for machine learning multi-factor strategies
+2. MultiCharts datafeed module vnpy_mcdata
 
-1. 核心支持版本升级到Python 3.13
-2. 使用pyproject.toml统一项目配置
-3. 日志功能使用loguru替代logging
-4. 使用mypy优化静态类型声明
-5. 使用ruff优化代码细节质量
-6. 使用uv作为开发环境管理工具
-7. 升级扩展模块适配4.0版本：vnpy_ctp/vnpy_ctastrategy/vnpy_sqlite/vnpy_rqdata
+## Changes
 
-## 修复
+1. Core support upgraded to Python 3.13
+2. Use pyproject.toml for unified project configuration
+3. Replaced logging with loguru for logging functionality
+4. Use mypy for static type checking optimization
+5. Use ruff for code quality optimization
+6. Use uv as development environment management tool
+7. Upgraded extension modules for v4.0 compatibility: vnpy_ctp/vnpy_ctastrategy/vnpy_sqlite/vnpy_rqdata
 
-1. 修复PySide6中单元格排序可能出现的乱序问题
+## Bug Fixes
 
-# 3.9.4版本
+1. Fixed potential sorting disorder in PySide6 cells
 
-## 新增
 
-1. vnpy_tora增加登录时终端动态密钥支持
-2. vnpy_taos升级支持TDengine的3.0版本
+# 3.9.4 Release
 
-## 调整
+## New Features
 
-1. vnpy_xt行情接口增加实时行情中的涨跌停价字段
-2. vnpy_taos移除不必要的时区转换提高性能
-3. vnpy_dolphindb优化写入大量数据时候的内存占用
-4. vnpy_portfoliostrategy简化回测引擎的calculate_pnl每日盈亏计算函数
-5. vnpy_tap/vnpy_tts升级pybind11封装工具库的版本，支持Python 3.12编译
-6. EmailEngine发送邮件失败后，捕捉异常并输出日志
-
-## 修复
+1. vnpy_tora added dynamic terminal key support for login
+2. vnpy_taos upgraded to support TDengine 3.0
 
-1. vnpy_optionmaster移除不必要的价格缓存代码
-2. vnpy_dolphindb修复保存overview的时区不正确问题
+## Changes
 
+1. vnpy_xt market data interface added limit up/down price fields
+2. vnpy_taos removed unnecessary timezone conversion for performance
+3. vnpy_dolphindb optimized memory usage when writing large data volumes
+4. vnpy_portfoliostrategy simplified calculate_pnl daily PnL calculation in backtesting engine
+5. vnpy_tap/vnpy_tts upgraded pybind11 wrapper library to support Python 3.12
+6. EmailEngine catches exceptions and logs on email sending failure
 
-# 3.9.3版本
+## Bug Fixes
 
-## 新增
+1. vnpy_optionmaster removed unnecessary price cache code
+2. vnpy_dolphindb fixed incorrect timezone when saving overview
 
-1. 利星资管交易接口vnpy_lstar
-2. 咏春大师数据服务vnpy_voltrader
-3. vnpy_rpcservice增加数据服务代理工具RpcDatafeed
 
-## 调整
+# 3.9.3 Release
 
-1. 适配6.3.0版本以上的PySide6模块：vnpy/vnpy_ctastrategy/vnpy_ctabacktester/vnpy_portfoliostrategy/vnpy_spreadtrading/vnpy_datamanager/vnpy_algotrading/vnpy_portfoliomananger/vnpy_optionmaster
-2. vnpy_uft升级3.7.4.1004版本API
-3. vnpy_ib的execDetails成交回报使用本地缓存的委托记录填充交易所，解决SMART交易所字段可能发生变化的问题
-4. vnpy_ib的openOrder委托回报优先使用本地缓存的委托记录，解决交易所字段可能发生变化的问题
-5. vnpy_ib的查询历史数据时，使用UTC时间戳传参
-6. vnpy_ib的查询历史数据时，异步返回最长等待时间延长为600秒
-7. vnpy_ib的增加期权链合约数据更新结束回报
-8. vnpy_ib的合约乘数支持浮点数
-9. 合约信息ContractData数据类，增加单笔最大委托数量max_volume
+## New Features
 
-## 修复
+1. Lstar asset management gateway vnpy_lstar
+2. Voltrader datafeed vnpy_voltrader
+3. vnpy_rpcservice added RpcDatafeed for datafeed proxy
 
-1. 修复vnpy_spreadtrading回测引擎clear_data时，没有清空价差仓位的问题
-2. 修复vnpy_ib查询历史数据失败时的日志输出错误
+## Changes
 
+1. Adapted to PySide6 6.3.0+: vnpy/vnpy_ctastrategy/vnpy_ctabacktester/vnpy_portfoliostrategy/vnpy_spreadtrading/vnpy_datamanager/vnpy_algotrading/vnpy_portfoliomananger/vnpy_optionmaster
+2. vnpy_uft upgraded to API 3.7.4.1004
+3. vnpy_ib execDetails trade callback now uses cached order record to populate exchange, resolving SMART exchange field changes
+4. vnpy_ib openOrder order callback prioritizes cached order record for exchange field stability
+5. vnpy_ib historical data query now uses UTC timestamps
+6. vnpy_ib historical data async wait time extended to 600 seconds
+7. vnpy_ib added option chain contract data update completion callback
+8. vnpy_ib contract multiplier now supports float values
+9. ContractData added max_volume field for maximum single order size
 
-# 3.9.2版本
+## Bug Fixes
 
-## 新增
+1. Fixed spread position not cleared in vnpy_spreadtrading backtesting engine clear_data
+2. Fixed vnpy_ib historical data query error log output
 
-1. vnpy_xt增加实时行情接口XtGateway
-2. vnpy_xt增加基于文件锁实现的xtdc单例运行
-3. vnpy_ib增加行情退订功能
-4. vnpy_ib的合约乘数支持浮点数
-5. vnpy_ib增加期权链合约数据更新结束回报
-6. vnpy_ctabacktester、vnpy_ctastrategy、vnpy_portfoliostrategy增加i18n国际化支持
 
-## 调整
+# 3.9.2 Release
 
-1. vnpy_algotrading增加委托/成交推送时，对于算法状态的过滤
-2. vnpy_tushare模块的to_ts_asset函数增加ETF基金支持
-3. vnpy_xt更新适配xtquant的240613.1.1版本
-4. vnpy_xt开启使用期货真实夜盘时间，增加期货历史数据集合竞价K线合成支持
-5. vnpy_tts更新API版本到6.7.2
-6. vnpy_rohon更新API版本：行情1.4.1.3，交易30.4.1.24
-7. vnpy_tap完善API日志输出功能
-8. vnpy_rest发送REST请求时，增加对于json参数的支持
-9. vnpy_excelrtd优化PyXLL启动时加载模块的方式
-10. vnpy_spreadtrading使用线程池实现策略初始化的异步执行
-11. vnpy_ib移除期权合约的自动查询功能
-12. vnpy_ib缓存查询返回的IB合约数据，简化行情切片查询函数
-13. vnpy_ib查询历史数据时，使用UTC时间戳传参，并将最长等待时间延长为600秒
-14. vnpy_ctastrategy的绩效统计值增加基于指数移动平均计算的EWM Sharpe比率
-15. vnpy_ctastrategy回测引擎的show_chart函数直接返回图表对象
+## New Features
 
-## 修复
+1. vnpy_xt added real-time market data interface XtGateway
+2. vnpy_xt implemented xtdc singleton using file lock
+3. vnpy_ib added market data unsubscription
+4. vnpy_ib contract multiplier now supports float values
+5. vnpy_ib added option chain contract data update completion callback
+6. vnpy_ctabacktester, vnpy_ctastrategy, vnpy_portfoliostrategy added i18n internationalization support
 
-1. 修复vnpy_rhon行情登录失败时的判断逻辑问题
-2. 修复vnpy_datarecorder记录价差数据时缺失的localtime字段
-3. 修复vnpy_spreadtraidng从datafeed加载数据时，时间戳传参缺失时区信息的问题
-4. 修复vnpy_paperaccount委托数量为0撮合之后导致的ZeroDivisionError问题
-5. 修复vnpy_portoliostrategy停止策略时，没有自动撤销策略委托的功能
-
-# 3.9.1版本
+## Changes
 
-## 新增
+1. vnpy_algotrading added algorithm status filtering for order/trade events
+2. vnpy_tushare to_ts_asset function added ETF fund support
+3. vnpy_xt adapted to xtquant 240613.1.1
+4. vnpy_xt enabled actual futures night trading hours, added auction call K-line synthesis
+5. vnpy_tts updated API to 6.7.2
+6. vnpy_rohon updated API: market 1.4.1.3, trading 30.4.1.24
+7. vnpy_tap improved API log output
+8. vnpy_rest added json parameter support for REST requests
+9. vnpy_excelrtd optimized PyXLL module loading on startup
+10. vnpy_spreadtrading uses thread pool for async strategy initialization
+11. vnpy_ib removed auto option contract query
+12. vnpy_ib caches queried IB contract data, simplified ticker query function
+13. vnpy_ib historical data query uses UTC timestamps, max wait time extended to 600 seconds
+14. vnpy_ctastrategy performance metrics added EWM Sharpe ratio based on exponential moving average
+15. vnpy_ctastrategy backtesting engine show_chart function now returns chart object directly
 
-1. 增加i18n国际化支持，以及对应的英文翻译
-2. 增加CFD和SWAP品种类型枚举值
-3. vnpy_ib增加COMEX、Eurex交易所支持
-4. vnpy_ib增加CFD品种支持
+## Bug Fixes
 
-## 调整
+1. Fixed vnpy_rohon market login failure judgment logic
+2. Fixed missing localtime field in vnpy_datarecorder spread data recording
+3. Fixed missing timezone info in datafeed timestamp for vnpy_spreadtrading
+4. Fixed ZeroDivisionError in vnpy_paperaccount when volume is 0 after matching
+5. Fixed vnpy_portfoliostrategy not canceling active orders when stopping strategy
 
-1. vnpy_rqdata完善对于周五夜盘数据查询的支持
-2. vnpy_ib订阅行情和委托下单时，检查代码字符串是否包含空格
-3. vnpy_ib解析合约对象时，增加对于ConId是否包含非数字字符的检查
-4. vnpy_ib查询历史K线数据，支持更长时间段跨度（不再限制半年）
-5. vnpy_da更新API版本到1.18.2.0
-6. vnpy_da移除历史数据查询功能
-7. vnpy_tora调整期权接口的委托号生成规则，支持上限10万数量委托
-8. vnpy_xtp调整账户冻结资金的计算逻辑
-9. vnpy_optionmaster增加对IB的股票期权品种支持
-10. vnpy_optionmaster定价模型改为计算理论希腊值
-11. vnpy_optionmaster调整对象希腊值为理论模式
-12. vnpy_optionmaster调整中值隐波动的计算方法
-13. vnpy_spreadtrading使用线程池实现策略初始化的异步执行
-14. vnpy_postgresql支持自动重用已经打开的数据库连接
-15. vnpy_ctptest更新API版本至6.7.2
-16. 接口封装升级更新pybind11到2.11.1版本：vnpy_ctptest、vnpy_sopttest
-17. vnpy_ctp更新API版本到6.7.2
-18. 调整extract_vt_symbol函数，兼容代码中带有"."的情况，如HHI.HK-HKD-FUT.HKFE
-19. 更新vnpy框架的核心依赖模块到2024年较新的版本
 
-## 修复
+# 3.9.1 Release
 
-1. 修复vnpy_portfoliostrategy调用stop_strategy没有撤销活动委托的问题
-2. 修复vnpy_xtp的API封装中queryTickersPriceInfo底层调用错误
-3. 修复RpcClient中_last_received_ping变量的类型问题
+## New Features
 
+1. Added i18n internationalization support with English translations
+2. Added CFD and SWAP product type enums
+3. vnpy_ib added COMEX, Eurex exchange support
+4. vnpy_ib added CFD product support
 
-# 3.9.0版本
+## Changes
 
-## 新增
+1. vnpy_rqdata improved Friday night trading data query support
+2. vnpy_ib checks for spaces in code string when subscribing/orders
+3. vnpy_ib added ConId non-digit character validation in contract parsing
+4. vnpy_ib historical K-line data supports longer time spans (no longer limited to 6 months)
+5. vnpy_da updated API to 1.18.2.0
+6. vnpy_da removed historical data query function
+7. vnpy_tora adjusted option order ID generation rule, supports up to 100k quantity
+8. vnpy_xtp adjusted account frozen funds calculation
+9. vnpy_optionmaster added IB stock option support
+10. vnpy_optionmaster pricing model changed to calculate theoretical Greeks
+11. vnpy_optionmaster adjusted object Greeks to theoretical mode
+12. vnpy_optionmaster adjusted mid-IV calculation method
+13. vnpy_spreadtrading uses thread pool for async strategy initialization
+14. vnpy_postgresql supports automatic reuse of open database connections
+15. vnpy_ctptest updated API to 6.7.2
+16. Upgraded pybind11 to 2.11.1: vnpy_ctptest, vnpy_sopttest
+17. vnpy_ctp updated API to 6.7.2
+18. Adjusted extract_vt_symbol to handle "." in codes (e.g., HHI.HK-HKD-FUT.HKFE)
+19. Updated vnpy core dependencies to 2024 versions
 
-1. 迅投研数据服务vnpy_xt，支持股票、期货、期权、债券、基金历史数据获取
-2. vnpy_ib增加对CBOE和CBOT交易所的支持、对指数期权的支持
-3. vnpy_rqdata增加对于88A2连续次主力合约的支持
-4. vnpy_wind增加广期所和上期能源交易所的数据支持
+## Bug Fixes
 
-## 调整
+1. Fixed vnpy_portfoliostrategy stop_strategy not canceling active orders
+2. Fixed vnpy_xtp queryTickersPriceInfo underlying call error
+3. Fixed RpcClient _last_received_ping variable type issue
 
-1. vnpy_sopt升级3.7.0版本API
-2. vnpy_portfoliostrategy回测引擎支持交易日参数annual_days
-3. K线合成器（BarGenerator）移除对于Tick时间戳的检查过滤逻辑，交由用户层负责控制过滤
-4. vnpy_ib收到期权合约数据后，自动查询其切片行情数据
-5. vnpy_paperaccount实现对于IB接口合约的特殊路由处理
-6. 接口封装升级更新pybind11到2.11.1版本：vnpy_ctp、vnpy_sopt、vnpy_tora
-7. vnpy_ctp过滤不支持的委托状态推送
-8. vnpy_mysql兼容无数据库写入权限情况下的数据表初始化
-9. vnpy_chartwizard支持关闭单个图表标签页
-10. vnpy_portfoliostrategy移除策略后同时清除对应的策略状态缓存数据
-11. vnpy_portfoliostrategy调整每日盈亏清算对象开盘持仓数据的初始化方式
-12. 策略模块遗传优化函数增加ngen_size和max_workers参数
 
+# 3.9.0 Release
 
-## 修复
+## New Features
 
-1. 修复vnpy_tora接口中的委托部分撤单状态映射缺失
-2. 修复vnpy_wind查询日线历史数据时数值存在NaN的问题
-3. 修复vnpy_mongodb的Tick汇总数据的条数统计错误
-4. 修复vnpy_chartwizard对于升级后的vnpy_spreadtrading价差行情显示问题
-5. 修复vnpy_ctastrategy回测成交记录为空时的报错
-6. 修复vnpy_ctastrategy策略初始化时，历史数据重复推送调用on_bar的问题
+1. Xuntou datafeed vnpy_xt supports stocks, futures, options, bonds, funds historical data
+2. vnpy_ib added CBOE, CBOT exchange support, index options support
+3. vnpy_rqdata added 88A2 continuous secondary contract support
+4. vnpy_wind added GFEX, INE exchange support
 
+## Changes
 
-# 3.8.0版本
+1. vnpy_sopt upgraded to API 3.7.0
+2. vnpy_portfoliostrategy backtesting engine supports annual_days trading days parameter
+3. BarGenerator removed tick timestamp check, delegated to user layer
+4. vnpy_ib auto-queries option chain slice data after receiving contract
+5. vnpy_paperaccount implemented special routing for IB contracts
+6. Upgraded pybind11 to 2.11.1: vnpy_ctp, vnpy_sopt, vnpy_tora
+7. vnpy_ctp filters unsupported order status push
+8. vnpy_mysql compatible with no database write permissions for table initialization
+9. vnpy_chartwizard supports closing individual chart tabs
+10. vnpy_portfoliostrategy clears strategy state cache on removal
+11. vnpy_portfoliostrategy adjusted daily PnL initialization for opening positions
+12. Genetic optimization function added ngen_size and max_workers parameters
 
-## 新增
+## Bug Fixes
 
-1. K线合成器（BarGenerator）增加对日K线的合成支持
-2. 基于华鑫奇点柜台的C++ API重构vnpy_tora，实现VeighNa Station加载支持
-3. 新增vnpy_ib对于期权合约查询、波动率和希腊值等扩展行情数据的支持
+1. Fixed vnpy_tora partial cancel order status mapping missing
+2. Fixed vnpy_wind daily historical data NaN values
+3. Fixed vnpy_mongodb Tick aggregation count error
+4. Fixed vnpy_chartwizard spread quote display for upgraded vnpy_spreadtrading
+5. Fixed vnpy_ctastrategy backtest error when trade records empty
+6. Fixed vnpy_ctastrategy duplicate on_bar calls during strategy initialization
 
-## 调整
 
-1. vnpy_rest/vnpy_websocket限制在Windows上改为必须使用Selector事件循环
-2. vnpy_rest/vnpy_websocket客户端关闭时确保所有会话结束，并等待有异步任务完成后安全退出
-3. vnpy_ctp升级6.6.9版本API
-4. vnpy_ctp支持大商所的1毫秒级别行情时间戳
-5. vnpy_tqsdk过滤不支持的K线频率查询并输出日志
-6. vnpy_datamanager增加数据频率下按交易所显示支持，优化数据加载显示速度
-7. vnpy_ctabacktester如果加载的历史数据为空，则不执行后续回测
-8. vnpy_spreadtrading采用轻量级数据结构，优化图形界面更新机制
-9. vnpy_spreadtrading价差子引擎之间的事件推送，不再经过事件引擎，降低延迟水平
-10. vnpy_rpcservice增加对下单返回委托号的gateway_name替换处理
-11. vnpy_portfoliostrategy策略模板增加引擎类型查询函数get_engine_type
-12. vnpy_sec更新行情API至1.6.45.0版本，更新交易API版本至1.6.88.18版本
-13. vnpy_ib更新10.19.1版本的API，恢复对于数字格式代码（ConId）的支持
-14. 没有配置数据服务或者加载模块失败的情况下，使用BaseDatafeed作为数据服务
-15. 遗传优化算法运行时，子进程指定使用spawn方式启动，避免数据库连接对象异常
-16. 合约管理控件，增加对于期权合约的特有数据字段显示
+# 3.8.0 Release
 
-## 修复
+## New Features
 
-1. 修复vnpy_datarecorder对于新版本vnpy_spreadtrading价差数据的录制支持
-2. 修复vnpy_algotrading条件委托算法StopAlgo全部成交后状态更新可能缺失的问题
-3. 修复vnpy_ctastrategy策略初始化时，历史数据重复推送调用on_bar的问题
-4. 修复vnpy_wind查询日线历史数据时，数值存在NaN的问题
+1. BarGenerator added daily K-line synthesis support
+2. Refactored vnpy_tora based on Tora C++ API, supports VeighNa Station loading
+3. vnpy_ib added option contract query, volatility and Greeks extended market data support
 
+## Changes
 
-# 3.7.0版本
+1. vnpy_rest/vnpy_websocket restricted to Selector event loop on Windows
+2. vnpy_rest/vnpy_websocket ensures all sessions complete on client shutdown
+3. vnpy_ctp upgraded to API 6.6.9
+4. vnpy_ctp supports DCE 1ms timestamp
+5. vnpy_tqsdk filters unsupported K-line frequency queries
+6. vnpy_datamanager added exchange display by data frequency, optimized loading speed
+7. vnpy_ctabacktester skips backtesting if historical data is empty
+8. vnpy_spreadtrading optimized UI with lightweight data structures
+9. vnpy_spreadtrading spread engine events no longer go through event engine (reduced latency)
+10. vnpy_rpcservice added gateway_name replacement for order return IDs
+11. vnpy_portfoliostrategy strategy template added get_engine_type function
+12. vnpy_sec updated market API to 1.6.45.0, trading API to 1.6.88.18
+13. vnpy_ib updated to API 10.19.1, restored ConId numeric code support
+14. Uses BaseDatafeed as default when no datafeed configured
+15. Genetic algorithm spawns child processes with spawn mode to avoid database connection issues
+16. Contract manager widget added option-specific data fields
 
-## 新增
+## Bug Fixes
 
-1. 新增沪股通和深股通交易所枚举值
-2. 增加vnpy_tap对于Linux系统的支持
-3. 增加vnpy_rqdata对于新型主力合约数据支持（切换前一日收盘价比例复权）
+1. Fixed vnpy_datarecorder spread data recording for new vnpy_spreadtrading version
+2. Fixed vnpy_algotrading StopAlgo status update missing after full execution
+3. Fixed vnpy_ctastrategy duplicate on_bar calls during initialization
+4. Fixed vnpy_wind daily historical data NaN values
 
-## 调整
 
-1. vnpy_ctastrategy/vnpy_ctabacktester加载策略类时，过滤TargetPosTemplate模板
-2. vnpy_ctp连接登录过程中，只有在授权码错误的情况下，才禁止再次发起认证
-3. vnpy_uft增加对广期所GFEX的支持
-4. vnpy_tqsdk增加对于output日志输出功能的支持
-5. vnpy_dolphindb允许指定用户自行配置具体的数据库实例
-6. vnpy_rqdata优化对于郑商所期货和期权合约的查询代码转换规则
-7. vnpy_rqdata增加对广期所GFEX的支持
-8. vnpy_portfoliostrategy增加回测爆仓检查
-9. vnpy_portfoliostrategy策略模板增加合约乘数查询函数get_size
-10. vnpy_portfoliostrategy回测加载日线和小时线数据时，不使用分段加载
+# 3.7.0 Release
 
-## 修复
+## New Features
 
-1. 修复vnpy_rpcservice中，RPC接口对于推送数据的vt前缀相关字段错误问题
-2. 修复vnpy_mini中，对于INE交易所今昨仓位的特殊处理
-3. 修复vnpy_datamanager中，批量数据更新时缺失output函数的问题
-4. 修复vnpy_spreadtrading中，回测加载数据时优先从数据服务获取历史数据的问题，改为优先从本地数据库加载
+1. Added Shanghai-HK Stock Connect and Shenzhen-HK Stock Connect exchange enums
+2. Added Linux support for vnpy_tap
+3. Added new continuous contract data support for vnpy_rqdata (pre-switch day close ratio adjustment)
 
+## Changes
 
-# 3.6.0版本
+1. vnpy_ctastrategy/vnpy_ctabacktester filters out TargetPosTemplate when loading strategy classes
+2. vnpy_ctp only blocks re-authentication on authorization code errors
+3. vnpy_uft added GFEX exchange support
+4. vnpy_tqsdk added output log function support
+5. vnpy_dolphindb allows user-specified database instance configuration
+6. vnpy_rqdata optimized ZCE futures/options query conversion rules
+7. vnpy_rqdata added GFEX exchange support
+8. vnpy_portfoliostrategy added bankruptcy check in backtesting
+9. vnpy_portfoliostrategy strategy template added get_size contract multiplier function
+10. vnpy_portfoliostrategy backtesting doesn't use segmented loading for daily/hourly bars
 
-## 新增
+## Bug Fixes
 
-1. 新增vnpy_ctp的Mac系统支持（M1/M2）
+1. Fixed vnpy_rpcservice RPC interface vt prefix field error for push data
+2. Fixed vnpy_mini INE exchange position special handling
+3. Fixed vnpy_datamanager missing output function in batch data update
+4. Fixed vnpy_spreadtrading backtest loading data from datafeed instead of local database
 
-## 调整
 
-1. BaseDatafeed的相关功能函数增加output入参用于输出日志
-2. 修改相关数据服务模块适配output参数：vnpy_rqdata/vnpy_ifind/vnpy_wind/vnpy_tushare
-3. 修改相关策略应用模块适配output参数：vnpy_ctastrategy/vnpy_ctabacktester/vnpy_portfoliostrategy/vnpy_spreadtrading/vnpy_datamanager
-3. OffsetConverter增加对于SHFE/INE合约的锁仓模式支持
-4. 在OmsEngine中添加全局的OffsetConverter功能，不再需要各AppEngine自行维护
-5. 添加CTA策略模块在执行参数优化时的最大进程数量限制参数：vnpy_ctastrategy/vnpy_ctabacktester
-6. 增加穷举优化算法运行过程中基于tqdm的进度条输出
-7. 增加遗传优化算法运行过程中的迭代次数进度输出
-8. 增加vnpy_optionmaster模块的期权产品对应标的合约的匹配函数，不再限制产品范围
-9.  升级vnpy_tts的dll链接库，解决openctp升级导致的资金不显示的问题
-10. 修改vnpy_ctastrategy使用vnpy.trader.database中统一定义的时区来加载数据
-11. 增加vnpy_ctastrategy策略模板的合约乘数查询函数get_size
-12. 增加vnpy_spreadtrading回测中统计绩效时对于爆仓情况的检查
-13. 增加vnpy_scripttrader基于vt_symbol和direction查询持仓数据的函数
-14. 修改vt_positionid的字符串内容，增加gateway_name前缀标识
+# 3.6.0 Release
 
-## 修复
+## New Features
 
-1. 修复异常捕捉钩子threading_excepthook的参数错误问题
-2. 修复vnpy_ib获取历史数据时的异常失败问题
-3. 修复vnpy_rest/vnpy_websocket中aiohttp的代理参数proxy传空时必须为None的问题
-4. 修复vnpy_optionmaster模块的Greeks监控表行数设置不足的问题
-5. 修复vnpy_rqdata查询股票期权数据报错的问题
-6. 修复vnpy_rqdata中RqdataGateway获取期货指数和连续合约信息时错误的问题
-7. 修复vnpy_portfoliostrategy中，从缓存文件恢复数据，导致defaultdict变成dict的问题
+1. Added Mac system support (M1/M2) for vnpy_ctp
 
+## Changes
 
-# 3.5.0版本
+1. BaseDatafeed functions added output parameter for logging
+2. Updated datafeed modules for output parameter: vnpy_rqdata/vnpy_ifind/vnpy_wind/vnpy_tushare
+3. Updated strategy modules for output parameter: vnpy_ctastrategy/vnpy_ctabacktester/vnpy_portfoliostrategy/vnpy_spreadtrading/vnpy_datamanager
+4. OffsetConverter added SHFE/INE lock position mode support
+5. Added global OffsetConverter in OmsEngine, removed from individual AppEngines
+6. Added max process count limit for CTA strategy optimization: vnpy_ctastrategy/vnpy_ctabacktester
+7. Added tqdm progress bar for exhaustive optimization
+8. Added iteration count output for genetic optimization
+9. Added underlying contract matching function for vnpy_optionmaster products
+10. Upgraded vnpy_tts dll library, fixed openctp upgrade fund display issue
+11. Fixed vnpy_ctastrategy to use unified timezone from vnpy.trader.database for data loading
+12. Added get_size contract multiplier function to vnpy_ctastrategy template
+13. Added bankruptcy check in vnpy_spreadtrading backtesting statistics
+14. Added vt_symbol and direction position query function to vnpy_scripttrader
+15. Modified vt_positionid string content, added gateway_name prefix
 
-## 新增
+## Bug Fixes
 
-1. 新增基于米筐RQData的跨市场行情数据接口RqdataGateway
-2. 新增东方财富证券EMT柜台交易接口vnpy_emt
+1. Fixed exception hook threading_excepthook parameter error
+2. Fixed vnpy_ib historical data retrieval failure
+3. Fixed vnpy_rest/vnpy_websocket aiohttp proxy parameter must be None
+4. Fixed vnpy_optionmaster Greeks monitor table row count issue
+5. Fixed vnpy_rqdata stock option query error
+6. Fixed vnpy_rqdata RqdataGateway futures index/continuous contract info error
+7. Fixed vnpy_portfoliostrategy defaultdict conversion issue when restoring from cache
 
-## 调整
 
-1. 调整vnpy_algotrading模块设计（模板、引擎），只支持单合约算法执行交易
-2. 优化vnpy_algotrading的算法状态控制，增加状态枚举值，算法支持暂停和恢复运行
-3. 升级vnpy_hft接口支持HFT国君统一交易网关的2.0版本API
-4. 优化vnpy_portfoliostrategy的策略模板，支持持仓目标调仓交易模式
+# 3.5.0 Release
 
-## 修复
+## New Features
 
-1. 修复后台线程异常捕捉钩子函数，对于Python 3.7的语法兼容性问题
-2. 修复vnpy_mysql加载历史数据时存在时段重复的问题
-3. 修复vnpy_ib由于TWS客户端升级导致的委托失败问题
-4. 修复vnpy_rest/vnpy_websocket对Python 3.10后asyncio的支持
-5. 修复vnpy_sopt由于流控导致的委托失败时，返回【提交中】状态委托的问题
+1. Added RQData cross-market data interface RqdataGateway
+2. Added East Money Securities EMT gateway vnpy_emt
 
+## Changes
 
-# 3.4.0版本
+1. Adjusted vnpy_algotrading module design (template, engine), single-contract execution only
+2. Optimized vnpy_algotrading algorithm status control, added status enum, pause/resume support
+3. Upgraded vnpy_hft to HFT Guojun unified gateway 2.0 API
+4. Optimized vnpy_portfoliostrategy strategy template, supports target position adjustment trading
 
-## 新增
+## Bug Fixes
 
-1. 新增杰宜斯资管系统交易接口vnpy_jees
+1. Fixed Python 3.7 syntax compatibility for background thread exception hook
+2. Fixed vnpy_mysql historical data loading time period duplication
+3. Fixed vnpy_ib order failure due to TWS client upgrade
+4. Fixed vnpy_rest/vnpy_websocket Python 3.10+ asyncio support
+5. Fixed vnpy_sopt [SUBMITTING] status return on flow control order failure
 
-## 调整
 
-1. 开启vnpy.rpc的pyzmq连接keepalive机制，避免在复杂网络环境下闲置连接的断开
-2. 移除vnpy_rpcservice中服务端的EVENT_TIMER定时事件推送
-3. 调整vnpy_postgresql采用批量方式写入数据，提高效率
-4. 添加VeighNa Trader中的子线程异常捕捉（需要Python>=3.8）
-5. 调整vnpy_ib接口查询历史K线数据时，对外汇和贵金属均采用中间价（而非成交价）
-6. 增加vnpy_ctastrategy对于回测过程中资金爆仓（小于等于0）情况的检查
-7. 优化vnpy_webtrader模块的加密鉴权，支持web进程关闭重启
+# 3.4.0 Release
 
-## 修复
+## New Features
 
-1. 修复vnpy.rpc模块对于23.0以上版本pyzmq的NOBLOCK兼容性问题
-2. 修复vnpy_taos由于TDengine版本升级，出现d的一系列兼容问题
-3. 修复vnpy_datamanager刷新数据汇总信息显示时，老数据点移除失败的问题
+1. Added Jees asset management gateway vnpy_jees
 
+## Changes
 
+1. Enabled keepalive mechanism for vnpy.rpc pyzmq connections
+2. Removed EVENT_TIMER push from vnpy_rpcservice server
+3. vnpy_postgresql now uses batch data writing for efficiency
+4. Added VeighNa Trader sub-thread exception capture (Python>=3.8)
+5. Adjusted vnpy_ib historical K-line data to use mid-price for forex and precious metals
+6. Added bankruptcy check (<=0) for vnpy_ctastrategy backtesting
+7. Optimized vnpy_webtrader encryption authentication, supports web process restart
 
-# 3.3.0版本
+## Bug Fixes
 
-## 新增
-1. 新增数据库组件vnpy.trader.database中的TickOverview对象
-2. 新增掘金仿真环境交易接口vnpy_gm
-3. BaseData基础数据类型增加extra字段（字典类型），用于传送任意相关数据
+1. Fixed vnpy.rpc pyzmq 23.0+ NOBLOCK compatibility issue
+2. Fixed vnpy_taos TDengine version upgrade d series compatibility issues
+3. Fixed vnpy_datamanager data refresh failure to remove old data points
 
-## 调整
-1. 使用Python内置的zoneinfo库替换三方的pytz库
-2. 调整相关交易接口、数据服务接口、数据库适配器、应用模块，使用新的ZoneInfo对象来标识时区信息
-3. 数据库适配器接口vnpy.trader.database写入数据时，新增流式写入参数stream，提高行情录制性能
 
+# 3.3.0 Release
 
-# 3.2.0版本
+## New Features
 
-## 新增
-1. 添加广州期货交易所枚举值字段GFEX
-2. 新增CTP期权（ETF）穿透式测试接口vnpy_sopttest
-3. 新增Currency.CAD（加元）枚举值
-4. 新增Exchange.TSE（多伦多交易所）和Exchange.AMEX（美洲交易所）枚举值
-5. 新增vnpy_taos，涛思数据TDengine时序数据库适配器
-5. 新增vnpy_timescaledb，TimescaleDB时序数据库适配器
+1. Added TickOverview object to vnpy.trader.database
+2. Added Goldminer simulation gateway vnpy_gm
+3. BaseData added extra field (dict type) for arbitrary related data
 
-## 调整
-1. 更新vnpy_ctp/vnpy_ctptest支持广州期货交易所
-2. 更新vnpy_tora的现货API接口到最新版本：API_Python3.7_交易_v4.0.3_20220222
-3. 更新vnpy_tora的期权API接口到最新版本：API_Python3.7_v1.3.2_20211201
-4. 更新vnpy_esunny/vnpy_tap添加关闭接口时对于API退出函数的调用
-5. 移除vnpy_ctastrategy/vnpy_ctabacktester/vnpy_optionmaster的反向合约支持
-6. 增加vnpy_ib对于沪股通、深股通、多伦多交易所、美洲交易所的支持
-7. 增加vnpy_ib对于指数行情数据的支持
-8. 添加vnpy_ctastrategy策略交易管理界面的策略实例查找功能
+## Changes
 
-## 修复
+1. Replaced pytz with Python built-in zoneinfo
+2. Updated gateways, datafeeds, database adapters to use new ZoneInfo timezone
+3. Database adapter vnpy.trader.database added stream parameter for streaming data writing
 
-1. 修复vnpy_mongodb中K线数据量统计的问题（使用新的count_documents函数）
-2. 修复由于PySide6对象销毁先于__del__调用，导致的BaseMonitor衍生组件无法自动保存界面状态的问题
+## Bug Fixes
 
+1. Fixed vnpy_mongodb K-line data count issue (using new count_documents function)
+2. Fixed BaseMonitor auto-save failure due to PySide6 object destruction order
 
 
-# 3.1.0版本
+# 3.2.0 Release
 
-## 新增
-1. 新增恒生云UF2.0证券仿真环境交易接口vnpy_uf
-2. 新增火象投教仿真环境交易接口vnpy_hx
+## New Features
 
-## 调整
-1. 升级tzlocal库的版本到4.2，消除get_localzone()函数的warning
-2. 完善代码中函数和变量类型提示
-3. 使用QtCore.Signal代替老的QtCore.pyqtSignal
-4. 优化vnpy_rohon接口的委托成交相关细节功能
-5. 更新vnpy_xtp到2.2.32.2.0版本XTP API，支持上交所新债系统
-6. 优化vnpy_mongodb的数据写入速度，基于pymongo 4.0版本的批量写入功能
-7. 增加vnpy_ctp对于委托函数返回值为非0（请求发送失败）状态的处理
-8. 对vnpy_ctastrategy和vnpy_ctabacktester的策略模板下拉框中内容，改为基于首字母排序
+1. Added GFEX (Guangzhou Futures Exchange) enum
+2. Added CTP Option (ETF) penetration test gateway vnpy_sopttest
+3. Added Currency.CAD (Canadian Dollar) enum
+4. Added Exchange.TSE (Toronto) and Exchange.AMEX (Americas) enums
+5. Added vnpy_taos TDengine time-series database adapter
+6. Added vnpy_timescaledb TimescaleDB time-series database adapter
 
-## 修复
-1. 修复vnpy_optionmaster模块希腊值监控组件的数据刷新问题
-2. 修复vnpy_mongodb由于时间戳的时区信息确实，导致的数据加载范围问题
-3. 修复vnpy_tts的sdist源代码打包缺失lib文件的问题
-4. 修复vnpy_rqdata由于查询返回数据为NaN导致的解析问题
-
+## Changes
 
-# 3.0.0版本
-
-## 调整
-1. 移除api、gateway、app子模块的目录
-2. 移除requirements.txt对于插件的默认依赖
-3. 简化重构rpc子模块，定位于可靠环境下跨进程通讯（本机、局域网）
-4. 移除rpc子模块对于鉴权的支持
-5. 调整rpc子模块中的心跳机制的实现方式
-6. 移除基于QScintilla开发的代码编辑器，改用VSCode打开代码
-7. 优化MainWindow主窗口中，对于QAction按钮图标的加载逻辑
-8. MainEngine添加交易接口时，支持自定义接口名称
-
-## 修复
-1. 使用非原生窗口菜单栏，修复Linux/Mac下【配置】按钮不显示的问题
-
+1. Updated vnpy_ctp/vnpy_ctptest for GFEX support
+2. Updated vnpy_tora spot API to latest: API_Python3.7_Trading_v4.0.3_20220222
+3. Updated vnpy_tora option API to latest: API_Python3.7_v1.3.2_20211201
+4. Updated vnpy_esunny/vnpy_tap API shutdown function calls
+5. Removed inverse contract support from vnpy_ctastrategy/vnpy_ctabacktester/vnpy_optionmaster
+6. Added Shanghai-HK Stock Connect, Shenzhen-HK Stock Connect, Toronto, Americas support to vnpy_ib
+7. Added index market data support to vnpy_ib
+8. Added strategy instance search to vnpy_ctastrategy trading management UI
 
-# 2.9.0版本
-
-## 新增
-1. 新增顶点HTS柜台交易接口vnpy_hts
-
-## 调整
-1. 移除恒生期权hsoption接口
-2. vnpy_webtrader增加对于自定义监听地址和端口的支持
-3. vnpy_mongodb锁定pymongo的依赖版本为3.12.3
-4. vnpy_udata安装脚本中添加hs_udata库的依赖
-5. vnpy_uft升级使用3.7.2.4版本的恒生API接口
-
-## 剥离
-2. 将国泰君安证券统一接入网关交易接口剥离到vnpy_hft项目中
-3. 将顶点飞创交易接口剥离到vnpy_sec项目中
-4. 将RPC服务和接口剥离到vnpy_rpcservice项目中
-
-## 修复
-1. 修复vnpy_tora撤单时，由于撤单编号和委托编号冲突导致的撤单失败问题
-2. 修复vnpy_tora股票委托状态中【未成交】状态的错误映射问题
-3. 修复vnpy_ctabacktester中，回测开始日期编辑框的数据缓存问题
-4. 修复vnpy_udata中，分段下载数据时，可能进入死循环的问题
-5. 修复vnpy_udata中，修复下载的数据量为空时，出现的异常报错问题
-6. 修复vnpy_dolphindb中，合约名带有符号时数据无法读取问题
-
-
-# 2.8.0版本
-
-## 新增
-1. 新增东证OST柜台交易接口vnpy_ost
-2. 增加投资组合策略模块的策略参数优化功能
-
-## 修复
-1. 修复部分C++接口模块剥离后，遗留的安装脚本编译代码导致的报错问题
-2. 修复vnpy_xtp订阅深交所行情后，可能出现的闪退问题
-3. 修复vnpy_tushare部分数据字段为None时，导致的数据错误
-4. 修复vnpy_mini，在夜盘换日时上期所行情时间戳的日期字段误差问题
-5. 修复vnpy_uft的ETF期权合约信息解析缺失的问题
-6. 修复vnpy_wind下载数据存在缺失时的N/A解析问题
-7. 修复vnpy_webtrader的html静态文件缺失的问题
-8. 修复vnpy_dolphindb存储Tick数据时的数据类型问题
-9. 修复vnpy_dolphindb读取数据为空时的BUG
-10. 修复vnpy_esunny查询黄金TD合约的合约乘数为0的问题
-11. 修复vnpy_ctastrategy策略初始化读取布尔值false失败的问题
-12. 修复vnpy_rohon的期权合约字段赋值错误的问题
-13. 修复vnpy_leveldb的Linux安装依赖库问题
-
-## 调整
-1. 移除老版本基于requests库的RestClient客户端
-2. 移除老版本基于websocket-client库的WebsocketClient客户端
-3. vnpy_tts增加对上交所和深交所股票模拟交易的支持
-4. 移除vnpy_ctp的期权询价指令支持
-5. 增加vnpy_ctp的授权码验证失败后，避免重复操作的功能
-6. 优化vnpy_uft的断线重连行情订阅逻辑
-7. 增加vnpy_arctic对于用户名和密码的鉴权功能
-8. 增加vnpy_mini对于股指期权的支持
-
-## 剥离
-1. 将华鑫奇点交易接口剥离到vnpy_tora项目中，并升级到4.0版本
-2. 将飞马交易接口剥离到vnpy_femas项目中
-3. 将金仕达黄金接口剥离到vnpy_ksgold项目中
-4. 将投资组合策略模块剥离到vnpy_portfoliostrategy项目中
-5. 将Excel RTD模块剥离到vnpy_excelrtd项目中
-6. 将本地仿真模拟交易模块剥离到vnpy_paperaccount项目中
-
-# 2.7.0版本
-
-## 新增
-1. 新增天软数据服务项目vnpy_tinysoft
-2. 新增同花顺iFinD数据服务项目vnpy_ifind
-3. 新增dYdx交易接口vnpy_dydx
-4. 新增万得Wind数据服务项目vnpy_wind
-5. 新增PortfolioStrategy专用的PortfolioBarGenerator
-
-## 调整
-1. 移除KasiaGateway
-4. 移除MarketRadarApp
-5. 算法交易模块中移除套利和网格两个非执行类算法
-6. vnpy_tushare数据服务，增加持仓量和成交额字段
-8. vnpy_datamanager数据管理器，查询的K线信息按合约代码排序显示
-13. vnpy_dolphindb优化数据的加载解析速度
-14. vnpy_influxdb采用pandas解析CSV数据，提高整体速度
-
-## 修复
-1. 修复vnpy_ctp的CtpGateway，在夜盘换日时上期所行情时间戳的日期字段误差问题
-2. 修复vnpy_arctic的数据重复写入时出现的错误覆盖问题
-
-## 剥离
-1. 将InteractiveBrokers交易接口剥离到vnpy_ib项目中
-2. 将飞鼠交易接口剥离到vnpy_sgit项目中
-3. 将易盛外盘交易接口剥离到vnpy_tap项目中
-4. 将直达期货交易接口剥离到vnpy_da项目中
-5. 将算法交易模块剥离到vnpy_algotrading项目中
-6. 将脚本交易模块剥离到vnpy_scripttrader项目中
-7. 将交易组合管理模块剥离到vnpy_portfoliomanager项目中
-
-
-# 2.6.0版本
-
-## 新增
-1. 增加双边报价业务的发送和撤销函数功能
-2. 增加双边报价监控UI组件
-3. 增加用于对接数据库的抽象接口vnpy.trader.database
-4. 新增基于Arctic的MongoDB数据库接口项目vnpy_arctic
-5. 新增LevelDB数据库接口项目vnpy_leveldb
-6. 新增DolphinDB数据库接口项目vnpy_dolphindb
-7. 增加用于对接数据服务的抽象接口vnpy.trader.datafeed
-8. 新增TuShare数据服务项目vnpy_tushare
-8. 新增恒生UData数据服务项目vnpy_udata
-8. 新增天勤TQSDK数据服务项目vnpy_tqsdk
-8. 新增CoinAPI数据服务项目vnpy_coinapi
-
-## 调整
-1. 移除批量委托和批量撤单相关的函数功能
-2. 移除老虎证券交易接口TigerGateway
-3. 移除鑫管家交易接口XgjGateway
-4. 移除AlgoTrading算法交易模块对于金纳算法服务的支持
-5. RestClient增加对操作系统代理配置的支持
-6. RestClient和WebsocketClient的默认异常处理逻辑由抛出异常修改为打印输出
-7. 价差交易模块移除对反向合约、线性价差、开平字段的支持
-8. 价差交易模块优化对灵活价差的支持，优化价差行情推送过滤判断
-9. 价差交易算法停止时，等待全部委托结束、各条腿平衡后，再结束算法
-
-## 修复
-1. 修复在Linux/Mac系统上，运行多进程优化时的进程启动错误
-2. 修复WebsocketClient由于心跳机制不完善，导致的频繁断线问题
-
-## 剥离
-1. 将米筐数据接口剥离到vnpy_rqdata项目中，并升级到2.9.38版本
-2. 将行情录制模块剥离到vnpy_datarecorder项目中
-3. 将K线图表模块剥离到vnpy_chartwizard项目中
-4. 将SQLite数据库接口剥离到vnpy_sqlite项目中
-5. 将MySQL数据库接口剥离到vnpy_mysql项目中
-6. 将PostgreSQL数据库接口剥离到vnpy_postgresql项目中
-7. 将MongoDB数据库接口剥离到vnpy_mongodb项目中
-8. 将InfluxDB数据库接口剥离到vnpy_influxdb项目中
-13. 将期权波动率交易模块剥离到vnpy_optionmaster项目中
-
-
-# 2.5.0版本
-## 新增
-1. 新增TTS交易系统（兼容CTP的仿真交易环境）的接口vnpy_tts（6.5.1）
-2. 新增易盛启明星/北斗星兼容交易API的接口vnpy_esunny（1.0.2.2）
-3. 新增BarData和TickData的成交额turnover字段
-
-## 调整
-1. 将SpreadTrading模块策略初始化时的K线价差数据加载，改为优先通过RQData查询数据
-2. 在MainWindow的AboutDialog中，基于importlib_metadata模块来获取版本信息
-3. 隐藏所有对话框右上角的【？】按钮
-4. 将易盛外盘TapGateway的合约信息，从行情接口获取改为交易接口获取（避免外盘合约size为0的问题）
-5. 改进VeighNa Trader的异常捕捉对话框弹出方式，避免多次重复报错情况下的程序卡死崩溃
-
-## 修复
-1. 修复Linux下安装时，对于已经剥离的XTP API的自动编译操作
-2. 修复PortfolioManager的UI组件，对于成交事件监听类型错误的BUG
-3. 修复vnpy_rest下的Response对象缺乏text字段导致的BUG
-4. 修复RestClient，代理端口信息传空时，导致底层连接出错的BUG
-6. 修复ArrayManager的Aroon指标计算输出结果顺序错误的BUG
-7. 修复数据库管理器读写TickData时，由于缺少对localtime字段处理导致的BUG
-
-## 剥离
-1. 将融航接口剥离到vnpy_rohon项目中，并升级到6.5.1版本
-2. 将CTP MINI接口剥离到vnpy_mini项目中，并升级到1.5.6版本
-3. 将CTP期权接口剥离到vnpy_sopt项目中
-4. 将恒生UFT柜台极速API接口剥离到vnpy_uft项目中
-
-
-# 2.4.0版本
-
-## 新增
-1. 新增TickData的本地时间戳字段local_time（不带时区信息）
-2. 新增基于asyncio和aiohttp实现的协程异步REST API客户端vnpy_rest项目
-3. 新增基于asyncio和aiohttp实现的协程异步Websocket API客户端vnpy_websocket项目
-4. 新增基于多进程模式的遗传算法优化功能
-5. 新增XTP的API封装中，行情登录函数对于本地网卡地址的参数支持
-
-## 调整
-2. 剥离CTA策略模块下的穷举和遗传优化算法到vnpy.trader.optimize模块下
-3. 遗传算法优化完成后，输出所有回测过的参数对应结果（而不只是最优结果）
-4. CTA策略引擎加载策略文件时，增加模块重载的操作，使得任何策略文件修改可以立即生效
-5. CTA策略引擎扫描特定目录下的策略文件时，使用glob函数（替换原有的os.walk），避免对子目录中文件的错误加载
-6. 将CTA策略模块剥离到vnpy_ctastrategy项目中
-7. 将CTA回测模块剥离到vnpy_ctabacktester项目中
-8. 将XTP接口剥离到vnpy_xtp项目中，并升级到2.2.27.4版本
-9. 将事前风控模块剥离到vnpy_riskmanager项目中
-10. 将数据管理模块剥离到vnpy_datamanager项目中
-
-## 修复
-2. 修复MySQL和PostgreSQL数据库管理器删除K线数据时出错的问题
-3. 修复基于aiohttp的RestClient和WebsocketClient，事件循环停止后重新启动失败的问题
-7. 修复CtaBacktester基于Tick级别数据进行参数优化时，启动优化失败的问题
-8. 修复ToraStockGateway和ToraOptionGateway，调用下单函数时没有返回委托号的问题
-9. 修复InfluxDB数据管理器，导入数据时时间字段解析错误的问题
-
-# 2.3.0版本
-
-## 修复
-1. 修复IbGateway断线重连后，没有自动订阅之前已订阅的合约行情问题
-2. 修复CTA模块的净仓交易模式中，部分平仓部分开仓时，开仓部分下单错误的问题
-6. 修复CtpGateway对于FAK和FOK委托指令的处理错误问题
-10. 修复IbGateway，查询历史数据由于传参错误导致的查询失败问题
-11. 修复IbGateway，当要查询的合约历史数据不存在时卡死的问题
-12. 修复IbGateway，查询返回的合约乘数（字符串）未作转换导致的上层应用问题
-14. 修复BarGenerator，在合成小时K线时部分情况下遗漏分钟K线收盘价更新的问题
-15. 修复UftGateway，在连接ETF期权服务器时无法订阅行情的问题
-16. 修复UftGateway，在连接ETF期权服务器时，对于包含毫秒的委托时间戳处理错误的问题
-
-## 调整
-1. 修改CTA模块的净仓交易模式，支持上期所和能交所的今昨仓拆分下单
-2. 调整组合策略模块的回测引擎K线回放逻辑，当某个时间点K线数据缺失时，推送给策略的K线字典中不对其进行向前补齐
-3. 将CTP接口和API封装，剥离到vnpy_ctp项目中
-4. 将CTP穿透式测试接口和API封装，剥离到vnpy_ctptest项目中
-
-## 新增
-1. 新增DataManager在导入CSV文件时，对于时间戳时区的选择功能
-2. 新增CtaStrategy模块的策略移仓助手功能，实现一键式期货换月移仓支持
-
-
-# 2.2.0版本
-
-## 修复
-1. 修复DataManager查询数据库中K线数据范围时，开始和结束日期相反的问题
-6. 修复PostgreSQL数据库对接层中，save_tick_data函数由于访问interval导致保存出错的问题
-7. 修复DataRecorder模块中add_bar_recording下保存录制用合约配置错误的问题
-8. 修复PostgreSQL数据库对接层中，由于事务执行失败导致的后续报错问题，创建数据库对象时设置自动回滚模式（autorollback=True）
-9. 修复DataManager自动更新数据时，查询数据范围由于调用老版本函数导致的错误
-10. 修复RQData下载获取的历史数据浮点数精度问题
-11. 修复BarGenerator在合成N小时K线时，收盘价、成交量、持仓量字段缺失的问题
-12. 修复K线图表底层组件ChartWidget当绘制数据较少时，坐标轴时间点显示重复的问题
-13. 修复SpreadTrading模块生成的价差盘口数据的时区信息缺失问题
-14. 修复IbGateway的现货贵金属行情数据缺失最新价和时间戳的问题
-15. 修复BarGenerator在合成小时级别K线时，成交量字段部分缺失的问题
-16. 修复vnpy.rpc模块启用非对称加密后无法正常退出的问题
-
-## 调整
-1. 修改vnpy.chart下ChartItem为按需绘制，大幅缩短图表第一次显示出来的耗时
-2. 修改IbGateway的历史数据查询功能，包括所有可用时间（即欧美晚上的电子交易时段）
-3. 修改DataRecorder的数据入库为定时批量写入，提高录制大量合约数据时的写入性能
-
-## 新增
-1. 新增IbGateway连接断开后的自动重连功能（每10秒检查）
-2. 新增双边报价业务相关的底层数据结构和功能函数
-3. 新增开平转换器OffsetConverter的净仓交易模式
-4. 新增CtaStrategy模块策略模板的委托时的净仓交易可选参数
-5. 新增CtaStrategy模块回测引擎中的全年交易日可选参数
-6. 新增ChartWizard模块对于价差行情图表的显示支持
-7. 新增MarketRadar模块的雷达信号条件提醒功能
-
-# 2.1.9.1版本
-
-## 修复
-1. 修复RestClient中，因为pyopenssl.extract_from_urllib3引起的兼容性问题
-
-## 调整
-1. 调整OptionMaster模块中，期权链数据结构搜索平值行权价的算法，不再依赖标的物合约
-
-## 新增
-1. 新增OptionMaster模块使用合成期货作为定价标的合约的功能
-
-
-# 2.1.9版本
-
-## 修复
-1. 修复BarGenerator的小时线合成时，出现同一个小时的K线重复推送两次的问题
-2. 修复遗传算法优化时，因为lru_cache缓存导致的新一轮优化结果不变的问题
-3. 修复RestClient发起请求时，由于requests库底层使用OpenSSL导致的WinError 10054 WSAECONNRESET的问题
-5. 修复程序中频繁捕捉到异常时，异常捕捉对话框反复执行导致卡死的问题
-7. 修复活动委托监控组件ActiveOrderMonitor，保存CSV时会将所有委托数据一起保存的问题
-8. 修复XtpGateway重复发起登录操作时，出现的系统崩溃问题
-9. 修复XtpGateway的股票市价委托类型映射错误问题
-
-## 调整
-1. 对XTP接口的行情价格数据基于合约最小价格跳动进行取整，资金保留2位小数
-2. BaseMonitor保存CSV文件时，表头改为图形界面显示的中文（之前是数据的字段名英文）
-3. 初始化TWAP算法时，对每轮委托数量取整到合约最小交易数量
-4. 将原vnpy.trader.database中的数据库客户端拆分到独立的vnpy.database模块下
-5. 对SQLite/MySQL/PostgreSQL/MongoDB/InfluxDB客户端进行代码重构优化，增加K线数据整体情况BarOverview查询功能
-
-## 新增
-1. 新增BaseMonitor数据监控UI组件（以及其子类），自动保存列宽的功能
-2. 增加华鑫奇点ToraGateway对于FENS服务器连接和资金账户登录的支持，之前只支持前置机连接和用户代码登录 
-4. 增加InfluxDB数据库客户端vnpy.database.influx对于Tick数据储存和加载的支持
+## Bug Fixes
+
+1. Fixed vnpy_mongodb K-line count issue (using new count_documents function)
+2. Fixed PySide6 object destruction order causing BaseMonitor state save failure
+
+
+# 3.1.0 Release
+
+## New Features
+
+1. Added Hundsun Cloud UF2.0 securities simulation gateway vnpy_uf
+2. Added Huoxiang simulation gateway vnpy_hx
+
+## Changes
+
+1. Upgraded tzlocal to 4.2, eliminated get_localzone() warning
+2. Improved function and variable type hints
+3. Replaced QtCore.pyqtSignal with QtCore.Signal
+4. Optimized vnpy_rohon order/trade details
+5. Updated vnpy_xtp to 2.2.32.2.0, supports SSE new bond system
+6. Optimized vnpy_mongodb batch writing (pymongo 4.0)
+7. Added vnpy_ctp non-zero return value handling for order function
+8. Changed vnpy_ctastrategy/vnpy_ctabacktester strategy dropdown to alphabetical sorting
+
+## Bug Fixes
+
+1. Fixed vnpy_optionmaster Greeks monitor data refresh issue
+2. Fixed vnpy_mongodb timestamp timezone missing data loading range issue
+3. Fixed vnpy_tts sdist lib file missing issue
+4. Fixed vnpy_rqdata NaN parsing issue in query results
+
+
+# 3.0.0 Release
+
+## Changes
+
+1. Removed api, gateway, app subdirectories
+2. Removed requirements.txt default plugin dependencies
+3. Simplified vnpy.rpc for reliable inter-process communication (local, LAN)
+4. Removed authentication support from vnpy.rpc
+5. Adjusted vnpy.rpc heartbeat mechanism
+6. Removed QScintilla code editor, now uses VSCode
+7. Optimized MainWindow QAction icon loading
+8. MainEngine now supports custom gateway names when adding
+
+## Bug Fixes
+
+1. Fixed Linux/Mac [Settings] button not displaying with non-native menu bar
+
+
+# 2.9.0 Release
+
+## New Features
+
+1. Added Hundsun HTS gateway vnpy_hts
+
+## Changes
+
+1. Removed Hundsun Option hsoption gateway
+2. vnpy_webtrader added custom listen address/port support
+3. vnpy_mongodb locked pymongo to 3.12.3
+4. vnpy_udata added hs_udata library dependency
+5. vnpy_uft upgraded to Hundsun API 3.7.2.4
+
+## Separated
+
+1. Separated Guotai Junan Securities gateway to vnpy_hft
+2. Separated Hundsun Feichuang gateway to vnpy_sec
+3. Separated RPC service to vnpy_rpcservice
+
+## Bug Fixes
+
+1. Fixed vnpy_tora cancel order conflict between cancel ID and order ID
+2. Fixed vnpy_tora stock order [NOT_TRADED] status mapping error
+3. Fixed vnpy_ctabacktester backtest start date cache issue
+4. Fixed vnpy_udata infinite loop on empty download
+5. Fixed vnpy_udata exception on empty download volume
+6. Fixed vnpy_dolphindb contract name symbol read issue
+
+
+# 2.8.0 Release
+
+## New Features
+
+1. Added Orient Securities OST gateway vnpy_ost
+2. Added portfolio strategy parameter optimization
+
+## Bug Fixes
+
+1. Fixed C++ gateway separation installation script compilation errors
+2. Fixed vnpy_xtp SSE market subscription crash issue
+3. Fixed vnpy_tushare None data field errors
+4. Fixed vnpy_mini SHFE night trading timestamp date error
+5. Fixed vnpy_uft ETF option contract info parsing missing
+6. Fixed vnpy_wind N/A parsing on missing data
+7. Fixed vnpy_webtrader html static files missing
+8. Fixed vnpy_dolphindb Tick data type issue
+9. Fixed vnpy_dolphindb empty data read BUG
+10. Fixed vnpy_esunny Gold TD contract multiplier 0 issue
+11. Fixed vnpy_ctastrategy false boolean value read failure
+12. Fixed vnpy_rohon option contract field assignment error
+13. Fixed vnpy_leveldb Linux installation dependency issue
+
+## Changes
+
+1. Removed old requests-based RestClient
+2. Removed old websocket-client-based WebsocketClient
+3. vnpy_tts added SSE/SEZ stock simulation trading
+4. Removed vnpy_ctp option inquiry instruction
+5. Added vnpy_ctp authorization failure duplicate operation prevention
+6. Optimized vnpy_uft reconnection market subscription logic
+7. Added vnpy_arctic username/password authentication
+8. Added stock option support to vnpy_mini
+
+## Separated
+
+1. Separated Tora gateway to vnpy_tora, upgraded to 4.0
+2. Separated Femas gateway to vnpy_femas
+3. Separated Kingstar Gold gateway to vnpy_ksgold
+4. Separated Portfolio Strategy to vnpy_portfoliostrategy
+5. Separated Excel RTD to vnpy_excelrtd
+6. Separated Paper Account to vnpy_paperaccount
+
+
+# 2.7.0 Release
+
+## New Features
+
+1. Added TinySoft datafeed vnpy_tinysoft
+2. Added iFinD datafeed vnpy_ifind
+3. Added dYdx gateway vnpy_dydx
+4. Added Wind datafeed vnpy_wind
+5. Added PortfolioBarGenerator for PortfolioStrategy
+
+## Changes
+
+1. Removed KasiaGateway
+2. Removed MarketRadarApp
+3. Removed arbitrage and grid algorithms from AlgoTrading
+4. vnpy_tushare added open_interest and turnover fields
+5. vnpy_datamanager displays K-line info sorted by contract code
+6. vnpy_dolphindb optimized data loading speed
+7. vnpy_influxdb uses pandas CSV parsing for speed
+
+## Bug Fixes
+
+1. Fixed vnpy_ctp SHFE night trading timestamp date error
+2. Fixed vnpy_arctic data overwrite issue on duplicate write
+
+## Separated
+
+1. Separated IB gateway to vnpy_ib
+2. Separated Sgit gateway to vnpy_sgit
+3. Separated Tap gateway to vnpy_tap
+4. Separated Da gateway to vnpy_da
+5. Separated AlgoTrading to vnpy_algotrading
+6. Separated ScriptTrader to vnpy_scripttrader
+7. Separated PortfolioManager to vnpy_portfoliomanager
+
+
+# 2.6.0 Release
+
+## New Features
+
+1. Added two-sided quote send and cancel functions
+2. Added two-sided quote monitor UI component
+3. Added abstract database interface vnpy.trader.database
+4. Added Arctic MongoDB interface vnpy_arctic
+5. Added LevelDB interface vnpy_leveldb
+6. Added DolphinDB interface vnpy_dolphindb
+7. Added abstract datafeed interface vnpy.trader.datafeed
+8. Added TuShare datafeed vnpy_tushare
+9. Added Hundsun UData datafeed vnpy_udata
+10. Added TQSDK datafeed vnpy_tqsdk
+11. Added CoinAPI datafeed vnpy_coinapi
+
+## Changes
+
+1. Removed batch order and batch cancel functions
+2. Removed TigerGateway
+3. Removed XgjGateway
+4. Removed AlgoTrading Jinna algorithm service support
+5. RestClient added OS proxy support
+6. RestClient/WebsocketClient default exception changed to print output
+7. SpreadTrading removed inverse contract, linear spread, offset field support
+8. SpreadTrading optimized flexible spread support, optimized quote filtering
+9. SpreadTrading algorithm waits for all orders to complete and legs balanced before stopping
+
+## Bug Fixes
+
+1. Fixed Linux/Mac multiprocessing optimization startup error
+2. Fixed WebsocketClient frequent disconnection due to heartbeat mechanism
+
+## Separated
+
+1. Separated RQData to vnpy_rqdata, upgraded to 2.9.38
+2. Separated DataRecorder to vnpy_datarecorder
+3. Separated ChartWizard to vnpy_chartwizard
+4. Separated SQLite to vnpy_sqlite
+5. Separated MySQL to vnpy_mysql
+6. Separated PostgreSQL to vnpy_postgresql
+7. Separated MongoDB to vnpy_mongodb
+8. Separated InfluxDB to vnpy_influxdb
+9. Separated OptionMaster to vnpy_optionmaster
+
+
+# 2.5.0 Release
+
+## New Features
+
+1. Added TTS trading system gateway vnpy_tts (6.5.1)
+2. Added Esunny gateway vnpy_esunny (1.0.2.2)
+3. Added BarData and TickData turnover field
+
+## Changes
+
+1. SpreadTrading strategy initialization now queries RQData first for K-line spread data
+2. MainWindow AboutDialog uses importlib_metadata for version info
+3. Hidden [?] button in all dialogs
+4. Changed TapGateway contract info from market to trading interface (avoid size=0 issue)
+5. Improved VeighNa Trader exception dialog to prevent crash on repeated errors
+
+## Bug Fixes
+
+1. Fixed Linux/Mac XTP API auto-compilation during installation
+2. Fixed PortfolioManager UI trade event listening type error
+3. Fixed vnpy_rest Response missing text field
+4. Fixed RestClient proxy port empty causing connection error
+5. Fixed ArrayManager Aroon indicator output order error
+6. Fixed database manager TickData localtime field missing
+
+## Separated
+
+1. Separated Rohon gateway to vnpy_rohon, upgraded to 6.5.1
+2. Separated CTP MINI to vnpy_mini, upgraded to 1.5.6
+3. Separated CTP Option to vnpy_sopt
+4. Separated Hundsun UFT to vnpy_uft
+
+
+# 2.4.0 Release
+
+## New Features
+
+1. Added TickData local timestamp field local_time (without timezone)
+2. Added asyncio/aiohttp-based async REST API client vnpy_rest
+3. Added asyncio/aiohttp-based async Websocket API client vnpy_websocket
+4. Added multiprocessing genetic algorithm optimization
+5. Added XTP API market login local network card address parameter
+
+## Changes
+
+1. Separated CTA strategy exhaustive/genetic optimization to vnpy.trader.optimize
+2. Genetic optimization outputs all tested parameter results (not just best)
+3. CTA engine reloads strategy files on modification (immediate effect)
+4. CTA engine uses glob for strategy file scanning (avoids subdirectory files)
+5. Separated CTA Strategy to vnpy_ctastrategy
+6. Separated CTA Backtester to vnpy_ctabacktester
+7. Separated XTP to vnpy_xtp, upgraded to 2.2.27.4
+8. Separated RiskManager to vnpy_riskmanager
+9. Separated DataManager to vnpy_datamanager
+
+## Bug Fixes
+
+1. Fixed MySQL/PostgreSQL K-line deletion error
+2. Fixed aiohttp RestClient/WebsocketClient event loop restart failure
+3. Fixed CtaBacktester Tick-level parameter optimization failure
+
+
+# 2.3.0 Release
+
+## Bug Fixes
+
+1. Fixed IbGateway not auto-resubscribing after reconnection
+2. Fixed CTA net position mode partial close/open order error
+3. Fixed CtpGateway FAK/FOK order handling error
+4. Fixed IbGateway historical data query parameter error
+5. Fixed IbGateway hang on non-existent historical data
+6. Fixed IbGateway contract multiplier string conversion missing
+7. Fixed BarGenerator hourly K-line close price update missing
+8. Fixed UftGateway ETF option connection issue
+9. Fixed UftGateway millisecond timestamp handling error
+
+## Changes
+
+1. Modified CTA net position mode to support SHFE/INE today/yesterday position split
+2. Adjusted PortfolioStrategy backtest K-line replay (no forward fill on missing data)
+3. Separated CTP to vnpy_ctp
+4. Separated CTP Test to vnpy_ctptest
+
+## New Features
+
+1. DataManager CSV import timezone selection
+2. CtaStrategy strategy rollover assistant for futures contract month switching
+
+
+# 2.2.0 Release
+
+## Bug Fixes
+
+1. Fixed DataManager K-line query date range reversed
+2. Fixed PostgreSQL save_tick_data interval access error
+3. Fixed DataRecorder add_bar_recording contract config error
+4. Fixed PostgreSQL transaction failure, added autorollback=True
+5. Fixed DataManager auto-update query range function call error
+6. Fixed RQData historical data float precision issue
+7. Fixed BarGenerator N-hour K-line close/volume/open_interest missing
+8. Fixed ChartWidget duplicate time labels on sparse data
+9. Fixed SpreadTrading spread quote timezone missing
+10. Fixed IbGateway spot precious metals last price/timestamp missing
+11. Fixed BarGenerator hourly K-line volume missing
+12. Fixed vnpy.rpc exit failure after encryption enabled
+
+## Changes
+
+1. vnpy.chart ChartItem now draws on-demand (faster first display)
+2. IbGateway historical data query includes all hours (including overnight electronic trading)
+3. DataRecorder changed to batch database writing for performance
+
+## New Features
+
+1. IbGateway auto-reconnection on disconnect (10s check)
+2. Added two-sided quote data structures and functions
+3. Added OffsetConverter net position mode
+4. Added CtaStrategy net position mode parameter
+5. Added CtaStrategy backtesting annual trading days parameter
+6. Added ChartWizard spread quote chart support
+7. Added MarketRadar radar signal condition alerts
+
+
+# 2.1.9.1 Release
+
+## Bug Fixes
+
+1. Fixed pyopenssl.extract_from_urllib3 compatibility issue in RestClient
+
+## Changes
+
+1. Adjusted OptionMaster at-the-money strike search algorithm (no longer depends on underlying contract)
+
+## New Features
+
+1. Added synthetic futures as pricing underlying in OptionMaster
+
+
+# 2.1.9 Release
+
+## Bug Fixes
+
+1. Fixed BarGenerator hourly K-line duplicate push
+2. Fixed genetic algorithm lru_cache causing identical optimization results
+3. Fixed RestClient OpenSSL WinError 10054 WSAECONNRESET
+4. Fixed exception dialog crash on frequent exceptions
+5. Fixed ActiveOrderMonitor CSV save includes all orders
+6. Fixed XtpGateway crash on duplicate login
+7. Fixed XtpGateway stock market order type mapping error
+
+## Changes
+
+1. XTP price rounded to pricetick, funds to 2 decimals
+2. BaseMonitor CSV header changed to UI Chinese (was field names)
+3. TWAP algorithm order volume rounded to min_volume
+4. Separated database client to vnpy.database module
+5. Refactored SQLite/MySQL/PostgreSQL/MongoDB/InfluxDB clients, added BarOverview query
+
+## New Features
+
+1. BaseMonitor auto-saves column width
+2. Added ToraGateway FENS server and fund account login support
+3. Added InfluxDB Tick data storage/loading support

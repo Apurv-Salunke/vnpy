@@ -4,39 +4,39 @@ from ..template import RuleTemplate
 
 
 class ActiveOrderRule(RuleTemplate):
-    """活动委托数量检查风控规则"""
+    """activeOrder volumeCheckRisk controlRule"""
 
-    name: str = "活动委托检查"
+    name: str = "activeOrderCheck"
 
     parameters: dict[str, str] = {
-        "active_order_limit": "活动委托上限"
+        "active_order_limit": "activeOrderuplimit"
     }
 
     variables: dict[str, str] = {
-        "active_order_count": "活动委托数量"
+        "active_order_count": "activeOrder volume"
     }
 
     def on_init(self) -> None:
-        """初始化"""
-        # 默认参数
+        """Initialize"""
+        # DefaultParameter
         self.active_order_limit: int = 50
 
-        # 活动委托
+        # activeOrder
         self.active_orders: dict[str, OrderData] = {}
 
-        # 数量统计
+        # Volumestatistics
         self.active_order_count: int = 0
 
     def check_allowed(self, req: OrderRequest, gateway_name: str) -> bool:
-        """检查是否允许委托"""
+        """CheckwhetherallowOrder"""
         if self.active_order_count >= self.active_order_limit:
-            self.write_log(f"活动委托数量{self.active_order_count}达到上限{self.active_order_limit}：{req}")
+            self.write_log(f"activeOrder volume{self.active_order_count}reachTouplimit{self.active_order_limit}：{req}")
             return False
 
         return True
 
     def on_order(self, order: OrderData) -> None:
-        """委托推送"""
+        """OrderPush"""
         if order.is_active():
             self.active_orders[order.vt_orderid] = order
         elif order.vt_orderid in self.active_orders:

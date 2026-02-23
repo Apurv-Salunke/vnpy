@@ -4,38 +4,38 @@ from ..template import RuleTemplate
 
 
 class OrderValidityRule(RuleTemplate):
-    """委托指令检查风控规则"""
+    """OrderinstructionCheckRisk controlRule"""
 
-    name: str = "委托指令检查"
+    name: str = "OrderinstructionCheck"
 
     def check_allowed(self, req: OrderRequest, gateway_name: str) -> bool:
-        """检查是否允许委托"""
-        # 检查合约存在
+        """CheckwhetherallowOrder"""
+        # CheckContractExist
         contract: ContractData | None = self.get_contract(req.vt_symbol)
         if not contract:
-            self.write_log(f"合约代码{req.vt_symbol}不存在：{req}")
+            self.write_log(f"ContractCode{req.vt_symbol}notExist：{req}")
             return False
 
-        # 检查最小价格变动
+        # CheckminPricechange
         if contract.pricetick > 0:
             pricetick: float = contract.pricetick
 
-            # 计算价格与最小变动价位的余数
+            # CalculatePriceAndminchangepricebitsurplusnumber
             remainder: float = req.price % pricetick
 
-            # 检查价格与最小变动价位的余数，确保价格为pricetick的整数倍（允许极小误差，适应浮点数精度问题）
+            # CheckPriceAndminchangepricebitsurplusnumber，ensurePriceaspricetickIntegertimes（allowtiny error，adaptshouldFloatprecisionproblem）
             if abs(remainder) > 1e-6 and abs(remainder - pricetick) > 1e-6:
-                self.write_log(f"价格{req.price}不是合约最小变动价位{pricetick}的整数倍：{req}")
+                self.write_log(f"Price{req.price}is notContractminchangepricebit{pricetick}Integertimes：{req}")
                 return False
 
-        # 检查委托数量上限
+        # CheckOrder volumeuplimit
         if contract.max_volume and req.volume > contract.max_volume:
-            self.write_log(f"委托数量{req.volume}大于合约委托数量上限{contract.max_volume}：{req}")
+            self.write_log(f"Order volume{req.volume}largeatContractOrder volumeuplimit{contract.max_volume}：{req}")
             return False
 
-        # 检查委托数量下限
+        # CheckOrder volumedownlimit
         if req.volume < contract.min_volume:
-            self.write_log(f"委托数量{req.volume}小于合约委托数量下限{contract.min_volume}：{req}")
+            self.write_log(f"Order volume{req.volume}smallatContractOrder volumedownlimit{contract.min_volume}：{req}")
             return False
 
         return True

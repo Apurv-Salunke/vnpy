@@ -199,7 +199,7 @@ class BarGenerator:
 
         self.daily_end: time | None = daily_end
         if self.interval == Interval.DAILY and not self.daily_end:
-            raise RuntimeError(_("合成日K线必须传入每日收盘时间"))
+            raise RuntimeError(_("The daily_end parameter is required for generating daily bar"))
 
     def update_tick(self, tick: TickData) -> None:
         """

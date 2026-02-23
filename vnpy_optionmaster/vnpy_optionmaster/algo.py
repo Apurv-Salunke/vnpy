@@ -59,7 +59,7 @@ class ElectronicEyeAlgo:
         self.pricing_active = True
         self.put_status_event()
         self.calculate_price()
-        self.write_log("启动定价")
+        self.write_log("StartPricing")
 
         return True
 
@@ -82,7 +82,7 @@ class ElectronicEyeAlgo:
 
         self.put_status_event()
         self.put_pricing_event()
-        self.write_log("停止定价")
+        self.write_log("StopPricing")
 
         return True
 
@@ -92,7 +92,7 @@ class ElectronicEyeAlgo:
             return False
 
         if not self.pricing_active:
-            self.write_log("请先启动定价")
+            self.write_log("pleasefirstStartPricing")
             return False
 
         self.long_allowed = params["long_allowed"]
@@ -102,14 +102,14 @@ class ElectronicEyeAlgo:
         self.max_order_size = params["max_order_size"]
 
         if not self.max_order_size:
-            self.write_log("请先设置最大委托数量")
+            self.write_log("pleasefirstsetmaxOrder volume")
             return False
 
         self.trading_active = True
 
         self.put_trading_event()
         self.put_status_event()
-        self.write_log("启动交易")
+        self.write_log("StartTrading")
 
         return True
 
@@ -125,7 +125,7 @@ class ElectronicEyeAlgo:
 
         self.put_status_event()
         self.put_trading_event()
-        self.write_log("停止交易")
+        self.write_log("StopTrading")
 
         return True
 
@@ -153,8 +153,8 @@ class ElectronicEyeAlgo:
     def on_trade(self, trade: TradeData) -> None:
         """"""
         msg: str = (
-            f"委托成交，{trade.direction} {trade.offset} {trade.volume}@{trade.price}，"
-            f"委托号[{trade.vt_orderid}，成交号[{trade.vt_tradeid}]"
+            f"Order Trade，{trade.direction} {trade.offset} {trade.volume}@{trade.price}，"
+            f"Order ID[{trade.vt_orderid}，TradeID[{trade.vt_tradeid}]"
         )
         self.write_log(msg)
 
@@ -183,7 +183,7 @@ class ElectronicEyeAlgo:
             volume
         )
 
-        self.write_log(f"发出委托，{direction} {offset} {volume}@{price} [{vt_orderid}]")
+        self.write_log(f"sendoutOrder，{direction} {offset} {volume}@{price} [{vt_orderid}]")
 
         return vt_orderid
 
@@ -233,7 +233,7 @@ class ElectronicEyeAlgo:
 
     def cancel_order(self, vt_orderid: str) -> None:
         """"""
-        self.write_log(f"委托撤单：[{vt_orderid}]")
+        self.write_log(f"Ordercancel order：[{vt_orderid}]")
         self.algo_engine.cancel_order(vt_orderid)
 
     def cancel_long(self) -> None:

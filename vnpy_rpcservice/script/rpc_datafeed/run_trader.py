@@ -8,7 +8,7 @@ from vnpy_ctastrategy import CtaStrategyApp
 from vnpy_ctabacktester import CtaBacktesterApp
 
 
-# 实际使用时，请将这三行配置代码注释掉，并写入vt_setting.json
+# Actualusetime，pleasewillthisthreerowConfigCodecommentdrop，andwritevt_setting.json
 SETTINGS["datafeed.name"] = "rpcservice"
 SETTINGS["datafeed.username"] = "tcp://localhost:66001"
 SETTINGS["datafeed.password"] = "tcp://localhost:66002"

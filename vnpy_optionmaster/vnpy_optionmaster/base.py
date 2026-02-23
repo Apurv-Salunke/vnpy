@@ -274,7 +274,7 @@ class UnderlyingData(InstrumentData):
         """"""
         super().__init__(contract)
 
-        self.theo_delta: float = self.size                  # 标的物理论Delta固定为1
+        self.theo_delta: float = self.size                  # UnderlyingTheoDeltafixedfixedas1
         self.pos_delta: float = 0
         self.chains: dict[str, ChainData] = {}
 
@@ -511,7 +511,7 @@ class ChainData:
         self.underlying.mid_price = call.mid_price - put.mid_price + self.atm_price
         self.update_underlying_tick()
 
-        # 推送合成期货的行情
+        # PushSynthetic futuresMarket data
         symbol, exchange = extract_vt_symbol(self.underlying.vt_symbol)
 
         tick: TickData = TickData(
@@ -666,9 +666,9 @@ class PortfolioData:
 @lru_cache(maxsize=100)
 def get_underlying_prefix(portfolio_name: str) -> str:
     """
-    基于期权产品名称获取对应标的代码
+    Get underlying prefix based on option portfolio name
 
-    已知规则：
+    Known rules:
     "510050_O.SSE": "510050"
     "159919_O.SZSE": "159919"
 
@@ -681,19 +681,19 @@ def get_underlying_prefix(portfolio_name: str) -> str:
     "sc_o.INE": "sc",
     "SR.CZCE": "SR",
     """
-    # 上交所
+    # SSE (Shanghai Stock Exchange)
     if portfolio_name.endswith("SSE"):
         return portfolio_name.replace("_O.SSE", "")
-    # 深交所
+    # SZSE (Shenzhen Stock Exchange)
     elif portfolio_name.endswith("SZSE"):
         return portfolio_name.replace("_O.SZSE", "")
-    # 港交所
+    # SEHK (Stock Exchange of Hong Kong)
     elif portfolio_name.endswith("SEHK"):
         return portfolio_name.replace("_O.SEHK", "")
-    # 美股
+    # US Stocks
     elif portfolio_name.endswith("SMART"):
         return portfolio_name.replace("_O.SMART", "")
-    # 中金所（特殊规则）
+    # CFFEX (China Financial Futures Exchange - special rules)
     elif portfolio_name.endswith("CFFEX"):
         d: dict = {
             "IO.CFFEX": "IF",
@@ -702,18 +702,18 @@ def get_underlying_prefix(portfolio_name: str) -> str:
         }
         prefix: str = d.get(portfolio_name, "")
         return prefix
-    # 上期所
+    # SHFE (Shanghai Futures Exchange)
     elif portfolio_name.endswith("SHFE"):
         return portfolio_name.replace("_o.SHFE", "")
-    # 能交所
+    # INE (Shanghai International Energy Exchange)
     elif portfolio_name.endswith("INE"):
         return portfolio_name.replace("_o.INE", "")
-    # 大商所
+    # DCE (Dalian Commodity Exchange)
     elif portfolio_name.endswith("DCE"):
         return portfolio_name.replace("_o.DCE", "")
-    # 郑商所
+    # CZCE (Zhengzhou Commodity Exchange)
     elif portfolio_name.endswith("CZCE"):
         return portfolio_name.replace(".CZCE", "")
-    # 其他
+    # Others
     else:
         return ""

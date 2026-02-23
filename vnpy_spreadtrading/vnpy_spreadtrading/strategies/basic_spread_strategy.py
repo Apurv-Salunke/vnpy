@@ -9,7 +9,7 @@ from vnpy_spreadtrading import (
 class BasicSpreadStrategy(SpreadStrategyTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     buy_price = 0.0
     sell_price = 0.0
@@ -50,7 +50,7 @@ class BasicSpreadStrategy(SpreadStrategyTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.start_t = datetime.strptime(self.start_time, "%H:%M:%S").time()
         self.end_t = datetime.strptime(self.end_time, "%H:%M:%S").time()
@@ -59,13 +59,13 @@ class BasicSpreadStrategy(SpreadStrategyTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
         self.update_time = None
         self.buy_algoid = ""

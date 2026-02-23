@@ -101,14 +101,14 @@ def ts_std(feature: DataProxy, window: int) -> DataProxy:
 
 def ts_slope(feature: DataProxy, window: int) -> DataProxy:
     """Calculate the slope of linear regression over a rolling window (optimized)"""
-    # 预计算 x 相关的常数 (x = 0, 1, 2, ..., window-1)
+    # Pre-calculate x-related constants (x = 0, 1, 2, ..., window-1)
     n = window
-    sum_x = n * (n - 1) / 2  # 等差数列求和
-    sum_x2 = (n - 1) * n * (2 * n - 1) / 6  # 平方和公式
+    sum_x = n * (n - 1) / 2  # Sum of arithmetic progression
+    sum_x2 = (n - 1) * n * (2 * n - 1) / 6  # Sum of squares formula
     denominator = n * sum_x2 - sum_x * sum_x
 
-    # 计算 sum(i * y[t-window+1+i]) for i in 0..window-1
-    # 等价于 sum((window-1-j) * y[t-j]) for j in 0..window-1
+    # Calculate sum(i * y[t-window+1+i]) for i in 0..window-1
+    # Equivalent to sum((window-1-j) * y[t-j]) for j in 0..window-1
     sum_xy_expr: pl.Expr = pl.sum_horizontal([
         (window - 1 - j) * pl.col("data").shift(j)
         for j in range(window)
@@ -139,13 +139,13 @@ def ts_quantile(feature: DataProxy, window: int, quantile: float) -> DataProxy:
 
 def ts_rsquare(feature: DataProxy, window: int) -> DataProxy:
     """Calculate the R-squared value of linear regression over a rolling window (optimized)"""
-    # 预计算 x 相关的常数 (x = 0, 1, 2, ..., window-1)
+    # Pre-calculate x-related constants (x = 0, 1, 2, ..., window-1)
     n = window
-    sum_x2 = (n - 1) * n * (2 * n - 1) / 6  # 平方和公式
+    sum_x2 = (n - 1) * n * (2 * n - 1) / 6  # Sum of squares formula
     mean_x = (n - 1) / 2
-    var_x = sum_x2 / n - mean_x * mean_x  # 总体方差
+    var_x = sum_x2 / n - mean_x * mean_x  # Population variance
 
-    # 计算 sum(i * y[t-window+1+i]) for i in 0..window-1
+    # Calculate sum(i * y[t-window+1+i]) for i in 0..window-1
     sum_xy_expr: pl.Expr = pl.sum_horizontal([
         (window - 1 - j) * pl.col("data").shift(j)
         for j in range(window)
@@ -157,7 +157,7 @@ def ts_rsquare(feature: DataProxy, window: int) -> DataProxy:
         sum_xy_expr.over("vt_symbol").alias("sum_xy")
     ])
 
-    # mean_y 和 cov(x, y) = E(xy) - E(x)E(y)
+    # mean_y and cov(x, y) = E(xy) - E(x)E(y)
     df = df.with_columns([
         (pl.col("sum_y") / n).alias("mean_y"),
     ])
@@ -185,14 +185,14 @@ def ts_rsquare(feature: DataProxy, window: int) -> DataProxy:
 
 def ts_resi(feature: DataProxy, window: int) -> DataProxy:
     """Calculate the residual of linear regression over a rolling window (optimized)"""
-    # 预计算 x 相关的常数 (x = 0, 1, 2, ..., window-1)
+    # Pre-calculate x-related constants (x = 0, 1, 2, ..., window-1)
     n = window
-    sum_x = n * (n - 1) / 2  # 等差数列求和
-    sum_x2 = (n - 1) * n * (2 * n - 1) / 6  # 平方和公式
+    sum_x = n * (n - 1) / 2  # Sum of arithmetic progression
+    sum_x2 = (n - 1) * n * (2 * n - 1) / 6  # Sum of squares formula
     mean_x = (n - 1) / 2
     denominator = n * sum_x2 - sum_x * sum_x
 
-    # 计算 sum(i * y[t-window+1+i]) for i in 0..window-1
+    # Calculate sum(i * y[t-window+1+i]) for i in 0..window-1
     sum_xy_expr: pl.Expr = pl.sum_horizontal([
         (window - 1 - j) * pl.col("data").shift(j)
         for j in range(window)
@@ -203,7 +203,7 @@ def ts_resi(feature: DataProxy, window: int) -> DataProxy:
         sum_xy_expr.over("vt_symbol").alias("sum_xy")
     ])
 
-    # 计算 slope 和 intercept
+    # Calculate slope and intercept
     df = df.with_columns([
         ((n * pl.col("sum_xy") - sum_x * pl.col("sum_y")) / denominator).alias("slope"),
         (pl.col("sum_y") / n).alias("mean_y"),
@@ -213,7 +213,7 @@ def ts_resi(feature: DataProxy, window: int) -> DataProxy:
         (pl.col("mean_y") - pl.col("slope") * mean_x).alias("intercept")
     ])
 
-    # residual = y - (slope * (n-1) + intercept)，最后一个点的 x = n-1
+    # residual = y - (slope * (n-1) + intercept), the x value of the last point is n-1
     df = df.select(
         pl.col("datetime"),
         pl.col("vt_symbol"),

@@ -94,11 +94,11 @@ class PortfolioEngine(BaseEngine):
 
         contract_result.update_trade(trade)
 
-        # 添加成交数据
+        # AddTrade data
         trade.reference = reference
         self.event_engine.put(Event(EVENT_PM_TRADE, trade))
 
-        # 自动订阅tick数据
+        # AutoSubscribetickData
         if trade.vt_symbol in self.subscribed:
             return
 
@@ -172,7 +172,7 @@ class PortfolioEngine(BaseEngine):
                 pos
             )
 
-        # 当数据改变时重新保存
+        # Re-save when data changes
         if date_changed:
             self.save_data()
 

@@ -43,7 +43,7 @@ class WebTraderApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = "Web服务"
+    display_name: str = "WebService"
     engine_class: type[WebEngine] = WebEngine
     widget_name: str = "WebManager"
     icon_name: str = str(app_path.joinpath("ui", "web.ico"))

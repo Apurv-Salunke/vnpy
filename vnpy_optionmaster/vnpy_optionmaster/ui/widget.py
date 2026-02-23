@@ -56,19 +56,19 @@ class OptionManager(QtWidgets.QWidget):
         self.portfolio_combo.setFixedWidth(150)
         self.update_portfolio_combo()
 
-        self.portfolio_button = QtWidgets.QPushButton("配置")
+        self.portfolio_button = QtWidgets.QPushButton("Config")
         self.portfolio_button.clicked.connect(self.open_portfolio_dialog)
 
-        self.market_button = QtWidgets.QPushButton("T型报价")
-        self.greeks_button = QtWidgets.QPushButton("持仓希腊值")
-        self.chain_button = QtWidgets.QPushButton("升贴水监控")
-        self.manual_button = QtWidgets.QPushButton("快速交易")
-        self.volatility_button = QtWidgets.QPushButton("波动率曲线")
-        self.hedge_button = QtWidgets.QPushButton("Delta对冲")
-        self.scenario_button = QtWidgets.QPushButton("情景分析")
-        self.eye_button = QtWidgets.QPushButton("电子眼")
-        self.pricing_button = QtWidgets.QPushButton("波动率管理")
-        self.risk_button = QtWidgets.QPushButton("风险监控")
+        self.market_button = QtWidgets.QPushButton("Ttypequote")
+        self.greeks_button = QtWidgets.QPushButton("Position Greeks")
+        self.chain_button = QtWidgets.QPushButton("Premium/DiscountMonitor")
+        self.manual_button = QtWidgets.QPushButton("Quick Trade")
+        self.volatility_button = QtWidgets.QPushButton("Volatilitycurve")
+        self.hedge_button = QtWidgets.QPushButton("Deltahedge")
+        self.scenario_button = QtWidgets.QPushButton("scenario analysis")
+        self.eye_button = QtWidgets.QPushButton("Electronic Eye")
+        self.pricing_button = QtWidgets.QPushButton("VolatilityManager")
+        self.risk_button = QtWidgets.QPushButton("Risk Monitor")
 
         for button in [
             self.market_button,
@@ -85,7 +85,7 @@ class OptionManager(QtWidgets.QWidget):
             button.setEnabled(False)
 
         hbox: QtWidgets.QHBoxLayout = QtWidgets.QHBoxLayout()
-        hbox.addWidget(QtWidgets.QLabel("期权产品"))
+        hbox.addWidget(QtWidgets.QLabel("OptionProduct"))
         hbox.addWidget(self.portfolio_combo)
         hbox.addWidget(self.portfolio_button)
         hbox.addWidget(self.market_button)
@@ -208,7 +208,7 @@ class PortfolioDialog(QtWidgets.QDialog):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle(f"{self.portfolio_name}组合配置")
+        self.setWindowTitle(f"{self.portfolio_name}PortfolioConfig")
 
         portfolio_setting: dict = self.option_engine.get_portfolio_setting(
             self.portfolio_name
@@ -226,7 +226,7 @@ class PortfolioDialog(QtWidgets.QDialog):
                 self.model_name_combo.findText(model_name)
             )
 
-        form.addRow("定价模型", self.model_name_combo)
+        form.addRow("Pricing Model", self.model_name_combo)
 
         # Interest rate spin
         self.interest_rate_spin: QtWidgets.QDoubleSpinBox = QtWidgets.QDoubleSpinBox()
@@ -238,7 +238,7 @@ class PortfolioDialog(QtWidgets.QDialog):
         interest_rate: float = portfolio_setting.get("interest_rate", 0.02)
         self.interest_rate_spin.setValue(interest_rate * 100)
 
-        form.addRow("年化利率", self.interest_rate_spin)
+        form.addRow("Annual Interest Rate", self.interest_rate_spin)
 
         # Greeks decimals precision
         self.precision_spin: QtWidgets.QSpinBox = QtWidgets.QSpinBox()
@@ -248,7 +248,7 @@ class PortfolioDialog(QtWidgets.QDialog):
         precision: int = portfolio_setting.get("precision", 0)
         self.precision_spin.setValue(precision)
 
-        form.addRow("Greeks小数位", self.precision_spin)
+        form.addRow("Greeksdecimalbit", self.precision_spin)
 
         # Underlying for each chain
         self.combos: dict[str, QtWidgets.QComboBox] = {}
@@ -280,7 +280,7 @@ class PortfolioDialog(QtWidgets.QDialog):
             self.combos[chain_symbol] = combo
 
         # Set layout
-        button: QtWidgets.QPushButton = QtWidgets.QPushButton("确定")
+        button: QtWidgets.QPushButton = QtWidgets.QPushButton("OK")
         button.clicked.connect(self.update_portfolio_setting)
         form.addRow(button)
 
@@ -338,7 +338,7 @@ class OptionManualTrader(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("期权交易")
+        self.setWindowTitle("OptionTrading")
 
         # Trading Area
         self.symbol_line: QtWidgets.QLineEdit = QtWidgets.QLineEdit()
@@ -368,18 +368,18 @@ class OptionManualTrader(QtWidgets.QWidget):
             Offset.CLOSE.value
         ])
 
-        order_button: QtWidgets.QPushButton = QtWidgets.QPushButton("委托")
+        order_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Order")
         order_button.clicked.connect(self.send_order)
 
-        cancel_button: QtWidgets.QPushButton = QtWidgets.QPushButton("全撤")
+        cancel_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Cancel All")
         cancel_button.clicked.connect(self.cancel_all)
 
         form1: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form1.addRow("代码", self.symbol_line)
-        form1.addRow("方向", self.direction_combo)
-        form1.addRow("开平", self.offset_combo)
-        form1.addRow("价格", self.price_line)
-        form1.addRow("数量", self.volume_line)
+        form1.addRow("Code", self.symbol_line)
+        form1.addRow("Direction", self.direction_combo)
+        form1.addRow("Offset", self.offset_combo)
+        form1.addRow("Price", self.price_line)
+        form1.addRow("Volume", self.volume_line)
         form1.addRow(order_button)
         form1.addRow(cancel_button)
 
@@ -630,7 +630,7 @@ class OptionHedgeWidget(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("Delta对冲")
+        self.setWindowTitle("Deltahedge")
 
         portfolio: PortfolioData = self.option_engine.get_portfolio(self.portfolio_name)
         underlying_symbols: list = [vs for vs in portfolio.underlyings.keys() if "LOCAL" not in vs]
@@ -640,7 +640,7 @@ class OptionHedgeWidget(QtWidgets.QWidget):
         self.symbol_combo.addItems(underlying_symbols)
 
         self.trigger_spin: QtWidgets.QSpinBox = QtWidgets.QSpinBox()
-        self.trigger_spin.setSuffix("秒")
+        self.trigger_spin.setSuffix("seconds")
         self.trigger_spin.setMinimum(1)
         self.trigger_spin.setValue(5)
 
@@ -658,19 +658,19 @@ class OptionHedgeWidget(QtWidgets.QWidget):
         self.payup_spin.setMinimum(0)
         self.payup_spin.setValue(3)
 
-        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("启动")
+        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Start")
         self.start_button.clicked.connect(self.start)
 
-        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("停止")
+        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton("Stop")
         self.stop_button.clicked.connect(self.stop)
         self.stop_button.setEnabled(False)
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form.addRow("对冲合约", self.symbol_combo)
-        form.addRow("执行频率", self.trigger_spin)
-        form.addRow("Delta目标", self.target_spin)
-        form.addRow("对冲阈值", self.range_spin)
-        form.addRow("委托超价", self.payup_spin)
+        form.addRow("hedgeContract", self.symbol_combo)
+        form.addRow("executefrequency", self.trigger_spin)
+        form.addRow("Deltatarget", self.target_spin)
+        form.addRow("hedgethresholdvalue", self.range_spin)
+        form.addRow("Price offset", self.payup_spin)
         form.addRow(self.start_button)
         form.addRow(self.stop_button)
 
@@ -688,12 +688,12 @@ class OptionHedgeWidget(QtWidgets.QWidget):
         underlying: UnderlyingData = cast(UnderlyingData, self.option_engine.get_instrument(vt_symbol))
         min_range: int = int(underlying.theo_delta * 0.6)
         if delta_range < min_range:
-            msg: str = f"Delta对冲阈值({delta_range})低于对冲合约"\
-                f"Delta值的60%({min_range})，可能导致来回频繁对冲！"
+            msg: str = f"Deltahedgethresholdvalue({delta_range})lowathedgeContract"\
+                f"Deltavalue60%({min_range})，canablecausetoreturnfrequenthedge！"
 
             QtWidgets.QMessageBox.warning(
                 self,
-                "无法启动自动对冲",
+                "unableStartAutohedge",
                 msg,
                 QtWidgets.QMessageBox.StandardButton.Ok
             )
@@ -728,7 +728,7 @@ class OptionHedgeWidget(QtWidgets.QWidget):
 
 
 class OptionRiskWidget(QtWidgets.QWidget):
-    """期权风险监控组件"""
+    """OptionRisk Monitorcomponent"""
 
     signal: QtCore.Signal = QtCore.Signal(Event)
 
@@ -748,7 +748,7 @@ class OptionRiskWidget(QtWidgets.QWidget):
 
     def init_ui(self) -> None:
         """"""
-        self.setWindowTitle("风险监控")
+        self.setWindowTitle("Risk Monitor")
         self.resize(400, 200)
 
         self.trade_volume_label: QtWidgets.QLabel = QtWidgets.QLabel("0")
@@ -771,15 +771,15 @@ class OptionRiskWidget(QtWidgets.QWidget):
         self.cancel_order_ratio_spin.valueChanged.connect(self.set_cancel_order_limit)
 
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
-        form.addRow("成交持仓限制", self.trade_position_limit_spin)
-        form.addRow("撤单委托限制", self.cancel_order_ratio_spin)
+        form.addRow("TradePositionLimit", self.trade_position_limit_spin)
+        form.addRow("cancel orderOrderLimit", self.cancel_order_ratio_spin)
         form.addRow(QtWidgets.QLabel(" "))
-        form.addRow("总成交量", self.trade_volume_label)
-        form.addRow("净持仓量", self.net_pos_label)
-        form.addRow("成交持仓比", self.trade_position_ratio_label)
-        form.addRow("委托笔数", self.order_count_label)
-        form.addRow("撤单笔数", self.cancel_count_label)
-        form.addRow("撤单委托比", self.cancel_order_ratio_label)
+        form.addRow("TotalTradevolume", self.trade_volume_label)
+        form.addRow("netPositionvolume", self.net_pos_label)
+        form.addRow("TradePositionratio", self.trade_position_ratio_label)
+        form.addRow("Ordercount", self.order_count_label)
+        form.addRow("cancel ordercount", self.cancel_count_label)
+        form.addRow("cancel orderOrderratio", self.cancel_order_ratio_label)
 
         self.setLayout(form)
 
@@ -807,25 +807,25 @@ class OptionRiskWidget(QtWidgets.QWidget):
         texts: list = []
         if data["trade_position_ratio"] >= self.trade_position_limit:
             ratio = data["trade_position_ratio"]
-            texts.append(f"当前交易持仓比{ratio}超过限制{self.trade_position_limit}！")
+            texts.append(f"CurrentTradingPositionratio{ratio}exceedpastLimit{self.trade_position_limit}！")
 
         if data["cancel_order_ratio"] >= self.cancel_order_limit:
             ratio = data["cancel_order_ratio"]
-            texts.append(f"当前撤单委托比{ratio}超过限制{self.cancel_order_limit}！")
+            texts.append(f"Currentcancel orderOrderratio{ratio}exceedpastLimit{self.cancel_order_limit}！")
 
         if texts:
             msg: str = "\n\n".join(texts)
             self.show_warning(msg)
 
     def set_cancel_order_limit(self, limit: float) -> None:
-        """设置撤单委托比限制"""
+        """setcancel orderOrderratioLimit"""
         self.cancel_order_limit = limit
 
     def set_trade_position_limit(self, limit: float) -> None:
-        """设置成交持仓比限制"""
+        """setTradePositionratioLimit"""
         self.trade_position_limit = limit
 
     def show_warning(self, msg: str) -> None:
-        """显示提示信息"""
+        """DisplaytipInfo"""
         if self.tray_icon:
-            self.tray_icon.showMessage("风险提示", msg)
+            self.tray_icon.showMessage("Risktip", msg)

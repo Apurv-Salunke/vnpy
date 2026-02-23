@@ -14,7 +14,7 @@ APP_NAME = "RpcService"
 
 
 class WebEngine(BaseEngine):
-    """Web服务引擎"""
+    """WebServiceEngine"""
 
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine) -> None:
         """"""
@@ -26,7 +26,7 @@ class WebEngine(BaseEngine):
         self.register_event()
 
     def init_server(self) -> None:
-        """初始化RPC服务器"""
+        """InitializeRPCServer"""
         self.server.register(self.main_engine.connect)
         self.server.register(self.main_engine.subscribe)
         self.server.register(self.main_engine.send_order)
@@ -46,14 +46,14 @@ class WebEngine(BaseEngine):
         rep_address: str,
         pub_address: str,
     ) -> None:
-        """启动RPC服务器"""
+        """StartRPCServer"""
         if self.server.is_active():
             return
 
         self.server.start(rep_address, pub_address)
 
     def register_event(self) -> None:
-        """注册事件监听"""
+        """Register event listener"""
         self.event_engine.register(EVENT_TICK, self.process_event)
         self.event_engine.register(EVENT_TRADE, self.process_event)
         self.event_engine.register(EVENT_ORDER, self.process_event)
@@ -61,10 +61,10 @@ class WebEngine(BaseEngine):
         self.event_engine.register(EVENT_ACCOUNT, self.process_event)
 
     def process_event(self, event: Event) -> None:
-        """处理事件"""
+        """ProcessEvent"""
         self.server.publish(event.type, event.data)
 
     def close(self) -> None:
-        """关闭"""
+        """Close"""
         self.server.stop()
         self.server.join()

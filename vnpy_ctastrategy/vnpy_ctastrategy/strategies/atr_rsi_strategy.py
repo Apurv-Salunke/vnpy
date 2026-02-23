@@ -15,7 +15,7 @@ from vnpy_ctastrategy import (
 class AtrRsiStrategy(CtaTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     atr_length: int = 22
     atr_ma_length: int = 10
@@ -54,7 +54,7 @@ class AtrRsiStrategy(CtaTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.bg: BarGenerator = BarGenerator(self.on_bar)
         self.am: ArrayManager = ArrayManager()
@@ -68,13 +68,13 @@ class AtrRsiStrategy(CtaTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
         """

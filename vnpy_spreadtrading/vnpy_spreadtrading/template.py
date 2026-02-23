@@ -54,12 +54,12 @@ class SpreadAlgoTemplate:
         else:
             self.target = -volume
 
-        self.status: Status = Status.NOTTRADED  # 算法状态
-        self.count: int = 0                     # 读秒计数
-        self.traded: float = 0                  # 成交数量
-        self.traded_volume: float = 0           # 成交数量（绝对值）
-        self.traded_price: float = 0            # 成交价格
-        self.stopped: bool = False              # 是否已被用户停止算法
+        self.status: Status = Status.NOTTRADED  # Algo status
+        self.count: int = 0                     # readsecondscountnumber
+        self.traded: float = 0                  # Trade volume
+        self.traded_volume: float = 0           # Trade volume（absoluteforvalue）
+        self.traded_price: float = 0            # TradePrice
+        self.stopped: bool = False              # whetheralreadybyUserStop algo
 
         self.leg_traded: defaultdict = defaultdict(float)
         self.leg_cost: defaultdict = defaultdict(float)
@@ -68,10 +68,10 @@ class SpreadAlgoTemplate:
         self.order_trade_volume: defaultdict = defaultdict(int)
         self.orders: dict[str, OrderData] = {}
 
-        self.write_log("算法已启动")
+        self.write_log("AlgoalreadyStart")
 
     def get_item(self) -> AlgoItem:
-        """获取数据对象"""
+        """GetDataObject"""
         item: AlgoItem = AlgoItem(
             algoid=self.algoid,
             spread_name=self.spread_name,
@@ -88,14 +88,14 @@ class SpreadAlgoTemplate:
         return item
 
     def is_active(self) -> bool:
-        """判断算法是否处于运行中"""
+        """checkAlgowhetherplaceatRunningin"""
         if self.status not in [Status.CANCELLED, Status.ALLTRADED]:
             return True
         else:
             return False
 
     def is_order_finished(self) -> bool:
-        """检查委托是否全部结束"""
+        """CheckOrderwhetherAllFinished"""
         finished: bool = True
 
         for leg in self.spread.legs.values():
@@ -108,7 +108,7 @@ class SpreadAlgoTemplate:
         return finished
 
     def is_hedge_finished(self) -> bool:
-        """检查当前各条腿是否平衡"""
+        """CheckCurrenteachlegwhetherflatbalance"""
         active_symbol: str = self.spread.active_leg.vt_symbol
         active_traded: float = self.leg_traded[active_symbol]
 
@@ -137,14 +137,14 @@ class SpreadAlgoTemplate:
         return finished
 
     def check_algo_cancelled(self) -> None:
-        """检查算法是否已停止"""
+        """CheckAlgowhetheralreadyStop"""
         if (
             self.stopped
             and self.is_order_finished()
             and self.is_hedge_finished()
         ):
             self.status = Status.CANCELLED
-            self.write_log("算法已停止")
+            self.write_log("AlgoalreadyStop")
             self.put_event()
 
     def stop(self) -> None:
@@ -152,7 +152,7 @@ class SpreadAlgoTemplate:
         if not self.is_active():
             return
 
-        self.write_log("算法停止中")
+        self.write_log("AlgoStopin")
         self.stopped = True
         self.cancel_all_order()
 
@@ -194,7 +194,7 @@ class SpreadAlgoTemplate:
             if order.vt_orderid in vt_orderids:
                 vt_orderids.remove(order.vt_orderid)
 
-        msg: str = f"委托成交[{trade.vt_orderid}]，{trade.vt_symbol}，{trade.direction.value}，{trade.volume}@{trade.price}"
+        msg: str = f"Order Trade[{trade.vt_orderid}]，{trade.vt_symbol}，{trade.direction.value}，{trade.volume}@{trade.price}"
         self.write_log(msg)
 
         self.put_event()
@@ -210,12 +210,12 @@ class SpreadAlgoTemplate:
             if order.vt_orderid in vt_orderids:
                 vt_orderids.remove(order.vt_orderid)
 
-            msg: str = f"委托{order.status.value}[{order.vt_orderid}]"
+            msg: str = f"Order{order.status.value}[{order.vt_orderid}]"
             self.write_log(msg)
 
         self.on_order(order)
 
-        # 如果在停止任务，则检查是否已经可以停止算法
+        # IfInStoptask，thenCheckwhetheralreadyCanStop algo
         self.check_algo_cancelled()
 
     def update_timer(self) -> None:
@@ -244,7 +244,7 @@ class SpreadAlgoTemplate:
         fak: bool = False
     ) -> None:
         """"""
-        # 如果已经进入停止任务，禁止主动腿发单
+        # IfalreadyintoinStoptask，forbidActive legplace order
         if self.stopped and vt_symbol == self.spread.active_leg.vt_symbol:
             return
 
@@ -253,7 +253,7 @@ class SpreadAlgoTemplate:
 
         price = round_to(price, leg.pricetick)
 
-        # 检查价格是否超过涨跌停板
+        # CheckPricewhetherexceedpastlimit up/downboard
         tick: TickData | None = self.get_tick(vt_symbol)
 
         if tick:
@@ -274,7 +274,7 @@ class SpreadAlgoTemplate:
 
         self.leg_orders[vt_symbol].extend(vt_orderids)
 
-        msg: str = "发出委托[{}]，{}，{}，{}@{}".format(
+        msg: str = "sendoutOrder[{}]，{}，{}，{}@{}".format(
             "|".join(vt_orderids),
             vt_symbol,
             direction.value,

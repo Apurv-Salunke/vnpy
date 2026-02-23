@@ -8,9 +8,9 @@ from ..template import AlgoTemplate
 
 
 class BestLimitAlgo(AlgoTemplate):
-    """最优限价算法类"""
+    """Best limit algo class"""
 
-    display_name: str = "BestLimit 最优限价"
+    display_name: str = "BestLimit Best limit"
 
     default_setting: dict = {
         "min_volume": 0,
@@ -33,32 +33,32 @@ class BestLimitAlgo(AlgoTemplate):
         volume: float,
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(algo_engine, algo_name, vt_symbol, direction, offset, price, volume, setting)
 
-        # 参数
+        # Parameter
         self.min_volume: float = setting["min_volume"]
         self.max_volume: float = setting["max_volume"]
 
-        # 变量
+        # Variable
         self.vt_orderid: str = ""
         self.order_price: float = 0
 
         self.put_event()
 
-        # 检查最大/最小挂单量
+        # Check max/min order volume
         if self.min_volume <= 0:
-            self.write_log("最小挂单量必须大于0，算法启动失败")
+            self.write_log("minhangordervolumeMustlargeat0，Start algoFailed")
             self.finish()
             return
 
         if self.max_volume < self.min_volume:
-            self.write_log("最大挂单量必须不小于最小委托量，算法启动失败")
+            self.write_log("Max order volume must be >= min order volume, algo start failed")
             self.finish()
             return
 
     def on_tick(self, tick: TickData) -> None:
-        """Tick行情回调"""
+        """TickMarket dataCallback"""
         if self.direction == Direction.LONG:
             if not self.vt_orderid:
                 self.buy_best_limit(tick.bid_price_1)
@@ -73,22 +73,22 @@ class BestLimitAlgo(AlgoTemplate):
         self.put_event()
 
     def on_trade(self, trade: TradeData) -> None:
-        """成交回调"""
+        """Trade callback"""
         if self.traded >= self.volume:
-            self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}")
+            self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
             self.finish()
         else:
             self.put_event()
 
     def on_order(self, order: OrderData) -> None:
-        """委托回调"""
+        """Order callback"""
         if not order.is_active():
             self.vt_orderid = ""
             self.order_price = 0
             self.put_event()
 
     def buy_best_limit(self, bid_price_1: float) -> None:
-        """最优限价买入"""
+        """Best limit buy"""
         volume_left: float = self.volume - self.traded
 
         rand_volume: int = self.generate_rand_volume()
@@ -102,7 +102,7 @@ class BestLimitAlgo(AlgoTemplate):
         )
 
     def sell_best_limit(self, ask_price_1: float) -> None:
-        """最优限价卖出"""
+        """Best limit sell"""
         volume_left: float = self.volume - self.traded
 
         rand_volume: int = self.generate_rand_volume()
@@ -116,6 +116,6 @@ class BestLimitAlgo(AlgoTemplate):
         )
 
     def generate_rand_volume(self) -> int:
-        """随机生成委托数量"""
+        """Randomly generate order volume"""
         rand_volume: float = uniform(self.min_volume, self.max_volume)
         return int(rand_volume)

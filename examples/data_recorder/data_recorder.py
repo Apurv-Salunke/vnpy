@@ -1,14 +1,14 @@
 """
-该程序使用VeighNa框架通过CTP接口连接到期货市场，并自动录制指定交易所和品种的行情数据。
+This program usesVeighNaframeworkviaCTPinterfaceconnect tofutures market，and automatically recordsspecified exchangesandinstrumentsmarket data。
 
-适合初学者了解VeighNa框架的基本用法和数据录制流程。
+Suitable forbeginnersto learnVeighNaframeworkbasic usageanddata recording process。
 """
 
-# 加载Python标准库
+# LoadPythonstandard library
 from logging import INFO
 from time import sleep
 
-# 加载VeighNa核心框架
+# LoadVeighNacore framework
 from vnpy.event import EventEngine, Event
 from vnpy.trader.setting import SETTINGS
 from vnpy.trader.engine import MainEngine, LogEngine
@@ -16,131 +16,131 @@ from vnpy.trader.object import ContractData
 from vnpy.trader.constant import Exchange, Product
 from vnpy.trader.event import EVENT_CONTRACT
 
-# 加载VeighNa插件模块
+# LoadVeighNaplugin modules
 from vnpy_ctp import CtpGateway
 from vnpy_datarecorder import DataRecorderApp, RecorderEngine
 from vnpy_datarecorder.engine import EVENT_RECORDER_LOG
 
 
-# 开启日志记录功能
-# 日志对于排查问题和监控系统运行状态非常重要
-SETTINGS["log.active"] = True       # 激活日志功能
-SETTINGS["log.level"] = INFO        # 设置日志级别为INFO，输出详细信息
-SETTINGS["log.console"] = True      # 在控制台显示日志，方便实时查看
+# Enable logging functionality
+# Logging is very important for troubleshooting and monitoring system status
+SETTINGS["log.active"] = True       # Activate logging
+SETTINGS["log.level"] = INFO        # Set log level toINFO，for detailed output
+SETTINGS["log.console"] = True      # Display logs in console for real-time viewing
 
 
-# CTP接口登录信息
-# 以下使用的是SimNow模拟账户信息，初学者可以在SimNow官网申请
+# CTPinterfacelogin credentials
+# The following usesSimNowdemo account info，beginners can apply onSimNowwebsite
 ctp_setting: dict[str, str] = {
-    "用户名": "888888",                       # SimNow账户名
-    "密码": "123456",                         # SimNow密码
-    "经纪商代码": "9999",                     # SimNow经纪商代码固定为9999
-    "交易服务器": "180.168.146.187:10201",    # SimNow交易服务器地址和端口
-    "行情服务器": "180.168.146.187:10211",    # SimNow行情服务器地址和端口
-    "产品名称": "simnow_client_test",         # 产品名称，用于区分不同的客户端
-    "授权编码": "0000000000000000"            # 授权编码，SimNow模拟账户使用默认值即可
+    "username": "888888",                       # SimNowaccount name
+    "password": "123456",                         # SimNowpassword
+    "broker_id": "9999",                     # SimNowbroker ID is fixed at9999
+    "trading_server": "180.168.146.187:10201",    # SimNowtrading server address and port
+    "market_data_server": "180.168.146.187:10211",    # SimNowmarket data server address and port
+    "product_name": "simnow_client_test",         # Product name to distinguish different clients
+    "auth_code": "0000000000000000"            # Auth code，SimNowdemo account uses default value
 }
 
 
-# 要录制数据的交易所列表
-# 可以根据需要取消注释来添加更多交易所
+# List of exchanges for data recording
+# Uncomment as needed to add more exchanges
 recording_exchanges: list[Exchange] = [
-    Exchange.CFFEX,          # 中国金融期货交易所
-    # Exchange.SHFE,         # 上海期货交易所
-    # Exchange.DCE,          # 大连商品交易所
-    # Exchange.CZCE,         # 郑州商品交易所
-    # Exchange.GFEX,         # 广州期货交易所
-    # Exchange.INE,          # 上海国际能源交易中心
+    Exchange.CFFEX,          # China Financial Futures Exchange
+    # Exchange.SHFE,         # Shanghai Futures Exchange
+    # Exchange.DCE,          # Dalian Commodity Exchange
+    # Exchange.CZCE,         # Zhengzhou Commodity Exchange
+    # Exchange.GFEX,         # Guangzhou Futures Exchange
+    # Exchange.INE,          # Shanghai International Energy Exchange
 ]
 
 
-# 要录制数据的品种类型
-# 可以根据需要取消注释来添加更多品种
+# Types of instruments for data recording
+# Uncomment as needed to add more instrument types
 recording_products: list[Product] = [
-    Product.FUTURES,        # 期货品种
-    # Product.OPTION,       # 期权品种
+    Product.FUTURES,        # Futures
+    # Product.OPTION,       # Options
 ]
 
 
 def run_recorder() -> None:
     """
-    运行行情录制程序
+    Run the market data recording program
 
-    该函数是程序的主体，按照以下步骤工作：
-    1. 创建VeighNa核心组件（事件引擎、主引擎）
-    2. 添加交易接口和应用模块
-    3. 设置数据录制规则
-    4. 连接到交易所并开始录制数据
+    This function is the main body of the program, working as follows:
+    1. CreateVeighNacore components（event engine、main engine）
+    2. Add trading gateway and application modules
+    3. Configure data recording rules
+    4. Connect to exchange and start recording data
     """
-    # 创建事件引擎，负责系统内各模块间的通信
+    # Create event engine, responsible for communication between modules
     event_engine: EventEngine = EventEngine()
 
-    # 创建主引擎，管理系统功能模块，包括底层接口、上层应用等
+    # Create main engine, manages system modules including gateways, applications, etc.
     main_engine: MainEngine = MainEngine(event_engine)
 
-    # 添加CTP接口，连接到期货市场
+    # AddCTPinterface，connect tofutures market
     main_engine.add_gateway(CtpGateway)
 
-    # 添加数据录制引擎，用于录制Tick行情入库
+    # AdddataRecordEngine，for recordingTickdata to database
     recorder_engine: RecorderEngine = main_engine.add_app(DataRecorderApp)
 
-    # 定义合约订阅函数
+    # Define contract subscription function
     def subscribe_data(event: Event) -> None:
         """
-        处理合约推送并订阅行情
+        Process contract push and subscribe to market data
 
-        当系统接收到合约信息后，根据预设的交易所和品种过滤条件，
-        自动为符合条件的合约添加行情录制任务。
+        When the system receives contract info, based on preset exchange and instrument filter conditions,
+        automatically add market data recording tasks for qualifying contracts.
 
-        参数:
-            event: 包含合约信息的事件对象
+        Args:
+            event: Event object containing contract info
         """
-        # 从事件对象中获取合约数据
+        # Get contract data from event object
         contract: ContractData = event.data
 
-        # 判断合约是否符合录制条件
+        # Check if contract meets recording criteria
         if (
-            contract.exchange in recording_exchanges    # 检查合约所属交易所是否在预设列表中
-            and contract.product in recording_products  # 检查合约品种类型是否在预设列表中
+            contract.exchange in recording_exchanges    # Check if contract exchange is in preset list
+            and contract.product in recording_products  # Check if contract product type is in preset list
         ):
-            # 添加该合约的行情录制任务，vt_symbol是VeighNa中的唯一标识符，格式为"代码.交易所"
-            recorder_engine.add_tick_recording(contract.vt_symbol)      # 录制Tick数据
-            recorder_engine.add_bar_recording(contract.vt_symbol)       # 录制分钟K线
+            # Add market data recording task for this contract，vt_symbolisVeighNais unique ID in VeighNa，format"code.exchange"
+            recorder_engine.add_tick_recording(contract.vt_symbol)      # RecordTickdata
+            recorder_engine.add_bar_recording(contract.vt_symbol)       # RecordminuteKline
 
-    # 注册合约事件处理函数，当有新合约信息推送时，会自动调用subscribe_data函数
+    # Register contract event handler，when newContract infois pushed，automatically callssubscribe_datafunction
     event_engine.register(EVENT_CONTRACT, subscribe_data)
 
-    # 获取日志引擎并设置日志处理
+    # Get log engine and configure log handling
     log_engine: LogEngine = main_engine.get_engine("log")
 
     def print_log(event: Event) -> None:
         """
-        处理数据录制模块的日志事件
+        Process log events from data recording module
 
-        将数据录制模块产生的日志信息输出到控制台和日志文件中，
-        便于监控录制过程和排查问题。
+        Output log info from data recording module to console and log files,
+        facilitating monitoring of recording process and troubleshooting.
 
-        参数:
-            event: 包含日志信息的事件对象
+        Args:
+            event: Event object containing log info
         """
         log_engine.logger.log(INFO, event.data)
 
-    # 注册日志事件处理函数，当有新的日志推送时，会自动调用print_log函数
+    # Register log event handler，when new log is pushed，automatically callsprint_logfunction
     event_engine.register(EVENT_RECORDER_LOG, print_log)
 
-    # 连接CTP接口并登录，第一个参数是接口设置，第二个参数是接口名称
+    # ConnectCTPinterfaceand login，firstArgsisinterfacesettings，secondArgsisinterfacename
     main_engine.connect(ctp_setting, CtpGateway.default_name)
 
-    # 等待30秒，CTP接口连接后需要一段时间来完成初始化
+    # Wait30seconds，CTPgateway needs time to complete initialization after connection
     sleep(30)
 
-    # 提示用户程序已经开始运行，用户可以根据需要随时退出
-    input(">>>>>> 高频行情数据录制已启动，正在记录数据。按回车键退出程序 <<<<<<")
+    # Prompt user that program has started, user can exit anytime as needed
+    input(">>>>>> High-frequency market data recording started, recording data. Press Enter to exit <<<<<<")
 
-    # 关闭主引擎实现安全退出，避免出现内存中未入库数据的丢失
+    # Close main engine for safe exit, avoid losing in-memory data not yet saved to database
     main_engine.close()
 
 
-# Python程序的标准入口写法，直接运行此脚本时会执行run_recorder函数
+# PythonStandard Python entry point，executesrun_recorderfunction
 if __name__ == "__main__":
     run_recorder()

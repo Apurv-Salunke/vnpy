@@ -1,4 +1,4 @@
-# VeighNa框架的Web服务模块
+# Web Trader Module for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,43 +11,140 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-针对B-S架构需求设计的Web服务应用模块，实现了提供主动函数调用（REST）和被动数据推送（Websocket）的Web服务器。
+Web service application module designed for B-S (Browser-Server) architecture. Implements a web server providing active function calls (REST) and passive data push (Websocket).
 
-目前仅提供了基础的交易和管理接口，用户根据自己的需求扩展支持其他VeighNa应用模块的Web接口（如CTA策略自动交易等）。
+Currently provides basic trading and management interfaces. Users can extend web interfaces for other VeighNa application modules (such as CTA strategy auto-trading) according to their needs.
 
-## 安装
+## Installation
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-直接使用pip命令：
-
-```
+**Install via pip:**
+```bash
 pip install vnpy_webtrader
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+# Download and extract source code
+cd vnpy_webtrader
 pip install .
 ```
 
+## Architecture
 
-## 架构
+### REST API (Active Function Calls)
 
-* 基于Fastapi-Restful实现的主动函数调用功能，数据流程：
-	1. 用户点击浏览器中的某个按钮，发起Restful功能调用；
-	2. Web服务器收到Restful请求，将其转化为RPC功能调用发送给交易服务器；
-	3. 交易服务器收到RPC请求，执行具体的功能逻辑，并返回结果；
-	4. Web服务器返回Restful请求的结果给浏览器。
+Based on FastAPI-RESTful implementation:
 
-* 基于Fastapi-Websocket实现的被动数据推送功能，数据流程：
-	1. 交易服务器的事件引擎转发某个事件推送，并推送给RPC客户端（Web服务器）；
-	2. Web服务器收到事件推送后，将其转化为json格式，并通过Websocket发出；
-	3. 浏览器通过Websocket收到推送的数据，并渲染在Web前端界面上。
+1. User clicks a button in browser, initiates RESTful call
+2. Web server receives RESTful request, converts to RPC call and sends to trading server
+3. Trading server receives RPC request, executes function logic, returns result
+4. Web server returns RESTful response to browser
 
-* 将程序分为两个进程的主要原因包括：
-	1. 交易服务器中的策略运行和数据计算的运算压力较大，需要保证尽可能保证低延时效率；
-	2. Web服务器需要面对互联网访问，将交易相关的逻辑剥离能更好保证安全性。
+### WebSocket (Passive Data Push)
+
+Based on FastAPI-WebSocket implementation:
+
+1. Trading server's event engine forwards event push to RPC client (web server)
+2. Web server receives event push, converts to JSON format, sends via WebSocket
+3. Browser receives push data via WebSocket, renders in web frontend
+
+### Two-Process Design
+
+Reasons for separating into two processes:
+
+1. **Performance:** Trading server runs strategies and calculations requiring low latency
+2. **Security:** Web server faces internet access, separating trading logic improves security
+
+## Usage
+
+### Start Trading Server
+
+```python
+from vnpy.event import EventEngine
+from vnpy.trader.engine import MainEngine
+from vnpy.trader.ui import MainWindow, create_qapp
+
+from vnpy_ctp import CtpGateway
+from vnpy_webtrader import WebTraderApp
+
+def main():
+    qapp = create_qapp()
+    event_engine = EventEngine()
+    main_engine = MainEngine(event_engine)
+    
+    main_engine.add_gateway(CtpGateway)
+    main_engine.add_app(WebTraderApp)
+    
+    main_window = MainWindow(main_engine, event_engine)
+    main_window.showMaximized()
+    qapp.exec()
+
+if __name__ == "__main__":
+    main()
+```
+
+### Access Web Interface
+
+1. Open browser
+2. Navigate to `http://localhost:8000`
+3. Login with credentials
+4. Use web interface for trading
+
+## API Endpoints
+
+### REST APIs
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/token` | POST | Get access token |
+| `/order` | POST | Send order |
+| `/cancel` | POST | Cancel order |
+| `/position` | GET | Get positions |
+| `/account` | GET | Get account |
+
+### WebSocket
+
+| Topic | Description |
+|-------|-------------|
+| `tick` | Tick data push |
+| `trade` | Trade fill push |
+| `order` | Order update push |
+| `position` | Position update push |
+
+## Configuration
+
+Edit `web_trader_setting.json`:
+
+```json
+{
+    "username": "admin",
+    "password": "your_password",
+    "req_address": "tcp://localhost:2014",
+    "sub_address": "tcp://localhost:4102"
+}
+```
+
+## Extending Web Interfaces
+
+Add custom endpoints in `web.py`:
+
+```python
+@app.get("/api/strategy/start")
+async def start_strategy(
+    strategy_name: str,
+    token: str = Depends(get_access)
+):
+    """Start CTA strategy"""
+    result = rpc_client.call("start_strategy", strategy_name)
+    return {"result": result}
+```
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_webtrader

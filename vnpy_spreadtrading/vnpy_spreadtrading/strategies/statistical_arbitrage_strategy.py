@@ -10,7 +10,7 @@ from vnpy_spreadtrading import (
 class StatisticalArbitrageStrategy(SpreadStrategyTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     boll_window = 20
     boll_dev = 2
@@ -41,7 +41,7 @@ class StatisticalArbitrageStrategy(SpreadStrategyTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.bg = BarGenerator(self.on_spread_bar)
         self.am = ArrayManager()
@@ -52,13 +52,13 @@ class StatisticalArbitrageStrategy(SpreadStrategyTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
         self.put_event()
 

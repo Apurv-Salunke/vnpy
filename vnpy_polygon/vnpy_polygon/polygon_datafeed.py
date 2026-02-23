@@ -20,7 +20,7 @@ INTERVAL_VT2POLYGON = {
 
 
 class PolygonDatafeed(BaseDatafeed):
-    """Polygon.io数据服务接口"""
+    """Polygon.ioDataServiceGateway"""
 
     def __init__(self) -> None:
         """"""
@@ -30,12 +30,12 @@ class PolygonDatafeed(BaseDatafeed):
         self.inited: bool = False
 
     def init(self, output: Callable[[str], Any] = print) -> bool:
-        """初始化"""
+        """Initialize"""
         if self.inited:
             return True
 
         if not self.api_key:
-            output("Polygon.io数据服务初始化失败：API密钥为空！")
+            output("Polygon.ioDataServiceInitializeFailed：APIkeyIs empty！")
             return False
 
         try:
@@ -43,14 +43,14 @@ class PolygonDatafeed(BaseDatafeed):
 
             self.client.get_exchanges(asset_class='options')
         except Exception as e:
-            output(f"Polygon.io数据服务初始化失败：{e}")
+            output(f"Polygon.ioDataServiceInitializeFailed：{e}")
             return False
 
         self.inited = True
         return True
 
     def query_bar_history(self, req: HistoryRequest, output: Callable[[str], Any] = print) -> list[BarData]:
-        """查询K线数据"""
+        """QueryKlineData"""
         if not self.inited:
             n: bool = self.init(output)
             if not n:
@@ -64,28 +64,28 @@ class PolygonDatafeed(BaseDatafeed):
 
         polygon_interval: str | None = INTERVAL_VT2POLYGON.get(interval)
         if not polygon_interval:
-            output(f"Polygon.io查询K线数据失败：不支持的时间周期{interval.value}")
+            output(f"Polygon.ioQueryKlineDataFailed：Not supportedTimecycle{interval.value}")
             return []
 
         if len(symbol) > 10:
-            symbol = "O:" + symbol  # Polygon要求期权代码前加O:前缀
+            symbol = "O:" + symbol  # PolygonneedrequestOptionCodebeforeaddO:beforesuffix
 
-        # polygon客户端的list_aggs方法返回一个处理分页的迭代器
+        # polygonClientlist_aggsMethodReturnoneProcessminutepageIterationer
         aggs: Iterator[Agg] = self.client.list_aggs(
             ticker=symbol,
             multiplier=1,
             timespan=polygon_interval,
             from_=start,
             to=end,
-            limit=5000      # 每次查5000条
+            limit=5000      # eachtimescheck5000strip
         )
 
         bars: list[BarData] = []
         for agg in aggs:
-            # Polygon时间戳是毫秒，转换为datetime
+            # PolygonTimestampismilliseconds，convertasdatetime
             dt: datetime = datetime.fromtimestamp(agg.timestamp / 1000)
 
-            # list_aggs可能返回超出请求范围的数据，所以需要过滤
+            # list_aggscanableReturnexceedoutRequestrangeData，toneedneedFilter
             if not (start <= dt <= end):
                 continue
 
@@ -107,5 +107,5 @@ class PolygonDatafeed(BaseDatafeed):
         return bars
 
     def query_tick_history(self, req: HistoryRequest, output: Callable[[str], Any] = print) -> list[TickData]:
-        """查询Tick数据"""
+        """QueryTickData"""
         return []

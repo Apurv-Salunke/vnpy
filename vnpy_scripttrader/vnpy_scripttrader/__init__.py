@@ -46,7 +46,7 @@ class ScriptTraderApp(BaseApp):
     app_name: str = APP_NAME
     app_module: str = __module__
     app_path: Path = Path(__file__).parent
-    display_name: str = "脚本策略"
+    display_name: str = "scriptStrategy"
     engine_class: type[ScriptEngine] = ScriptEngine
     widget_name: str = "ScriptManager"
     icon_name: str = str(app_path.joinpath("ui", "script.ico"))

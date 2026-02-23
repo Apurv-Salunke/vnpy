@@ -43,9 +43,9 @@ from .algo import ElectronicEyeAlgo
 
 
 PRICING_MODELS: dict = {
-    "Black-76 欧式期货期权": black_76,
-    "Black-Scholes 欧式股票期权": black_scholes,
-    "二叉树 美式期货期权": binomial_tree
+    "Black-76 EuropeanstyleFuturesOption": black_76,
+    "Black-Scholes EuropeanstyleStockOption": black_scholes,
+    "binomialtree AmericanstyleFuturesOption": binomial_tree
 }
 
 
@@ -719,7 +719,7 @@ class OptionAlgoEngine:
 
 
 class OptionRiskEngine:
-    """期权风控引擎"""
+    """OptionRisk controlEngine"""
 
     def __init__(self, option_engine: OptionEngine) -> None:
         """"""
@@ -728,15 +728,15 @@ class OptionRiskEngine:
 
         self.instruments: dict[str, InstrumentData] = option_engine.instruments
 
-        # 成交持仓比风控
+        # TradePositionratioRisk control
         self.trade_volume: int = 0
         self.net_pos: int = 0
 
-        # 委托撤单比风控
+        # Ordercancel orderratioRisk control
         self.all_orderids: set[str] = set()
         self.cancel_orderids: set[str] = set()
 
-        # 定时运行参数
+        # Timer Running Parameter
         self.timer_count: int = 0
         self.timer_trigger: int = 10
 
@@ -776,7 +776,7 @@ class OptionRiskEngine:
         self.put_event()
 
     def put_event(self) -> None:
-        """推送事件"""
+        """PushEvent"""
         order_count: int = len(self.all_orderids)
         cancel_count: int = len(self.cancel_orderids)
 

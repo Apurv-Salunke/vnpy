@@ -10,9 +10,9 @@ from vnpy_portfoliostrategy import StrategyTemplate, StrategyEngine
 
 
 class PairTradingStrategy(StrategyTemplate):
-    """配对交易策略"""
+    """configforTradingStrategy"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     tick_add = 1
     boll_window = 20
@@ -52,7 +52,7 @@ class PairTradingStrategy(StrategyTemplate):
         vt_symbols: list[str],
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(strategy_engine, strategy_name, vt_symbols, setting)
 
         self.bgs: dict[str, BarGenerator] = {}
@@ -72,21 +72,21 @@ class PairTradingStrategy(StrategyTemplate):
             self.bgs[vt_symbol] = BarGenerator(on_bar)
 
     def on_init(self) -> None:
-        """策略初始化回调"""
-        self.write_log("策略初始化")
+        """StrategyInitializeCallback"""
+        self.write_log("StrategyInitialize")
 
         self.load_bars(1)
 
     def on_start(self) -> None:
-        """策略启动回调"""
-        self.write_log("策略启动")
+        """StrategyStartCallback"""
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
-        """策略停止回调"""
-        self.write_log("策略停止")
+        """StrategyStopCallback"""
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
-        """行情推送回调"""
+        """Market dataPushCallback"""
         if (
             self.last_tick_time
             and self.last_tick_time.minute != tick.datetime.minute
@@ -102,23 +102,23 @@ class PairTradingStrategy(StrategyTemplate):
         self.last_tick_time = tick.datetime
 
     def on_bars(self, bars: dict[str, BarData]) -> None:
-        """K线切片回调"""
-        # 获取期权腿K线
+        """KlinesliceCallback"""
+        # GetOptionlegKline
         leg1_bar = bars.get(self.leg1_symbol, None)
         leg2_bar = bars.get(self.leg2_symbol, None)
 
-        # 必须两条期权腿行情都存在
+        # MusttwoOptionlegMarket dataallExist
         if not leg1_bar or not leg2_bar:
             return
 
-        # 每5分钟运行一次
+        # each5minuteclockRunningonce
         if (leg1_bar.datetime.minute + 1) % 5:
             return
 
-        # 计算当前价差
+        # CalculateCurrentSpread
         self.current_spread = leg1_bar.close_price * self.leg1_ratio - leg2_bar.close_price * self.leg2_ratio
 
-        # 更新到价差序列
+        # UpdateToSpreadordercolumn
         self.spread_data[:-1] = self.spread_data[1:]
         self.spread_data[-1] = self.current_spread
 
@@ -126,7 +126,7 @@ class PairTradingStrategy(StrategyTemplate):
         if self.spread_count <= self.boll_window:
             return
 
-        # 计算布林带
+        # CalculateBollinger
         buf: np.ndarray = self.spread_data[-self.boll_window:]
 
         std = buf.std()
@@ -134,7 +134,7 @@ class PairTradingStrategy(StrategyTemplate):
         self.boll_up = self.boll_mid + self.boll_dev * std
         self.boll_down = self.boll_mid - self.boll_dev * std
 
-        # 计算目标持仓
+        # CalculatetargetPosition
         leg1_pos = self.get_pos(self.leg1_symbol)
 
         if not leg1_pos:
@@ -153,14 +153,14 @@ class PairTradingStrategy(StrategyTemplate):
                 self.set_target(self.leg1_symbol, 0)
                 self.set_target(self.leg2_symbol, 0)
 
-        # 执行调仓交易
+        # executeadjustpositionTrading
         self.rebalance_portfolio(bars)
 
-        # 推送更新事件
+        # PushUpdateEvent
         self.put_event()
 
     def calculate_price(self, vt_symbol: str, direction: Direction, reference: float) -> float:
-        """计算调仓委托价格（支持按需重载实现）"""
+        """CalculateadjustpositionOrderPrice（supportpressneedreloadimplement）"""
         pricetick: float = self.get_pricetick(vt_symbol)
 
         if direction == Direction.LONG:

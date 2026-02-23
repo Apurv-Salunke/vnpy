@@ -9,9 +9,9 @@ from vnpy_portfoliostrategy.utility import PortfolioBarGenerator
 
 
 class TrendFollowingStrategy(StrategyTemplate):
-    """ATR-RSI趋势跟踪策略"""
+    """ATR-RSItrendtraceStrategy"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     atr_window = 22
     atr_ma_window = 10
@@ -45,7 +45,7 @@ class TrendFollowingStrategy(StrategyTemplate):
         vt_symbols: list[str],
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(strategy_engine, strategy_name, vt_symbols, setting)
 
         self.rsi_data: dict[str, float] = {}
@@ -56,7 +56,7 @@ class TrendFollowingStrategy(StrategyTemplate):
 
         self.last_tick_time: datetime | None = None
 
-        # 创建每个合约的ArrayManager
+        # CreateeachContractArrayManager
         self.ams: dict[str, ArrayManager] = {}
         for vt_symbol in self.vt_symbols:
             self.ams[vt_symbol] = ArrayManager()
@@ -64,8 +64,8 @@ class TrendFollowingStrategy(StrategyTemplate):
         self.pbg = PortfolioBarGenerator(self.on_bars)
 
     def on_init(self) -> None:
-        """策略初始化回调"""
-        self.write_log("策略初始化")
+        """StrategyInitializeCallback"""
+        self.write_log("StrategyInitialize")
 
         self.rsi_buy = 50 + self.rsi_entry
         self.rsi_sell = 50 - self.rsi_entry
@@ -73,20 +73,20 @@ class TrendFollowingStrategy(StrategyTemplate):
         self.load_bars(10)
 
     def on_start(self) -> None:
-        """策略启动回调"""
-        self.write_log("策略启动")
+        """StrategyStartCallback"""
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
-        """策略停止回调"""
-        self.write_log("策略停止")
+        """StrategyStopCallback"""
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
-        """行情推送回调"""
+        """Market dataPushCallback"""
         self.pbg.update_tick(tick)
 
     def on_bars(self, bars: dict[str, BarData]) -> None:
-        """K线切片回调"""
-        # 更新K线计算RSI数值
+        """KlinesliceCallback"""
+        # UpdateKlineCalculateRSInumbervalue
         for vt_symbol, bar in bars.items():
             am: ArrayManager = self.ams[vt_symbol]
             am.update_bar(bar)
@@ -137,7 +137,7 @@ class TrendFollowingStrategy(StrategyTemplate):
         self.put_event()
 
     def calculate_price(self, vt_symbol: str, direction: Direction, reference: float) -> float:
-        """计算调仓委托价格（支持按需重载实现）"""
+        """CalculateadjustpositionOrderPrice（supportpressneedreloadimplement）"""
         if direction == Direction.LONG:
             price: float = reference + self.price_add
         else:

@@ -1,4 +1,4 @@
-# VeighNa框架的Polygon.io数据服务接口
+# Polygon.io Datafeed for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,38 +11,41 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-基于Polygon.io的Python API开发，支持美股市场的K线数据
+Developed based on Polygon.io Python API, supports K-line data for US stock market.
 
-注意：
- - 需要购买相应的数据服务权限。
- - 期权合约历史数据查询的时候symbol需要去掉“O：”前缀。
+**Note:**
+- Requires appropriate data service subscription
+- For option contract historical data, remove "O:" prefix from symbol
 
+## Installation
 
-## 安装
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
-
-直接使用pip命令：
-
-```
+**Install via pip:**
+```bash
 pip install vnpy_polygon
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+# Download and extract source code
+cd vnpy_polygon
 pip install .
 ```
 
+## Usage
 
-## 使用
+When using Polygon.io in VeighNa, configure the following fields in global settings:
 
-在VeighNa中使用Polygon.io时，需要在全局配置中填写以下字段信息：
+| Name | Description | Required | Example |
+|------|-------------|----------|---------|
+| datafeed.name | Datafeed name | Yes | polygon |
+| datafeed.password | API Key | Yes | (Your API Key) |
 
-|名称|含义|必填|举例|
-|---------|----|---|---|
-|datafeed.name|名称|是|polygon|
-|datafeed.password|密码|是|(API Key)|
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_polygon

@@ -6,7 +6,7 @@ from Cython.Build import cythonize
 
 
 def get_version() -> str:
-    """从 __init__.py 读取版本号"""
+    """From __init__.py Read version number"""
     with open("vnpy_riskmanager/__init__.py", encoding="utf-8") as f:
         for line in f:
             if line.startswith("__version__"):
@@ -14,7 +14,7 @@ def get_version() -> str:
     return "1.0.0"
 
 
-# 定义需要编译的 Cython 扩展
+# Define Cython extension to compile
 extensions = [
     Extension(
         "vnpy_riskmanager.template",
@@ -42,14 +42,14 @@ extensions = [
     )
 ]
 
-# Cython 编译配置
+# Cython compileConfig
 compiler_directives = {
-    "language_level": "3",              # Python 3 语法
-    "boundscheck": False,               # 禁用边界检查（性能优化）
-    "wraparound": False,                # 禁用负索引（性能优化）
-    "cdivision": True,                  # C 风格除法（不检查除零）
-    "initializedcheck": False,          # 禁用初始化检查
-    "embedsignature": True,             # 嵌入函数签名（便于调试）
+    "language_level": "3",              # Python 3 syntax
+    "boundscheck": False,               # DisableboundaryCheck（performanceOptimization）
+    "wraparound": False,                # Disablenegativeindex（performanceOptimization）
+    "cdivision": True,                  # C style division（notCheckdiv by zero）
+    "initializedcheck": False,          # DisableInitializeCheck
+    "embedsignature": True,             # embedinFunctionSign（for debugging）
 }
 
 setup(
@@ -59,10 +59,10 @@ setup(
     ext_modules=cythonize(
         extensions,
         compiler_directives=compiler_directives,
-        annotate=False,     # 设为 True 可生成 HTML 性能分析文件
+        annotate=False,     # Set to True to generate HTML performance analysis file
     ),
     package_data={
-        "vnpy_riskmanager": ["*.pxd", "*.pyx"],  # 包含 Cython 源文件
+        "vnpy_riskmanager": ["*.pxd", "*.pyx"],  # Include Cython source files
     },
-    zip_safe=False,         # Cython 扩展不支持 zip 打包
+    zip_safe=False,         # Cython extendNot supported zip pack
 )

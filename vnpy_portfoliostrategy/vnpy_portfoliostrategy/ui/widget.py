@@ -16,13 +16,13 @@ from ..locale import _
 
 
 class PortfolioStrategyManager(QtWidgets.QWidget):
-    """组合策略界面"""
+    """PortfolioStrategyinterface"""
 
     signal_log: QtCore.Signal = QtCore.Signal(Event)
     signal_strategy: QtCore.Signal = QtCore.Signal(Event)
 
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__()
 
         self.main_engine: MainEngine = main_engine
@@ -37,25 +37,25 @@ class PortfolioStrategyManager(QtWidgets.QWidget):
         self.update_class_combo()
 
     def init_ui(self) -> None:
-        """初始化界面"""
-        self.setWindowTitle(_("组合策略"))
+        """Initialize interface"""
+        self.setWindowTitle(_("PortfolioStrategy"))
 
         # Create widgets
         self.class_combo: QtWidgets.QComboBox = QtWidgets.QComboBox()
 
-        add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("添加策略"))
+        add_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AddStrategy"))
         add_button.clicked.connect(self.add_strategy)
 
-        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部初始化"))
+        init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllInitialize"))
         init_button.clicked.connect(self.strategy_engine.init_all_strategies)
 
-        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部启动"))
+        start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("AllStart"))
         start_button.clicked.connect(self.strategy_engine.start_all_strategies)
 
-        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("全部停止"))
+        stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop all"))
         stop_button.clicked.connect(self.strategy_engine.stop_all_strategies)
 
-        clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("清空日志"))
+        clear_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("clearNoneLog"))
         clear_button.clicked.connect(self.clear_log)
 
         self.scroll_layout: QtWidgets.QVBoxLayout = QtWidgets.QVBoxLayout()
@@ -90,13 +90,13 @@ class PortfolioStrategyManager(QtWidgets.QWidget):
         self.setLayout(vbox)
 
     def update_class_combo(self) -> None:
-        """更新策略类名显示控件"""
+        """UpdateStrategyClassnameDisplaycontrolfile"""
         self.class_combo.addItems(
             self.strategy_engine.get_all_strategy_class_names()
         )
 
     def register_event(self) -> None:
-        """注册事件引擎"""
+        """RegisterEventEngine"""
         self.signal_strategy.connect(self.process_strategy_event)
 
         self.event_engine.register(
@@ -104,7 +104,7 @@ class PortfolioStrategyManager(QtWidgets.QWidget):
         )
 
     def process_strategy_event(self, event: Event) -> None:
-        """策略事件推送"""
+        """StrategyEventPush"""
         data: dict = event.data
         strategy_name: str = data["strategy_name"]
 
@@ -117,12 +117,12 @@ class PortfolioStrategyManager(QtWidgets.QWidget):
             self.managers[strategy_name] = manager
 
     def remove_strategy(self, strategy_name: str) -> None:
-        """移除策略"""
+        """removeStrategy"""
         manager: StrategyManager = self.managers.pop(strategy_name)
         manager.deleteLater()
 
     def add_strategy(self) -> None:
-        """添加策略"""
+        """AddStrategy"""
         class_name: str = str(self.class_combo.currentText())
         if not class_name:
             return
@@ -141,16 +141,16 @@ class PortfolioStrategyManager(QtWidgets.QWidget):
             )
 
     def clear_log(self) -> None:
-        """清除日志"""
+        """clearLog"""
         self.log_monitor.setRowCount(0)
 
     def show(self) -> None:
-        """最大化显示"""
+        """maxizeDisplay"""
         self.showMaximized()
 
 
 class StrategyManager(QtWidgets.QFrame):
-    """策略控制控件"""
+    """Strategycontrolcontrolfile"""
 
     def __init__(
         self,
@@ -158,7 +158,7 @@ class StrategyManager(QtWidgets.QFrame):
         strategy_engine: StrategyEngine,
         data: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__()
 
         self.strategy_manager: PortfolioStrategyManager = strategy_manager
@@ -170,26 +170,26 @@ class StrategyManager(QtWidgets.QFrame):
         self.init_ui()
 
     def init_ui(self) -> None:
-        """初始化界面"""
+        """Initialize interface"""
         self.setFixedHeight(300)
         self.setFrameShape(self.Shape.Box)
         self.setLineWidth(1)
 
-        self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("初始化"))
+        self.init_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Initialize"))
         self.init_button.clicked.connect(self.init_strategy)
 
-        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("启动"))
+        self.start_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Start"))
         self.start_button.clicked.connect(self.start_strategy)
         self.start_button.setEnabled(False)
 
-        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("停止"))
+        self.stop_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("Stop"))
         self.stop_button.clicked.connect(self.stop_strategy)
         self.stop_button.setEnabled(False)
 
-        self.edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("编辑"))
+        self.edit_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("edit"))
         self.edit_button.clicked.connect(self.edit_strategy)
 
-        self.remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("移除"))
+        self.remove_button: QtWidgets.QPushButton = QtWidgets.QPushButton(_("remove"))
         self.remove_button.clicked.connect(self.remove_strategy)
 
         strategy_name: str = self._data["strategy_name"]
@@ -220,13 +220,13 @@ class StrategyManager(QtWidgets.QFrame):
         self.setLayout(vbox)
 
     def update_data(self, data: dict) -> None:
-        """更新策略数据"""
+        """UpdateStrategyData"""
         self._data = data
 
         self.parameters_monitor.update_data(data["parameters"])
         self.variables_monitor.update_data(data["variables"])
 
-        # 更新按钮状态
+        # UpdatebuttonStatus
         variables: dict = data["variables"]
         inited: bool = variables["inited"]
         trading: bool = variables["trading"]
@@ -247,19 +247,19 @@ class StrategyManager(QtWidgets.QFrame):
             self.remove_button.setEnabled(True)
 
     def init_strategy(self) -> None:
-        """初始化策略"""
+        """InitializeStrategy"""
         self.strategy_engine.init_strategy(self.strategy_name)
 
     def start_strategy(self) -> None:
-        """启动策略"""
+        """StartStrategy"""
         self.strategy_engine.start_strategy(self.strategy_name)
 
     def stop_strategy(self) -> None:
-        """停止策略"""
+        """StopStrategy"""
         self.strategy_engine.stop_strategy(self.strategy_name)
 
     def edit_strategy(self) -> None:
-        """编辑策略"""
+        """editStrategy"""
         strategy_name: str = self._data["strategy_name"]
 
         parameters: dict = self.strategy_engine.get_strategy_parameters(strategy_name)
@@ -271,19 +271,19 @@ class StrategyManager(QtWidgets.QFrame):
             self.strategy_engine.edit_strategy(strategy_name, setting)
 
     def remove_strategy(self) -> None:
-        """移除策略"""
+        """removeStrategy"""
         result: bool = self.strategy_engine.remove_strategy(self.strategy_name)
 
-        # 只移除在策略引擎被成功移除的策略
+        # onlyremoveInStrategyEnginebySuccessremoveStrategy
         if result:
             self.strategy_manager.remove_strategy(self.strategy_name)
 
 
 class DataMonitor(QtWidgets.QTableWidget):
-    """策略监控组件"""
+    """StrategyMonitorcomponent"""
 
     def __init__(self, data: dict) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__()
 
         self._data: dict = data
@@ -292,7 +292,7 @@ class DataMonitor(QtWidgets.QTableWidget):
         self.init_ui()
 
     def init_ui(self) -> None:
-        """初始化界面"""
+        """Initialize interface"""
         labels: list = list(self._data.keys())
         self.setColumnCount(len(labels))
         self.setHorizontalHeaderLabels(labels)
@@ -314,26 +314,26 @@ class DataMonitor(QtWidgets.QTableWidget):
             self.cells[name] = cell
 
     def update_data(self, data: dict) -> None:
-        """更新数据"""
+        """UpdateData"""
         for name, value in data.items():
             cell: QtWidgets.QTableWidgetItem = self.cells[name]
             cell.setText(str(value))
 
 
 class LogMonitor(BaseMonitor):
-    """日志监控组件"""
+    """LogMonitorcomponent"""
 
     event_type: str = EVENT_PORTFOLIO_LOG
     data_key: str = ""
     sorting: bool = False
 
     headers: dict = {
-        "time": {"display": _("时间"), "cell": TimeCell, "update": False},
-        "msg": {"display": _("信息"), "cell": MsgCell, "update": False},
+        "time": {"display": _("Time"), "cell": TimeCell, "update": False},
+        "msg": {"display": _("Info"), "cell": MsgCell, "update": False},
     }
 
     def init_ui(self) -> None:
-        """初始化界面"""
+        """Initialize interface"""
         super().init_ui()
 
         self.horizontalHeader().setSectionResizeMode(
@@ -341,18 +341,18 @@ class LogMonitor(BaseMonitor):
         )
 
     def insert_new_row(self, data: dict) -> None:
-        """插入新行"""
+        """insertNewrow"""
         super().insert_new_row(data)
         self.resizeRowToContents(0)
 
 
 class SettingEditor(QtWidgets.QDialog):
-    """配置编辑框"""
+    """Configeditframe"""
 
     def __init__(
         self, parameters: dict, strategy_name: str = "", class_name: str = ""
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__()
 
         self.parameters: dict = parameters
@@ -364,17 +364,17 @@ class SettingEditor(QtWidgets.QDialog):
         self.init_ui()
 
     def init_ui(self) -> None:
-        """初始化界面"""
+        """Initialize interface"""
         form: QtWidgets.QFormLayout = QtWidgets.QFormLayout()
 
         if self.class_name:
-            self.setWindowTitle(_("添加策略：{}").format(self.class_name))
-            button_text: str = _("添加")
+            self.setWindowTitle(_("AddStrategy：{}").format(self.class_name))
+            button_text: str = _("Add")
             parameters: dict = {"strategy_name": "", "vt_symbols": ""}
             parameters.update(self.parameters)
         else:
-            self.setWindowTitle(_("参数编辑：{}").format(self.strategy_name))
-            button_text = _("确定")
+            self.setWindowTitle(_("Parameteredit：{}").format(self.strategy_name))
+            button_text = _("OK")
             parameters = self.parameters
 
         for name, value in parameters.items():
@@ -399,7 +399,7 @@ class SettingEditor(QtWidgets.QDialog):
         self.setLayout(form)
 
     def get_setting(self) -> dict:
-        """获取策略配置"""
+        """GetStrategyConfig"""
         setting: dict = {}
 
         if self.class_name:

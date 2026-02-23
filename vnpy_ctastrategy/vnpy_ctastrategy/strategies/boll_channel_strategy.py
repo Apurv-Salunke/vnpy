@@ -13,7 +13,7 @@ from vnpy_ctastrategy import (
 class BollChannelStrategy(CtaTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "usePythonTradinger"
 
     boll_window: int = 18
     boll_dev: float = 3.4
@@ -54,7 +54,7 @@ class BollChannelStrategy(CtaTemplate):
         """
         Callback when strategy is inited.
         """
-        self.write_log("策略初始化")
+        self.write_log("StrategyInitialize")
 
         self.bg = BarGenerator(self.on_bar, 15, self.on_15min_bar)
         self.am = ArrayManager()
@@ -65,13 +65,13 @@ class BollChannelStrategy(CtaTemplate):
         """
         Callback when strategy is started.
         """
-        self.write_log("策略启动")
+        self.write_log("StrategyStart")
 
     def on_stop(self) -> None:
         """
         Callback when strategy is stopped.
         """
-        self.write_log("策略停止")
+        self.write_log("StrategyStop")
 
     def on_tick(self, tick: TickData) -> None:
         """

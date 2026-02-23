@@ -1,4 +1,4 @@
-# VeighNa框架的CTA投研模块
+# CTA Backtester Module for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,23 +11,55 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-图形化CTA策略回测模块，基于用户友好的图形界面实现简洁易用的数据下载、历史回测和参数优化等投研功能。
+Graphical CTA strategy backtesting module. Implements data download, historical backtesting, and parameter optimization research functions through a user-friendly graphical interface.
 
-## 安装
+## Installation
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-直接使用pip命令：
-
-```
+**Install via pip:**
+```bash
 pip install vnpy_ctabacktester
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+cd vnpy_ctabacktester
 pip install .
 ```
+
+## Features
+
+- **Data Download:** Download historical data from datafeed services
+- **Backtesting:** Event-driven backtesting engine
+- **Parameter Optimization:** Grid search and genetic algorithm optimization
+- **Performance Statistics:** Sharpe ratio, max drawdown, win rate, profit factor
+- **Charts:** Equity curve, drawdown chart, daily PnL chart, histogram
+
+## Usage
+
+1. Launch VeighNa Trader
+2. Click "CTA Backtester" app
+3. Select strategy class
+4. Configure strategy parameters
+5. Set backtesting period and interval
+6. Set rate, slippage, size, pricetick, capital
+7. Click "Start Backtesting"
+8. View results and optimize parameters
+
+## Performance Metrics
+
+- **Sharpe Ratio:** Risk-adjusted return
+- **Max Drawdown:** Largest peak-to-trough decline
+- **Win Rate:** Percentage of profitable trades
+- **Profit Factor:** Gross profit / Gross loss
+- **Total Trades:** Number of trades executed
+- **Daily PnL:** Profit and loss by day
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_ctabacktester

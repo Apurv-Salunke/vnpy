@@ -51,9 +51,9 @@ class RecorderEngine(BaseEngine):
         self.ticks: dict[str, list[TickData]] = defaultdict(list)
         self.bars: dict[str, list[BarData]] = defaultdict(list)
 
-        self.filter_dt: datetime = datetime.now(DB_TZ)      # Tick数据过滤的时间戳
-        self.filter_window: int = 60                        # Tick数据过滤的时间窗口，默认60秒
-        self.filter_delta: timedelta                        # Tick数据过滤的时间偏差对象
+        self.filter_dt: datetime = datetime.now(DB_TZ)      # TickDataFilterTimestamp
+        self.filter_window: int = 60                        # TickDataFilterTimewindow，Default60seconds
+        self.filter_delta: timedelta                        # TickDataFilterTimedeviationObject
 
         self.database: BaseDatabase = get_database()
 
@@ -98,7 +98,7 @@ class RecorderEngine(BaseEngine):
                 self.active = False
 
                 info: str = traceback.format_exc()
-                self.write_log(f"触发异常，录制已停止：\n{info}")
+                self.write_log(f"triggerException，RecordalreadyStop：\n{info}")
 
     def close(self) -> None:
         """"""
@@ -115,13 +115,13 @@ class RecorderEngine(BaseEngine):
     def add_bar_recording(self, vt_symbol: str) -> None:
         """"""
         if vt_symbol in self.bar_recordings:
-            self.write_log(f"已在K线记录列表中：{vt_symbol}")
+            self.write_log(f"alreadyInKlinelogListin：{vt_symbol}")
             return
 
         if Exchange.LOCAL.value not in vt_symbol:
             contract: ContractData | None = self.main_engine.get_contract(vt_symbol)
             if not contract:
-                self.write_log(f"找不到合约：{vt_symbol}")
+                self.write_log(f"Not found contract：{vt_symbol}")
                 return
 
             self.bar_recordings[vt_symbol] = {
@@ -137,19 +137,19 @@ class RecorderEngine(BaseEngine):
         self.save_setting()
         self.put_event()
 
-        self.write_log(f"添加K线记录成功：{vt_symbol}")
+        self.write_log(f"AddKlinelogSuccess：{vt_symbol}")
 
     def add_tick_recording(self, vt_symbol: str) -> None:
         """"""
         if vt_symbol in self.tick_recordings:
-            self.write_log(f"已在Tick记录列表中：{vt_symbol}")
+            self.write_log(f"alreadyInTicklogListin：{vt_symbol}")
             return
 
         # For normal contract
         if Exchange.LOCAL.value not in vt_symbol:
             contract: ContractData | None = self.main_engine.get_contract(vt_symbol)
             if not contract:
-                self.write_log(f"找不到合约：{vt_symbol}")
+                self.write_log(f"Not found contract：{vt_symbol}")
                 return
 
             self.tick_recordings[vt_symbol] = {
@@ -166,31 +166,31 @@ class RecorderEngine(BaseEngine):
         self.save_setting()
         self.put_event()
 
-        self.write_log(f"添加Tick记录成功：{vt_symbol}")
+        self.write_log(f"AddTicklogSuccess：{vt_symbol}")
 
     def remove_bar_recording(self, vt_symbol: str) -> None:
         """"""
         if vt_symbol not in self.bar_recordings:
-            self.write_log(f"不在K线记录列表中：{vt_symbol}")
+            self.write_log(f"notInKlinelogListin：{vt_symbol}")
             return
 
         self.bar_recordings.pop(vt_symbol)
         self.save_setting()
         self.put_event()
 
-        self.write_log(f"移除K线记录成功：{vt_symbol}")
+        self.write_log(f"removeKlinelogSuccess：{vt_symbol}")
 
     def remove_tick_recording(self, vt_symbol: str) -> None:
         """"""
         if vt_symbol not in self.tick_recordings:
-            self.write_log(f"不在Tick记录列表中：{vt_symbol}")
+            self.write_log(f"notInTicklogListin：{vt_symbol}")
             return
 
         self.tick_recordings.pop(vt_symbol)
         self.save_setting()
         self.put_event()
 
-        self.write_log(f"移除Tick记录成功：{vt_symbol}")
+        self.write_log(f"removeTicklogSuccess：{vt_symbol}")
 
     def register_event(self) -> None:
         """"""
@@ -201,7 +201,7 @@ class RecorderEngine(BaseEngine):
 
     def update_tick(self, tick: TickData) -> None:
         """"""
-        # 过滤偏离本地时间戳过大的Tick数据
+        # FilterdeviatelocalTimestamppastlargeTickData
         tick_delta: timedelta = abs(tick.datetime - self.filter_dt)
         if abs(tick_delta) >= self.filter_delta:
             return

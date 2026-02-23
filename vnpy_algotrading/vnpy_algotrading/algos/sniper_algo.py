@@ -6,9 +6,9 @@ from ..template import AlgoTemplate
 
 
 class SniperAlgo(AlgoTemplate):
-    """狙击手算法类"""
+    """Sniper algo class"""
 
-    display_name: str = "Sniper 狙击手"
+    display_name: str = "Sniper Sniper"
 
     default_setting: dict = {}
 
@@ -25,16 +25,16 @@ class SniperAlgo(AlgoTemplate):
         volume: float,
         setting: dict
     ) -> None:
-        """构造函数"""
+        """Constructor"""
         super().__init__(algo_engine, algo_name, vt_symbol, direction, offset, price, volume, setting)
 
-        # 变量
+        # Variable
         self.vt_orderid = ""
 
         self.put_event()
 
     def on_tick(self, tick: TickData) -> None:
-        """Tick行情回调"""
+        """TickMarket dataCallback"""
         if self.vt_orderid:
             self.cancel_all()
             return
@@ -63,15 +63,15 @@ class SniperAlgo(AlgoTemplate):
         self.put_event()
 
     def on_order(self, order: OrderData) -> None:
-        """委托回调"""
+        """Order callback"""
         if not order.is_active():
             self.vt_orderid = ""
             self.put_event()
 
     def on_trade(self, trade: TradeData) -> None:
-        """成交回调"""
+        """Trade callback"""
         if self.traded >= self.volume:
-            self.write_log(f"已交易数量：{self.traded}，总数量：{self.volume}")
+            self.write_log(f"Traded volume：{self.traded}，Total volume：{self.volume}")
             self.finish()
         else:
             self.put_event()

@@ -1,4 +1,4 @@
-# VeighNa框架的交易组合管理模块
+# Portfolio Manager Module for VeighNa
 
 <p align="center">
   <img src ="https://vnpy.oss-cn-shanghai.aliyuncs.com/vnpy-logo.png"/>
@@ -11,23 +11,88 @@
     <img src ="https://img.shields.io/github/license/vnpy/vnpy.svg?color=orange"/>
 </p>
 
-## 说明
+## Description
 
-PortfolioManager是用于交易组合跟踪管理的功能模块，以独立的策略交易组合（子账户）为基础，提供委托成交记录管理、交易仓位自动跟踪以及每日盈亏实时统计功能。
+Application module for trading portfolio tracking and management. Based on independent strategy portfolios (sub-accounts), provides order and trade record management, automatic position tracking, and real-time daily PnL statistics.
 
-## 安装
+## Installation
 
-安装环境推荐基于4.0.0版本以上的【[**VeighNa Studio**](https://www.vnpy.com)】。
+Recommended environment: [**VeighNa Studio**](https://www.vnpy.com) version 4.0.0 or above.
 
-直接使用pip命令：
-
-```
+**Install via pip:**
+```bash
 pip install vnpy_portfoliomanager
 ```
 
-
-或者下载源代码后，解压后在cmd中运行：
-
-```
+**Install from source:**
+```bash
+cd vnpy_portfoliomanager
 pip install .
 ```
+
+## Features
+
+- **Sub-Accounts:** Multiple independent portfolios
+- **Position Tracking:** Automatic position updates from trades
+- **PnL Calculation:** Realized and unrealized PnL
+- **Daily Reports:** End-of-day PnL summary
+- **Trade Blotter:** Complete trade history per portfolio
+- **Multi-Strategy:** Track different strategies separately
+
+## Portfolio Structure
+
+```
+Portfolio Manager
+├── Portfolio 1 (e.g., CTA Strategy A)
+│   ├── Positions
+│   ├── Trades
+│   └── Daily PnL
+├── Portfolio 2 (e.g., CTA Strategy B)
+│   ├── Positions
+│   ├── Trades
+│   └── Daily PnL
+└── Portfolio 3 (e.g., Alpha Strategy)
+    ├── Positions
+    ├── Trades
+    └── Daily PnL
+```
+
+## Usage Example
+
+```python
+from vnpy_portfoliomanager import PortfolioManager
+
+# Create portfolio
+portfolio = PortfolioManager(
+    name="My CTA Portfolio",
+    initial_capital=1_000_000
+)
+
+# Add trades (automatically from event engine)
+portfolio.add_trade(trade_data)
+
+# Get PnL
+daily_pnl = portfolio.calculate_daily_pnl(date)
+total_pnl = portfolio.calculate_total_pnl()
+
+# Get positions
+positions = portfolio.get_all_positions()
+
+# Generate report
+report = portfolio.generate_daily_report()
+```
+
+## Performance Metrics
+
+- **Total PnL:** Cumulative profit/loss
+- **Daily PnL:** Day-by-day PnL breakdown
+- **Realized PnL:** Closed position PnL
+- **Unrealized PnL:** Open position PnL
+- **Win Rate:** Percentage of profitable days
+- **Max Drawdown:** Largest peak-to-trough decline
+
+## Resources
+
+- **Documentation:** https://www.vnpy.com/docs
+- **Forum:** https://www.vnpy.com/forum
+- **GitHub:** https://github.com/vnpy/vnpy_portfoliomanager
