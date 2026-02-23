@@ -1,0 +1,131 @@
+flowchart LR
+
+subgraph EXT[External Systems]
+    EXCH["Exchanges / Brokers<br/>CTP, IB, Binance, XTP, ..."]
+    HIST["Historical Data Providers<br/>RQData, XT, Polygon, ..."]
+    USER[Operators / Quants]
+end
+
+subgraph GWEXT[Gateway Extensions vnpy_*]
+    GWDOM[Domestic: ctp/mini/femas/sopt/xtp/tora/...]
+    GWOVR[Overseas: ib/tap/da]
+    GWSPL[Special: rqdata/rpcservice/xt]
+end
+
+subgraph APPEXT[App Extensions vnpy_*]
+    APPCTA[CTA Strategy]
+    APPSPREAD[Spread Trading]
+    APPPORT[Portfolio Strategy]
+    APPALGO[Algo Trading]
+    APPOPT[Option Master]
+    APPRISK[Risk Manager]
+    APPREC[Data Recorder]
+    APPDATA[Data Manager]
+    APPSCRIPT[Script Trader]
+    APPBACK[CTA Backtester]
+    APPPAPER[Paper Account]
+    APPPM[Portfolio Manager]
+    APPWEB[Web Trader / RPC Service]
+end
+
+subgraph DBEXT[Database Extensions]
+    DBSQL[sqlite/mysql/postgresql]
+    DBNOSQL[mongodb/taos/dolphindb/...]
+end
+
+subgraph DFEXT[Datafeed Extensions]
+    DFSET[xt/rqdata/tushare/tqsdk/wind/ifind/...]
+end
+
+subgraph COREAPI[Core API Extensions]
+    RESTEXT[vnpy_rest]
+    WSEXT[vnpy_websocket]
+end
+
+subgraph CORE[Core Runtime vnpy]
+    subgraph APPLAYER[App Metadata Layer]
+        BASEAPP["BaseApp<br/>app_name, engine_class, widget_name"]
+    end
+
+    subgraph MAIN[Main Orchestration]
+        MAINENGINE["MainEngine<br/>add_gateway()<br/>add_app()<br/>send_order()/subscribe()"]
+    end
+
+    subgraph ENGINES[Built-in Engines]
+        OMS["OmsEngine<br/>State Cache + OffsetConverter"]
+        LOGE[LogEngine]
+        EMAILE[EmailEngine]
+    end
+
+    subgraph EVENTSYS[Event System]
+        EVQ[(Event Queue)]
+        EVPROC["Event Thread<br/>FIFO Dispatch"]
+        EVTIMER["Timer Thread<br/>EVENT_TIMER @ 1s"]
+    end
+
+    subgraph CONTRACTS[Canonical Contracts]
+        BGGW[BaseGateway]
+        BDB[BaseDatabase]
+        BDF[BaseDatafeed]
+        DM["Tick/Bar/Order/Trade/Position/Account/Contract/Quote<br/>+ Request Objects"]
+    end
+end
+
+subgraph UI[UI + Integration]
+    QT["Desktop Qt UI<br/>MainWindow + Monitors + App Widgets"]
+    RPC["RPC/Web Service Layer<br/>REST/WS publish-consume pattern"]
+end
+
+USER --> QT
+USER --> RPC
+
+EXCH --> GWDOM
+EXCH --> GWOVR
+EXCH --> GWSPL
+HIST --> DFSET
+
+RESTEXT --> GWDOM
+WSEXT --> GWDOM
+RESTEXT --> GWOVR
+WSEXT --> GWOVR
+
+GWDOM --> BGGW
+GWOVR --> BGGW
+GWSPL --> BGGW
+
+BGGW --> MAINENGINE
+MAINENGINE --> EVQ
+EVQ --> EVPROC
+EVTIMER --> EVQ
+
+EVPROC --> OMS
+EVPROC --> LOGE
+EVPROC --> EMAILE
+EVPROC --> APPEXT
+EVPROC --> QT
+EVPROC --> RPC
+
+MAINENGINE --> OMS
+MAINENGINE --> APPEXT
+BASEAPP --> MAINENGINE
+
+APPEXT --> MAINENGINE
+APPEXT --> EVQ
+APPEXT --> DM
+
+APPREC --> BDB
+APPDATA --> BDB
+APPBACK --> BDB
+APPCTA --> BDF
+APPPORT --> BDF
+
+DBSQL --> BDB
+DBNOSQL --> BDB
+DFSET --> BDF
+
+BDB --> MAINENGINE
+BDF --> MAINENGINE
+
+DM --> BGGW
+DM --> OMS
+DM --> APPEXT
