@@ -1,0 +1,11 @@
+{
+    "API Key": "",
+    "Client Code": "",
+    "PIN": "",
+    "TOTP Secret": "",
+    "Feed Token": "",
+    "Instrument Master Path": "",
+    "Paper Mode": "True",
+    "Paper Base URL": "",
+    "Timeout Seconds": 10
+}

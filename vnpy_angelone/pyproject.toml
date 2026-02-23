@@ -1,0 +1,42 @@
+[project]
+name = "vnpy_angelone"
+version = "0.1.0"
+description = "Angel One SmartAPI gateway skeleton for VeighNa."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Local Dev", email = "devnull@example.com"}]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+]
+requires-python = ">=3.10"
+keywords = ["quant", "trading", "angelone", "smartapi", "vnpy"]
+dependencies = [
+    "vnpy",
+]
+
+[project.urls]
+"Homepage" = "https://www.vnpy.com"
+"Source" = "https://github.com/vnpy/vnpy"
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["vnpy_angelone"]
+include-package-data = true
+
+[tool.hatch.build.targets.sdist]
+include = ["vnpy_angelone*"]

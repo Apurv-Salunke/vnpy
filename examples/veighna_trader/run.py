@@ -3,7 +3,7 @@ from vnpy.event import EventEngine
 from vnpy.trader.engine import MainEngine
 from vnpy.trader.ui import MainWindow, create_qapp
 
-from vnpy_ctp import CtpGateway
+# from vnpy_ctp import CtpGateway
 # from vnpy_ctptest import CtptestGateway
 # from vnpy_mini import MiniGateway
 # from vnpy_femas import FemasGateway
@@ -17,10 +17,13 @@ from vnpy_ctp import CtpGateway
 # from vnpy_da import DaGateway
 # from vnpy_rohon import RohonGateway
 # from vnpy_tts import TtsGateway
+from vnpy_binance import BinanceLinearGateway
 
-# from vnpy_paperaccount import PaperAccountApp
-from vnpy_ctastrategy import CtaStrategyApp
-from vnpy_ctabacktester import CtaBacktesterApp
+from vnpy_paperaccount import PaperAccountApp
+
+# from vnpy_ctastrategy import CtaStrategyApp
+# from vnpy_ctabacktester import CtaBacktesterApp
+
 # from vnpy_spreadtrading import SpreadTradingApp
 # from vnpy_algotrading import AlgoTradingApp
 # from vnpy_optionmaster import OptionMasterApp
@@ -44,7 +47,8 @@ def main():
 
     main_engine = MainEngine(event_engine)
 
-    main_engine.add_gateway(CtpGateway)
+    main_engine.add_gateway(BinanceLinearGateway)
+    # main_engine.add_gateway(CtpGateway)
     # main_engine.add_gateway(CtptestGateway)
     # main_engine.add_gateway(MiniGateway)
     # main_engine.add_gateway(FemasGateway)
@@ -60,9 +64,9 @@ def main():
     # main_engine.add_gateway(RohonGateway)
     # main_engine.add_gateway(TtsGateway)
 
-    # main_engine.add_app(PaperAccountApp)
-    main_engine.add_app(CtaStrategyApp)
-    main_engine.add_app(CtaBacktesterApp)
+    main_engine.add_app(PaperAccountApp)
+    # main_engine.add_app(CtaStrategyApp)
+    # main_engine.add_app(CtaBacktesterApp)
     # main_engine.add_app(SpreadTradingApp)
     # main_engine.add_app(AlgoTradingApp)
     # main_engine.add_app(OptionMasterApp)
