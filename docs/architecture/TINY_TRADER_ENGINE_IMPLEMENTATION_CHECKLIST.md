@@ -5,8 +5,9 @@ This is the execution plan to build `tiny-trader-engine` from scratch into a pro
 ## Naming and Scope
 
 - Product name: `tiny-trader-engine`
-- Core pipeline: `data -> strategy -> portfolio_risk -> oms`
+- Core pipeline: `market_data -> strategy -> portfolio -> execution`
 - Architecture style: kernel + pip-installable extensions
+- `portfolio_engine` is the portfolio master (owns sizing/risk/ledger/accounting).
 
 ## Repository Skeleton (Target)
 
@@ -18,13 +19,13 @@ tiny_trader_engine/
       schemas.py
       codecs.py
     interfaces/
-      data_service.py
+      market_data.py
       strategy.py
       sizer.py
       risk_rule.py
       oms.py
       execution_policy.py
-      broker_adapter.py
+      broker_gateway.py
       fee_tax.py
     runtime/
       process_bootstrap.py
@@ -43,17 +44,17 @@ tiny_trader_engine/
       compatibility.py
       capabilities.py
     contracts/
-      test_data_service_contract.py
+      test_market_data_contract.py
       test_oms_contract.py
       test_risk_contract.py
       test_execution_policy_contract.py
   services/
-    data_service/main.py
-    strategy_runtime/main.py
-    portfolio_risk/main.py
-    oms_execution/main.py
+    market_data/main.py
+    strategy_engine/main.py
+    portfolio_engine/main.py
+    execution_engine/main.py
     control_plane/main.py
-    reconciliation/main.py
+    reconciliation_engine/main.py
   configs/
     local.yaml
     paper.yaml
@@ -112,7 +113,7 @@ tiny_trader_engine/
 - Integration test with bus + journal roundtrip.
 - Restart test: replay produces deterministic state.
 
-## Phase 2: OMS Core
+## Phase 2: ExecutionEngine (OMS) Core
 
 ### Build Tasks
 - Implement canonical order state machine.
@@ -121,9 +122,9 @@ tiny_trader_engine/
 - Add timeout/cancel/replace handling.
 
 ### Files to Implement
-- `tiny_trader_engine/services/oms_execution/main.py`
+- `tiny_trader_engine/services/execution_engine/main.py`
 - `tiny_trader_engine/kernel/interfaces/oms.py`
-- `tiny_trader_engine/kernel/interfaces/broker_adapter.py`
+- `tiny_trader_engine/kernel/interfaces/broker_gateway.py`
 
 ### Acceptance Criteria
 - Invalid state transitions are rejected and alerted.
@@ -135,16 +136,16 @@ tiny_trader_engine/
 - Broker callback dedupe tests.
 - Chaos test: disconnect/reconnect continuity.
 
-## Phase 3: PortfolioRisk Engine
+## Phase 3: PortfolioEngine (Master)
 
 ### Build Tasks
-- Implement per-strategy and global ledgers.
-- Implement sizing policies.
-- Implement risk gate rules and reasons.
-- Implement accounting module (commission/taxes/net pnl).
+- Implement `sizing_engine` for quantity proposals.
+- Implement `risk_engine` for final pre-trade checks and limits.
+- Implement `ledger_engine` with per-strategy and global ledgers.
+- Implement `accounting_engine` (commission/taxes/net pnl).
 
 ### Files to Implement
-- `tiny_trader_engine/services/portfolio_risk/main.py`
+- `tiny_trader_engine/services/portfolio_engine/main.py`
 - `tiny_trader_engine/kernel/interfaces/sizer.py`
 - `tiny_trader_engine/kernel/interfaces/risk_rule.py`
 - `tiny_trader_engine/kernel/interfaces/fee_tax.py`
@@ -158,7 +159,7 @@ tiny_trader_engine/
 - Deterministic ledger test suite.
 - Risk-block reason and code assertions.
 
-## Phase 4: Data Service
+## Phase 4: Market Data
 
 ### Build Tasks
 - Implement ingest adapters and normalization.
@@ -167,8 +168,8 @@ tiny_trader_engine/
 - Implement data quality guards.
 
 ### Files to Implement
-- `tiny_trader_engine/services/data_service/main.py`
-- `tiny_trader_engine/kernel/interfaces/data_service.py`
+- `tiny_trader_engine/services/market_data/main.py`
+- `tiny_trader_engine/kernel/interfaces/market_data.py`
 
 ### Acceptance Criteria
 - Stale/crossed/invalid data is blocked or flagged.
@@ -179,7 +180,7 @@ tiny_trader_engine/
 - Adapter normalization tests.
 - Data quality guard tests.
 
-## Phase 5: Strategy Runtime
+## Phase 5: Strategy Engine
 
 ### Build Tasks
 - Implement strategy manager and worker orchestration.
@@ -187,12 +188,12 @@ tiny_trader_engine/
 - Emit `SignalIntent` only.
 
 ### Files to Implement
-- `tiny_trader_engine/services/strategy_runtime/main.py`
+- `tiny_trader_engine/services/strategy_engine/main.py`
 - `tiny_trader_engine/kernel/interfaces/strategy.py`
 
 ### Acceptance Criteria
 - Multiple strategy instances run with isolated state.
-- Strategy crash does not crash OMS/PortfolioRisk.
+- Strategy crash does not crash OMS/PortfolioEngine.
 - Restart resumes from snapshot + replay without duplicate intents.
 
 ### Tests
@@ -208,7 +209,7 @@ tiny_trader_engine/
 
 ### Files to Implement
 - `tiny_trader_engine/services/control_plane/main.py`
-- `tiny_trader_engine/services/reconciliation/main.py`
+- `tiny_trader_engine/services/reconciliation_engine/main.py`
 
 ### Acceptance Criteria
 - Drift detection triggers configured policy actions.
@@ -247,10 +248,10 @@ tiny_trader_engine/
 ## Example Entry Point Registration
 
 ```toml
-[project.entry-points."tiny_trader_engine.oms"]
+[project.entry-points."tiny_trader_engine.execution_engine"]
 live_oms_v1 = "tiny_trader_ext_live_oms.plugin:LiveOmsPlugin"
 
-[project.entry-points."tiny_trader_engine.data_service"]
+[project.entry-points."tiny_trader_engine.market_data"]
 options_data_v1 = "tiny_trader_ext_options_data.plugin:OptionsDataPlugin"
 ```
 

@@ -24,6 +24,15 @@ This folder is the **source of truth** for TT architecture.
 - Product name: `tiny-trader-engine` (TT)
 - Python package root: `tiny_trader_engine`
 - Plugin entry-point namespace: `tiny_trader_engine.*`
+- Core service names:
+  - `market_data`
+  - `strategy_engine`
+  - `portfolio_engine` (master: sizing/risk/ledger/accounting)
+  - `execution_engine` (OMS)
+  - `broker_gateway`
+  - `control_plane`
+  - `reconciliation_engine`
+  - `event_log`
 
 ## Policy
 

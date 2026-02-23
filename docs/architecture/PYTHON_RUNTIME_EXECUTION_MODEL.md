@@ -47,31 +47,31 @@ Why this model is preferred for production:
 
 Recommended baseline processes:
 
-1. `data_service`
+1. `market_data`
 - market and reference data ingestion
 - instrument master + data cache
 - data query API
 
-2. `strategy_runtime`
+2. `strategy_engine`
 - strategy lifecycle manager
 - strategy instance orchestration
 - emits `SignalIntent`
 
-3. `portfolio_risk`
+3. `portfolio_engine`
 - sizing + risk gate
 - per-strategy and global ledgers
 - accounting (fees/taxes/net pnl)
 
-4. `oms_execution`
+4. `execution_engine`
 - order state machine
 - execution policy engine
-- broker interaction adapter boundary
+- broker gateway boundary
 
 5. `control_plane`
 - headless API/CLI for lifecycle and risk controls
 - runtime config changes and kill switches
 
-6. `reconciliation_worker` (separate process or inside `oms_execution` in phase 1)
+6. `reconciliation_engine` (separate process or inside `execution_engine` in phase 1)
 - broker-vs-internal drift detection and auto-halt policies
 
 7. `observability_agent` (optional separate process)
@@ -98,21 +98,22 @@ Guideline:
 
 ## 5. Threading and Worker Pattern by Process
 
-## `data_service`
+## `market_data`
 - 1 asyncio loop thread
 - 0-2 adapter threads for blocking APIs
 - optional background compaction/cache thread
 
-## `strategy_runtime`
+## `strategy_engine`
 - 1 asyncio loop thread
 - optional `ProcessPoolExecutor` for CPU-heavy signal generation
 - no direct broker I/O threads
 
-## `portfolio_risk`
+## `portfolio_engine`
 - 1 asyncio loop thread
 - optional accounting worker for batch recalculation
+- internal workers for sizing/risk/ledger pipelines
 
-## `oms_execution`
+## `execution_engine`
 - 1 asyncio loop thread
 - 1-4 adapter threads for broker SDK/network callbacks
 - timer task for order timeout/retry windows
@@ -151,7 +152,7 @@ All events use a common envelope.
   "event_id": "uuid-v7",
   "event_type": "SignalIntent",
   "ts": "2026-02-24T00:00:00.000Z",
-  "source": "strategy_runtime",
+  "source": "strategy_engine",
   "strategy_id": "meanrev_01",
   "correlation_id": "corr-...",
   "causation_id": "event-id-that-triggered-this",
@@ -172,28 +173,28 @@ Event types (minimum):
 ## 8. State Ownership Rules
 
 Strict ownership (no ambiguity):
-- `DataService`: instrument master, live cache, historical query cache
-- `StrategyRuntime`: strategy internal state and config
-- `PortfolioRisk`: exposure state, limits, ledgers, accounting state
+- `MarketDataEngine`: instrument master, live cache, historical query cache
+- `StrategyEngine`: strategy internal state and config
+- `PortfolioEngine`: exposure state, limits, ledgers, accounting state
 - `OMS`: order state machine and broker interaction state
 
 Read access across boundaries should occur through events or read APIs, not direct object references.
 
 ## 9. Order Path (Authoritative Runtime Flow)
 
-1. `MarketTick/Bar` enters from `data_service`.
-2. `strategy_runtime` emits `SignalIntent`.
-3. `portfolio_risk` performs:
-   - sizing
-   - portfolio/strategy/global limits
-   - final market-aware pre-trade checks
+1. `MarketTick/Bar` enters from `market_data`.
+2. `strategy_engine` emits `SignalIntent`.
+3. `portfolio_engine` performs:
+   - `sizing_engine`: quantity proposal
+   - `risk_engine`: final market-aware pre-trade checks and limits
+   - `ledger_engine`/`accounting_engine`: state updates from execution lifecycle
 4. If passed, emits `OrderIntent`; else emits `RiskBlocked`.
-5. `oms_execution`:
+5. `execution_engine`:
    - validates intent idempotency
    - generates execution plan (single child order or sliced plan)
    - routes broker commands via adapter
 6. broker callbacks become canonical lifecycle events.
-7. `portfolio_risk` updates ledgers/accounting from fills.
+7. `portfolio_engine` updates ledgers/accounting from fills.
 8. all major events append to durable journal.
 
 ## 10. OMS State Machine Model
@@ -335,12 +336,12 @@ Suggested package layout:
 ```text
 runtime/
   processes/
-    data_service.py
-    strategy_runtime.py
-    portfolio_risk.py
-    oms_execution.py
+    market_data.py
+    strategy_engine.py
+    portfolio_engine.py
+    execution_engine.py
     control_plane.py
-    reconciliation_worker.py
+    reconciliation_engine.py
   bus/
     consumer.py
     producer.py
@@ -369,7 +370,7 @@ runtime/
     capabilities.py
   contracts/
     tests/
-      test_data_service_contract.py
+      test_market_data_contract.py
       test_oms_contract.py
       test_risk_rule_contract.py
       test_execution_policy_contract.py
@@ -388,7 +389,7 @@ tradingext-<name>/
 `pyproject.toml` entry point example:
 
 ```toml
-[project.entry-points."tiny_trader_engine.oms"]
+[project.entry-points."tiny_trader_engine.execution_engine"]
 live_oms_v1 = "tradingext_live_oms.plugin:LiveOmsPlugin"
 ```
 
@@ -407,12 +408,12 @@ If any required plugin fails validation, startup must fail closed.
 
 Startup order:
 1. journal store + bus connectivity check
-2. data_service
-3. oms_execution + broker adapters
-4. portfolio_risk
-5. strategy_runtime
+2. market_data
+3. execution_engine + broker gateways
+4. portfolio_engine
+5. strategy_engine
 6. control_plane
-7. reconciliation_worker
+7. reconciliation_engine
 
 Shutdown order (graceful):
 1. strategy intake off
@@ -429,13 +430,13 @@ Shutdown order (graceful):
 - keeps retrying session with backoff
 
 2. Strategy process crash
-- strategy_runtime supervisor restarts process
+- strategy_engine supervisor restarts process
 - replay from journal
 - no duplicate orders because OMS idempotency gate
 
 3. Risk process lag
 - queue threshold triggers degraded mode
-- strategy_runtime throttles signal emission
+- strategy_engine throttles signal emission
 
 4. Journal unavailable
 - move to safe mode (no new order intents)
@@ -445,8 +446,8 @@ Shutdown order (graceful):
 
 ## Phase 1 (minimum safe)
 - process topology + canonical envelope
-- OMS state machine + broker adapter contract
-- basic portfolio risk gate
+- OMS state machine + broker gateway contract
+- basic portfolio master gate (sizing + risk)
 - journal append + replay by offset
 
 ## Phase 2 (operational hardening)

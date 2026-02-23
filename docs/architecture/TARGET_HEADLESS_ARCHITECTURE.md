@@ -20,8 +20,8 @@ Core codebase should remain a **small kernel**:
 - compatibility and contract-test framework
 
 Strategy/use-case variations should live in **extensions**:
-- use-case-specific data services (options multileg, multi-symbol portfolio, alt data)
-- OMS variants (live broker OMS, paper OMS, backtest OMS)
+- use-case-specific market data engines (options multileg, multi-symbol portfolio, alt data)
+- execution engine variants (live broker OMS, paper OMS, backtest OMS)
 - risk/sizer/execution policy packs
 - strategy packs
 - fee/tax models
@@ -33,21 +33,21 @@ This avoids kernel bloat and keeps maintenance boundaries clear.
 ```mermaid
 flowchart LR
 
-    subgraph DS[DataService]
+    subgraph DS[MarketDataEngine]
       DA[Data Adapters\nBroker/Vendor/Alt Data]
       IM[Instrument Master]
       DC[Data Cache\nTick/Bar/Snapshot/History]
       DAPI[Data Query API]
     end
 
-    subgraph SR[StrategyRuntime]
+    subgraph SR[StrategyEngine]
       SM[Strategy Manager]
       S1[Strategy Instance 1]
       S2[Strategy Instance 2]
       SN[Strategy Instance N]
     end
 
-    subgraph PR[PortfolioRiskEngine]
+    subgraph PR[PortfolioEngine (Master)]
       GL[Global Ledger]
       SL[Per-Strategy Ledgers]
       SZ[Position Sizer]
@@ -55,20 +55,20 @@ flowchart LR
       AC[Accounting\nCommission + Taxes + Net PnL]
     end
 
-    subgraph OMS[OMS / ExecutionEngine]
+    subgraph OMS[ExecutionEngine (OMS)]
       OSM[Order State Machine]
       EP[Execution Policies\nLimit/TWAP/Iceberg/Urgency]
       OR[Order Router]
     end
 
-    subgraph BA[BrokerAdapter Layer]
+    subgraph BA[BrokerGateway Layer]
       BR1[Broker Adapter A]
       BR2[Broker Adapter B]
     end
 
     subgraph OPS[Control + Ops]
       CP[Control Plane API/CLI\nstart/stop/reload/kill]
-      RC[Reconciliation Service]
+      RC[ReconciliationEngine]
       EJ[Event Journal\nDurable Append Log]
       OB[Observability\nlogs/metrics/alerts]
     end
@@ -111,31 +111,36 @@ flowchart LR
 
 ## Component Responsibilities
 
-## DataService
+## MarketDataEngine
 - Ingest live/historical/alt data from adapters.
 - Own instrument master and symbol metadata.
 - Maintain queryable cache (last tick, bars, snapshots, calendars).
 - Publish normalized market/domain events.
 
-## StrategyRuntime
+## StrategyEngine
 - Host multiple strategy instances with isolated context/state.
 - Consume market/domain events; emit `SignalIntent` (not broker orders).
 - Manage strategy lifecycle (init/start/stop/pause/reload).
 
-## PortfolioRiskEngine
+## PortfolioEngine
 - Own funds, margin, holdings, exposure.
 - Maintain per-strategy ledgers and global ledger.
 - Convert signal intent -> sized/risk-checked order intent.
 - Apply limits: per day, per strategy, per symbol, global.
 - Perform accounting (commission/taxes/net PnL).
+- Operate as the **master portfolio orchestrator** across:
+  - `sizing_engine`
+  - `risk_engine`
+  - `ledger_engine`
+  - `accounting_engine`
 
-## OMS / ExecutionEngine
+## ExecutionEngine (OMS)
 - Own canonical order state machine.
 - Execute order intents via execution policies.
 - Route orders to appropriate broker adapter.
 - Handle lifecycle events (ack/reject/partial/fill/cancel/timeout/replace).
 
-## BrokerAdapter
+## BrokerGateway
 - Translate canonical requests/events to broker-specific APIs.
 - Manage sessions, reconnect, heartbeat, and API throttles.
 - Provide reconciliation endpoints for open orders/positions/balances.
@@ -148,14 +153,14 @@ flowchart LR
 
 ## Authoritative Execution Flow
 
-1. DataService publishes market event.
-2. StrategyRuntime emits `SignalIntent`.
-3. PortfolioRiskEngine determines quantity and checks limits.
+1. MarketDataEngine publishes market event.
+2. StrategyEngine emits `SignalIntent`.
+3. PortfolioEngine determines quantity and checks limits.
 4. Final risk gate evaluates current market + portfolio constraints.
 5. If pass, produce `OrderIntent`; if fail, emit `RiskBlocked`.
 6. OMS applies execution policy and sends broker action.
-7. BrokerAdapter returns lifecycle events.
-8. OMS updates state machine; PortfolioRiskEngine updates ledgers/accounting.
+7. BrokerGateway returns lifecycle events.
+8. OMS updates state machine; PortfolioEngine updates ledgers/accounting.
 
 ## Event Contracts (Canonical)
 
@@ -201,7 +206,7 @@ class IRiskRule:
 class IExecutionPolicy:
     def plan(self, order_intent, market_state) -> list: ...  # child order actions
 
-class IBrokerAdapter:
+class IBrokerGateway:
     def send(self, action) -> str: ...
     def cancel(self, broker_order_id: str) -> None: ...
     def snapshot(self) -> dict: ...  # open orders/positions/balances
@@ -221,14 +226,15 @@ Discovery model:
 - load plugins by capability + configured ID at startup.
 
 Example entry-point groups:
-- `tiny_trader_engine.data_service`
-- `tiny_trader_engine.oms`
-- `tiny_trader_engine.strategy_runtime`
+- `tiny_trader_engine.market_data`
+- `tiny_trader_engine.execution_engine`
+- `tiny_trader_engine.strategy_engine`
+- `tiny_trader_engine.portfolio_engine`
 - `tiny_trader_engine.risk_rule`
 - `tiny_trader_engine.sizer`
 - `tiny_trader_engine.execution_policy`
 - `tiny_trader_engine.fee_tax`
-- `tiny_trader_engine.broker_adapter`
+- `tiny_trader_engine.broker_gateway`
 
 ## Compatibility and Contract Testing
 
@@ -242,9 +248,9 @@ Kernel startup should reject incompatible extensions before runtime starts.
 ## Backtesting as Extension, Not Forked Core
 
 Backtesting should reuse the same contracts:
-- `DataServiceBacktest` implementation
-- `OMSBacktest` implementation
-- optional `BrokerAdapterSim` implementation
+- `MarketDataBacktest` implementation
+- `ExecutionEngineBacktest` implementation
+- optional `BrokerGatewaySim` implementation
 
 This ensures strategy/risk/portfolio logic remains portable across live and backtest runtimes.
 
@@ -259,9 +265,9 @@ This ensures strategy/risk/portfolio logic remains portable across live and back
 
 ## Scope and Boundary Rules
 
-- StrategyRuntime does not call brokers directly.
-- PortfolioRiskEngine owns sizing and risk decisions.
-- OMS owns order state transitions and broker command execution.
+- StrategyEngine does not call brokers directly.
+- PortfolioEngine owns sizing, risk, ledger, and accounting decisions.
+- ExecutionEngine (OMS) owns order state transitions and broker command execution.
 - Accounting owns commission/tax/net PnL computations.
 - All cross-component communication uses canonical events.
 
@@ -269,8 +275,8 @@ This ensures strategy/risk/portfolio logic remains portable across live and back
 
 1. Build canonical event schema + IDs + journal.
 2. Implement OMS state machine + broker adapter contract.
-3. Add PortfolioRiskEngine ledgers + sizing + risk gate.
-4. Wire StrategyRuntime multi-instance manager.
+3. Add PortfolioEngine ledgers + sizing + risk gate.
+4. Wire StrategyEngine multi-instance manager.
 5. Add reconciliation + control plane + alerts.
 
 ## See Also

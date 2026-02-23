@@ -49,7 +49,7 @@ For every component, read in this order:
 
 ---
 
-## DataService (Data Handler)
+## MarketDataEngine (Data Handler)
 
 ### Responsibilities
 - Ingest market/reference/alt data from adapters.
@@ -81,7 +81,7 @@ For every component, read in this order:
 
 ---
 
-## StrategyRuntime
+## StrategyEngine
 
 ### Responsibilities
 - Host and manage multiple strategy instances.
@@ -111,12 +111,12 @@ For every component, read in this order:
 
 ---
 
-## PortfolioRiskEngine
+## PortfolioEngine (Master)
 
 ### Responsibilities
 - Own funds, margin, holdings, and exposure state.
 - Maintain per-strategy ledgers and global ledger.
-- Perform sizing and policy/risk checks.
+- Orchestrate sizing and policy/risk checks.
 - Produce `OrderIntent` or `RiskBlocked`.
 - Update accounting from execution events.
 
@@ -125,9 +125,10 @@ For every component, read in this order:
 - Dynamic market-aware pre-trade checks.
 - Position sizing policies.
 - Net/gross/concentration controls.
+- Portfolio master orchestration across internal engines.
 
 ### Scope
-- Portfolio, risk, sizing, and accounting decision layer.
+- Portfolio decision layer and governance across internal engines.
 - Not responsible for broker protocol execution.
 
 ### Limitations
@@ -138,15 +139,42 @@ For every component, read in this order:
 - `ISizer` implementations.
 - `IRiskRule` libraries.
 - fee/tax models and jurisdiction-specific accounting rules.
+- ledger/accounting backends.
 
 ### Current vnpy mapping
 - Risk: `vnpy_riskmanager`
 - Portfolio-like accounting: `vnpy_portfoliomanager`
 - Strategy-local sizing patterns across strategy apps
 
+### Internal Subcomponents
+
+#### SizingEngine
+- Responsibilities: Convert strategy intents into candidate quantities.
+- Capabilities: Volatility sizing, fixed-fraction sizing, target exposure sizing.
+- Scope: Sizing logic only.
+- Limitations: Cannot approve/reject by itself.
+
+#### RiskEngine
+- Responsibilities: Enforce pre-trade and intraday limits.
+- Capabilities: Per-strategy/per-symbol/global limits, time-window controls, kill/freeze checks.
+- Scope: Approval/rejection with reason codes.
+- Limitations: Depends on timely portfolio and market state.
+
+#### LedgerEngine
+- Responsibilities: Maintain per-strategy and global ledgers from execution events.
+- Capabilities: Position state, cash/margin deltas, audit-ready entries.
+- Scope: Canonical state accounting ledger.
+- Limitations: Requires deduped fill/order lifecycle events.
+
+#### AccountingEngine
+- Responsibilities: Compute fees, taxes, realized/unrealized PnL.
+- Capabilities: Venue and jurisdiction specific models, strategy/global rollups.
+- Scope: Financial reporting under portfolio ownership.
+- Limitations: Requires complete and correct cost model configuration.
+
 ---
 
-## OMS / ExecutionEngine (Order Handler)
+## ExecutionEngine (OMS)
 
 ### Responsibilities
 - Own canonical order state machine.
@@ -179,7 +207,7 @@ For every component, read in this order:
 
 ---
 
-## BrokerAdapter Layer
+## BrokerGateway Layer
 
 ### Responsibilities
 - Translate canonical order/query commands to broker-specific APIs.
@@ -237,7 +265,7 @@ For every component, read in this order:
 
 ---
 
-## Journal / Event Store
+## EventLog / Journal
 
 ### Responsibilities
 - Persist immutable event stream for audit/replay/recovery.
@@ -263,7 +291,7 @@ For every component, read in this order:
 
 ---
 
-## Reconciliation Service
+## ReconciliationEngine
 
 ### Responsibilities
 - Compare internal vs broker orders/positions/funds.
@@ -289,7 +317,7 @@ For every component, read in this order:
 
 ---
 
-## Control Plane (Headless Ops)
+## Control Plane
 
 ### Responsibilities
 - Expose operational commands (start/stop/kill, limits updates, drain mode).
@@ -397,8 +425,8 @@ For every component, read in this order:
 
 ## Quick Trace Map
 
-- Market data issue: `DataService` -> adapter -> bus lag -> strategy subscribers.
-- Signal issue: `StrategyRuntime` instance state/config -> emitted `SignalIntent`.
-- Risk block issue: `PortfolioRiskEngine` rule/sizer decision + market snapshot.
+- Market data issue: `MarketDataEngine` -> adapter -> bus lag -> strategy subscribers.
+- Signal issue: `StrategyEngine` instance state/config -> emitted `SignalIntent`.
+- Risk block issue: `PortfolioEngine` rule/sizer decision + market snapshot.
 - Execution issue: `OMS` transition table + adapter callbacks + idempotency cache.
 - Position mismatch: reconciliation snapshot diff -> ledger correction or halt.
