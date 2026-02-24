@@ -1,9 +1,9 @@
-交易功能
+Trading Features
 ~~~~~~~~~
 
 .. toctree::
    :maxdepth: 2
-   :caption: Elite版
+   :caption: Elite Version
 
    introduction.md
    veighna_station.md

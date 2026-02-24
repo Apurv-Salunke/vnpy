@@ -1,105 +1,105 @@
-# ExcelRtd - EXCEL RTD模块
+# ExcelRtd - EXCEL RTD Module
 
-## 功能简介
+## Function Overview
 
-ExcelRtd是用于**在Excel中访问VeighNa程序内任意数据信息**的功能模块，
-RTD全称是RealTimeData，是微软提供的主要面向金融行业中实时数据需求设计的Excel数据对接方案。ExcelRtd依赖于PyXLLC模块（www.pyxll.com），该模块属于商业软件，需要购买才能使用（提供30天免费使用）。
+ExcelRtd is a functional module for **accessing any data information in VeighNa programs through Excel**. RTD stands for RealTimeData, which is an Excel data docking solution designed by Microsoft mainly for real-time data requirements in the financial industry. ExcelRtd depends on the PyXLLC module (www.pyxll.com), which is commercial software and needs to be purchased to use (30-day free trial is provided).
 
-## 安装PyXLL
-为了使用ExcelRtd模块，需要安装PyXLL插件。步骤如下：
+## Installing PyXLL
+To use the ExcelRtd module, you need to install the PyXLL plugin. The steps are as follows:
 
-首先进入[PyXLL官网](https://www.pyxll.com/)，点击DownloadPyXLL，如下图所示：
+First, go to the [PyXLL official website](https://www.pyxll.com/), click Download PyXLL, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_0.png)
 
-接着跳转到下载界面，如下图所示：
+Then you will be redirected to the download interface, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/13.png)
 
-这时需要填写相应字段，其中**Python Version**选择Python3.10，而**Excel Version**则根据自己安装的Excel版本选择，一般为64bit(x64)。
+At this time, you need to fill in the corresponding fields. Among them, **Python Version** should select Python 3.10, and **Excel Version** should be selected according to your installed Excel version, generally 64bit (x64).
 
-填写完之后点击【Download PyXLL】，就会跳转到下载页面。将文件下载好之后，进入放置该文件的文件夹，按住shift键并且点击鼠标右键，选择【在此处打开PowerShell窗口】，运行以下命令：
+After filling in, click [Download PyXLL] to jump to the download page. After downloading the file, enter the folder where the file is placed, hold the shift key and click the right mouse button, select [Open PowerShell window here], and run the following commands:
 ```bash
 pip install pyxll
 pyxll install
 ```
 
-接着按照软件要求就能成功安装了。
+Then you can successfully install according to the software requirements.
 
-请注意，在执行到下图这一步时：
+Please note that when executing to the step shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_9.png)
 
-如果没有具体指定路径，会安装到图中的默认位置（因为后面还需要进入这个文件夹，所以请记住这个路径）。
+If no specific path is specified, it will be installed to the default location shown in the figure (because you need to enter this folder later, please remember this path).
 
-接着进入该目录下的examples目录，并把路径~/veighna_studio/Lib/site-packages/vnpy_excelrtd/下的vnpy_rtd.py放入该目录，如下图所示：
+Then enter the examples directory under this directory, and put vnpy_rtd.py from the path ~/veighna_studio/Lib/site-packages/vnpy_excelrtd/ into this directory, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_5.png)
 
-如此就算正式安装完成了。
+This completes the formal installation.
 
-## 加载启动
+## Loading and Launching
 
-### VeighNa Station加载
+### Loading via VeighNa Station
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【ExcelRtd】。
+After launching and logging into VeighNa Station, click the [Trading] button. In the configuration dialog, check [ExcelRtd] in the [Application Module] section.
 
-### 脚本加载
+### Loading via Script
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_excelrtd import ExcelRtdApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(ExcelRtdApp)
 ```
 
-## 启动模块
+## Starting the Module
 
-在启动模块之前，请先连接交易接口（连接方法详见基本使用篇的连接接口部分）。看到VeighNa Trader主界面【日志】栏输出“合约信息查询成功”之后再启动模块，如下图所示：
+Before starting the module, please connect to the trading interface first (for connection methods, see the Interface Connection section in the Basic Usage chapter). After seeing "Contract information query successful" output in the [Log] section of the VeighNa Trader main interface, start the module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_strategy/1.png)
 
-请注意，IB接口因为登录时无法自动获取所有的合约信息，只有在用户手动订阅行情时才能获取。因此需要在主界面上先行手动订阅合约行情，再启动模块。
+Please note that because the IB interface cannot automatically obtain all contract information upon login, it can only be obtained when the user manually subscribes to market data. Therefore, you need to manually subscribe to contract market data on the main interface before starting the module.
 
-成功连接交易接口后，在菜单栏中点击【功能】 -> 【Excel RTD】，或者点击左侧按钮栏的图表：
+After successfully connecting to the trading interface, click [Function] -> [Excel RTD] in the menu bar, or click the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_6.png)
 
-即可进入Excel RTD模块的UI界面，如下图所示：
+You can then enter the UI interface of the Excel RTD module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/15.png)
 
 
-## 功能和配置
+## Functions and Configuration
 
-### 基础应用
+### Basic Applications
 
-在启动Excel RTD模块后，即可在Excel表格中通过PyXll调用该模块提供的功能（主要是通过rtd_tick_data函数获取实时数据）。
+After starting the Excel RTD module, you can call the functions provided by this module through PyXll in Excel tables (mainly obtaining real-time data through the rtd_tick_data function).
 
-首先打开一个excel表格，并且在每个单元格中调用rtd_tick_data函数并传入相应参数则可获取对应的数据，如下图所示：
+First, open an Excel table, and call the rtd_tick_data function in each cell and pass in the corresponding parameters to obtain the corresponding data, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/14.png)
 
-上图是获取豆油2205四个字段实时数据（分别是bid_price_1、high_price、low_price以及last_price）的例子。
+The figure above is an example of obtaining real-time data for four fields of Soybean Meal 2205 (namely bid_price_1, high_price, low_price, and last_price).
 
-从图中可以看出rtd_tick_data函数需要两个参数：一个是vt_symbol，另一个是VeighNa中定义的TickData的属性（具体属性可参考源代码vnpy.trader.object.TickData）。这两个参数都是字符串，第一个参数可以通过单元格的具体位置指定，比如“A1”表示A列第1行的数据。
+From the figure, it can be seen that the rtd_tick_data function requires two parameters: one is vt_symbol, and the other is the attribute of TickData defined in VeighNa (specific attributes can be found in the source code vnpy.trader.object.TickData). Both parameters are strings. The first parameter can be specified through the specific position of the cell, such as "A1" indicating the data in column A, row 1.
 
-与此同时，在Excel RTD模块的图形界面中也能看到相应输出，如下图所示：
+At the same time, corresponding output can also be seen in the GUI of the Excel RTD module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/16.png)
 
-### 进阶应用
-当然，上面只是简单的展示了ExcelRtd模块的功能。至于具体获取哪些数据，以什么样的方式展示在excel上，则由用户根据自己的实际需求编写。这里提供几个进阶的案例，包括期货市场报价跟踪、市场深度行情跟踪以及价差监控：
+### Advanced Applications
+Of course, the above is just a simple demonstration of the ExcelRtd module's functions. As for what specific data to obtain and how to display it in Excel, it is up to the user to write according to their actual needs. Here are several advanced cases, including futures market quote tracking, market depth market tracking, and spread monitoring:
 
-#### 期货市场报价跟踪
+#### Futures Market Quote Tracking
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_10.png)
 
-#### 市场深度行情跟踪
+#### Market Depth Market Tracking
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_11.png)
-#### 价差监控
+
+#### Spread Monitoring
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/excel_rtd/excel_rtd_12.png)

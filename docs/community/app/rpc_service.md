@@ -1,110 +1,110 @@
-# RpcService - RPC服务器模块
+# RpcService - RPC Server Module
 
-## 功能简介
+## Function Overview
 
-RpcService是用于**将VeighNa Trader进程转化为RPC服务器**的功能模块，对外提供交易路由、行情数据推送、持仓资金查询等功能。
+RpcService is a functional module for **converting VeighNa Trader processes into RPC servers**, providing functions such as trading routing, market data push, and position/capital query to the outside.
 
-关于RPC的具体应用场景请参考本文档结尾的【RPC的应用场景】版块。
+For specific application scenarios of RPC, please refer to the [RPC Application Scenarios] section at the end of this document.
 
-## 加载启动
+## Loading and Launching
 
-### VeighNa Station加载
+### Loading via VeighNa Station
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【RpcService】。
+After launching and logging into VeighNa Station, click the [Trading] button. In the configuration dialog, check [RpcService] in the [Application Module] section.
 
-### 脚本加载
+### Loading via Script
 
-在启动脚本中添加如下代码：
-›
+Add the following code to the startup script:
+
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_rpcservice import RpcServiceApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(RpcServiceApp)
 ```
 
-### 启动模块
+### Starting the Module
 
-在启动模块之前，请先连接登录交易接口（连接方法详见基本使用篇的连接接口部分）。看到VeighNa Trader主界面【日志】栏输出“合约信息查询成功”之后再启动模块，如下图所示：  
+Before starting the module, please connect and log in to the trading interface first (for connection methods, see the Interface Connection section in the Basic Usage chapter). After seeing "Contract information query successful" output in the [Log] section of the VeighNa Trader main interface, start the module, as shown in the figure below:
 
-![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/market_radar/1.png) 
+![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/market_radar/1.png)
 
-成功连接交易接口后，在菜单栏中点击【功能】-> 【RPC服务】，或者点击左侧按钮栏的图标：
+After successfully connecting to the trading interface, click [Function] -> [RPC Service] in the menu bar, or click the icon in the left button bar:
 
-![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/1.png) 
+![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/1.png)
 
-即可进入RPC服务模块的UI界面，如下图所示：
+You can then enter the UI interface of the RPC service module, as shown in the figure below:
 
-![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/2.png) 
+![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/2.png)
 
-## 配置和使用
+## Configuration and Usage
 
-### 配置RPC服务
-RPC服务基于ZeroMQ开发，对外的通讯地址包括：
+### Configuring RPC Service
+RPC service is developed based on ZeroMQ, and external communication addresses include:
 
-* **请求响应地址**
-    * 用于被动接收客户端发送过来的请求，执行对应任务后返回结果；
-    * 功能举例：
-        * 行情订阅；
-        * 委托下单；
-        * 委托撤单；
-        * 初始化信息查询（合约、持仓、资金等）；
-* **事件广播地址**
-    * 用于主动推送服务端收到的事件数据，到所有已连接的客户端；
-    * 功能举例：
-        * 行情推送；
-        * 委托推送；
-        * 成交推送。
+* **Request-Response Address**
+    * Used to passively receive requests sent by clients, execute corresponding tasks, and return results;
+    * Function examples:
+        * Market subscription;
+        * Order placement;
+        * Order cancellation;
+        * Initialization information query (contracts, positions, capital, etc.);
+* **Event Broadcast Address**
+    * Used to actively push event data received by the server to all connected clients;
+    * Function examples:
+        * Market push;
+        * Order push;
+        * Trade push.
 
-以上地址均采用ZeroMQ的地址格式，由**通讯协议**（如tcp://）和**通讯地址**（如127.0.0.1:2014）两部分组成。
+The above addresses all use ZeroMQ address format, consisting of two parts: **communication protocol** (such as tcp://) and **communication address** (such as 127.0.0.1:2014).
 
-RPC服务支持的通讯协议包括：
+Communication protocols supported by RPC service include:
 
-* **TCP协议**
-    * 协议前缀：tcp://
-    * Windows和Linux系统均可使用
-    * 可用于本机通讯（127.0.0.1）或者网络通讯（网络IP地址）
-* **IPC协议**
-    * 协议前缀：ipc://
-    * 只能在Linux系统上使用（POSIX本地端口通讯）
-    * 只能用于本机通讯，后缀为任意字符串内容
+* **TCP Protocol**
+    * Protocol prefix: tcp://
+    * Can be used on both Windows and Linux systems
+    * Can be used for local communication (127.0.0.1) or network communication (network IP address)
+* **IPC Protocol**
+    * Protocol prefix: ipc://
+    * Can only be used on Linux systems (POSIX local port communication)
+    * Can only be used for local communication, suffix is any string content
 
-一般推荐直接使用TCP协议（以及默认地址），对于使用Ubuntu系统且希望追求更低通讯延时的用户可以使用IPC协议。
+It is generally recommended to use the TCP protocol (and default address) directly. For users using Ubuntu systems and hoping to pursue lower communication latency, the IPC protocol can be used.
 
-### 运行RPC服务
+### Running RPC Service
 
-完成通讯地址的配置后，点击【启动】按钮即可启动RPC服务，日志区域会输出"RPC服务启动成功"，如下图所示：
+After completing the communication address configuration, click the [Start] button to start the RPC service. The log area will output "RPC service started successfully", as shown in the figure below:
 
-![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/3.png) 
+![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/3.png)
 
-启动成功后，即可在另一VeighNa Trader进程中（客户端）使用RpcGateway来连接
+After successful startup, you can use RpcGateway to connect in another VeighNa Trader process (client)
 
-如需停止RPC服务可以点击【停止】按钮，此时日志输出"RPC服务已停止"。
+If you need to stop the RPC service, you can click the [Stop] button. At this time, the log outputs "RPC service stopped".
 
 
-### 连接客户端
+### Connecting Clients
 
-VeighNa提供了与RpcService配套使用的RpcGateway，作为客户端的标准接口来连接服务端并进行交易，对上层应用透明。
+VeighNa provides RpcGateway matching RpcService as a standard interface for clients to connect to the server and conduct trading, transparent to upper-layer applications.
 
-从客户端的视角看，RpcGateway是类似CTP的接口。因为已经在服务端统一完成外部交易账户的配置连接，客户端只需要和服务器端进行通讯即可，无需再次输入账户密码等信息。
+From the client's perspective, RpcGateway is an interface similar to CTP. Because external trading account configuration and connection are uniformly completed on the server side, the client only needs to communicate with the server side and does not need to enter account password and other information again.
 
-在客户端加载RpcGateway接口后，进入VeighNa Trader主界面，点击菜单栏中【系统】->【连接RPC】，在弹出的窗口中点击【连接】即可连接使用，如下图所示。
+After loading the RpcGateway interface on the client, enter the VeighNa Trader main interface, click [System] -> [Connect RPC] in the menu bar, and click the [Connect] button in the pop-up window to connect and use, as shown in the figure below.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/5.png)
 
-【主动请求地址】和【推送订阅地址】，分别对应之前在服务端配置的【请求响应地址】和【事件广播地址】，注意不要写反。
+[Active Request Address] and [Push Subscription Address] correspond to [Request-Response Address] and [Event Broadcast Address] configured on the server side respectively. Note not to write them in reverse.
 
 
-## RPC简介
+## RPC Introduction
 
-由于全局解释器锁GIL的存在，导致单一Python进程只能利用CPU单核的算力。远程过程调用（Remote Procedure Call Protocol, RPC）服务可以用于**跨进程或者跨网络的服务功能调用**，有效解决了上述问题。
+Due to the existence of the Global Interpreter Lock (GIL), a single Python process can only use the computing power of one CPU core. Remote Procedure Call Protocol (RPC) service can be used for **cross-process or cross-network service function calls**, effectively solving the above problem.
 
-由一个特定的进程连接交易接口充当**服务器**的角色，在本地物理机或者局域网内部向其他独立的**客户端**进程主动推送事件，并处理客户端相关请求，如下图所示：
+A specific process connects to the trading interface to act as a **server**, actively pushing events to other independent **client** processes in the local physical machine or local area network, and processing client-related requests, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/rpc_service/7.png)
 
-## RPC服务（RpcService）的应用场景
+## Application Scenarios of RPC Service (RpcService)
 
-- 针对运行策略数量较多的用户，只需本地一条行情和交易通道，可以支持多个客户端进程同时交易，且每个客户端中交易策略独立运行，互不影响；
-- 针对中小型投资机构用户，可以通过在服务端加载各种交易接口以及RiskManagerApp，实现一个轻量级的资管交易系统，多个交易员共享统一的交易通道，并实现基金产品级别的风险管理。
+- For users running a large number of strategies, only one market and trading channel is needed locally, which can support multiple client processes trading simultaneously, and trading strategies in each client run independently without interfering with each other;
+- For small and medium-sized investment institution users, by loading various trading interfaces and RiskManagerApp on the server side, a lightweight asset management trading system can be implemented. Multiple traders share a unified trading channel and achieve fund product-level risk management.

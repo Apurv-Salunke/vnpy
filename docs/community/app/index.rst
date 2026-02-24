@@ -1,15 +1,15 @@
-策略应用
+Strategy Applications
 ~~~~~~~~~
 
 .. toctree::
    :maxdepth: 2
-   :caption: Elite版
+   :caption: Elite Version
 
    cta_strategy.md
    cta_backtester.md
    spread_trading.md
    option_master.md
-   portfolio_strategy.md   
+   portfolio_strategy.md
    algo_trading.md
    script_trader.md
    paper_account.md

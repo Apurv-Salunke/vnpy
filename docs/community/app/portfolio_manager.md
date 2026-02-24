@@ -1,122 +1,122 @@
 
-# PortfolioManager - 投资组合管理模块
+# PortfolioManager - Investment Portfolio Management Module
 
-## 功能简介
+## Function Overview
 
-PortfolioManager是用于**投资组合管理**的功能模块，用户可以在盘中通过其UI界面对交易策略进行实时的业绩跟踪和盈亏分析。  
+PortfolioManager is a functional module for **investment portfolio management**. Users can conduct real-time performance tracking and P&L analysis on trading strategies during trading through its UI interface.
 
 
-## 加载启动
+## Loading and Launching
 
-### VeighNa Station加载
+### Loading via VeighNa Station
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【PortfolioManager】。
+After launching and logging into VeighNa Station, click the [Trading] button. In the configuration dialog, check [PortfolioManager] in the [Application Module] section.
 
-### 脚本加载
+### Loading via Script
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_portfoliomanager import PortfolioManagerApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(PortfolioManagerApp)
 ```
 
 
-## 启动模块
+## Starting the Module
 
-在菜单栏中点击【功能】-> 【投资组合】，或者点击左侧按钮栏的图标：
+Click [Function] -> [Investment Portfolio] in the menu bar, or click the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_manager/1.jpg)
 
-即可进入投资组合管理模块的UI界面，如下图所示：
+You can then enter the UI interface of the investment portfolio management module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_manager/6.png)
 
 
-## 组合信息表
+## Portfolio Information Table
 
-界面整体可以分为左右两部分，左边显示的是当前已有投资组合的信息表，如下图所示：
+The interface can be divided into left and right parts overall. The left side displays the information table of current investment portfolios, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_manager/7.png)
 
 
-组合信息表每列的含义如下：
+The meaning of each column in the portfolio information table is as follows:
 
- - 组合名称：委托来源标识（reference），所有从VeighNa发出的委托请求都可以直接通过该标识来区分其交易来源，如手动交易、算法执行、量化策略等，每个交易来源可以视作一个独立的投资组合。
+ - Portfolio Name: Order source identifier (reference). All order requests sent from VeighNa can directly distinguish their trading source through this identifier, such as manual trading, algorithm execution, quantitative strategies, etc. Each trading source can be regarded as an independent investment portfolio.
 
-   - 手动交易：ManualTrading
+   - Manual Trading: ManualTrading
 
-   - CTA策略：CtaStrategy_策略名
+   - CTA Strategy: CtaStrategy_StrategyName
 
-   - 价差交易：SpreadTrading_价差名
+   - Spread Trading: SpreadTrading_SpreadName
 
-   - 期权交易：OptionMaster_ElectronicEye/DeltaHedging
+   - Option Trading: OptionMaster_ElectronicEye/DeltaHedging
 
-   - 算法交易：AlgoTrading_算法编号
+   - Algorithm Trading: AlgoTrading_AlgorithmNumber
 
-   - 脚本策略：ScriptTrader
+   - Script Strategy: ScriptTrader
 
-   - 组合策略：PortfolioStrategy_策略名
+   - Portfolio Strategy: PortfolioStrategy_StrategyName
 
- - 本地代码：带交易所后缀的合约代码（vt_symbol）
+ - Local Code: Contract code with exchange suffix (vt_symbol)
 
- - 开盘仓位：昨日收盘时（今日开盘），投资组合内该合约的持仓
+ - Opening Position: Position of the contract in the investment portfolio at yesterday's close (today's open)
 
- - 当前仓位：开盘仓位加上今日成交数量（多头成交 - 空头成交）的结果
+ - Current Position: Result of opening position plus today's trade quantity (long trades - short trades)
 
- - 交易盈亏：今日所有成交，以成交价格映射到当前最新价的盈亏
+ - Trading P&L: All trades today, P&L mapped to current latest price at execution price
 
- - 持仓盈亏：组合开盘仓位，以昨收盘价映射到当前最新价的盈亏
+ - Position P&L: Portfolio opening position, P&L mapped to current latest price at yesterday's closing price
 
- - 总盈亏：交易盈亏和持仓盈亏的和
+ - Total P&L: Sum of trading P&L and position P&L
 
- - 多头成交：投资组合内该合约今日买开和买平成交数量
+ - Long Trades: Today's buy open and buy close trade quantity of the contract in the investment portfolio
 
- - 空头成交：投资组合内该合约今日卖开和卖平成交数量
+ - Short Trades: Today's sell open and sell close trade quantity of the contract in the investment portfolio
 
-其中，交易盈亏（TradingPnl）和持仓盈亏（HoldingPnl）的计算方式采用的是期货交易所每日结算时所用的逐日盯市（Marking to Market）算法，计算过程如下所示：
+Among them, the calculation method of TradingPnl and HoldingPnl adopts the Marking to Market algorithm used by futures exchanges for daily settlement. The calculation process is as shown below:
 
- - 交易盈亏 = 持仓量 * （当日收盘价-昨日收盘价）* 合约规模  
+ - Trading P&L = Position Quantity * (Closing Price - Yesterday's Closing Price) * Contract Size
 
- - 持仓盈亏 = 持仓变化量 * （当日收盘价 - 开仓成交价）* 合约规模  
+ - Position P&L = Position Change Quantity * (Closing Price - Opening Execution Price) * Contract Size
 
- - 总盈亏 = 交易盈亏 + 持仓盈亏  
+ - Total P&L = Trading P&L + Position P&L
 
- - 净盈亏 = 总盈亏 - 总手续费 - 总滑点  
+ - Net P&L = Total P&L - Total Commission - Total Slippage
 
-用户可以通过展开和折叠投资组合，调整列宽来查看信息：
+Users can view information by expanding and collapsing investment portfolios and adjusting column widths:
 
- - 点击每个投资组合左侧的箭头可以展开和折叠各投资组合的信息；
+ - Click the arrow on the left side of each investment portfolio to expand and collapse the information of each investment portfolio;
 
- - 点击顶部的【全部展开】和【全部折叠】按钮对所有投资组合进行批量操作；
+ - Click the [Expand All] and [Collapse All] buttons at the top to batch operate on all investment portfolios;
 
- - 点击【调整列宽】按钮可以自动调整表格每列的宽度。
+ - Click the [Adjust Column Width] button to automatically adjust the width of each column in the table.
 
-## 成交记录表
+## Trade Record Table
 
-界面右侧部分显示的是所有成交记录，点击右上角的下拉框可以根据投资组合进行筛选，如下图所示：
+The right part of the interface displays all trade records. Click the dropdown box in the upper right corner to filter by investment portfolio, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_manager/8.png)
 
 
-## 刷新频率
+## Refresh Frequency
 
-投资组合的盈亏基于定时逻辑自动计算，计算频率可以通过顶部中间的选项框进行调整，如下图所示：
+Portfolio P&L is calculated automatically based on timed logic. The calculation frequency can be adjusted through the option box in the middle of the top, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/portfolio_manager/5.png)
 
 
-请注意，所有组合的持仓数据会在关闭VeighNa Trader时写入缓存文件中，所以不要直接杀进程退出，会丢失数据。  
+Please note that all portfolio position data will be written to cache files when closing VeighNa Trader, so do not kill the process directly to exit, as data will be lost.
 
-在隔日加载时，程序会自动将昨天的总仓位结算到今天的昨仓数据字段中，该逻辑对于24小时交易的市场（外盘期货）不一定合适，后续考虑加入每日定时结算或者手动结算功能。
+During next-day loading, the program will automatically settle yesterday's total position to yesterday's position data field. This logic may not be suitable for markets trading 24 hours a day (foreign futures). Subsequent consideration will be given to adding daily timed settlement or manual settlement functions.
 
-如果发现有仓位记录错误，或者策略已经移除的情况，可以手动修改缓存文件，再重新启动VeighNa Trader即可。
+If you find position record errors, or strategies have been removed, you can manually modify the cache file and then restart VeighNa Trader.
 
-Windows系统上缓存文件的默认路径位于：
+The default path for cache files on Windows systems is located at:
 
     C:\Users\Administrator\.vntrader\portfolio_manager_data.json
 
-其中Administrator是当前Windows系统的用户名。
+Where Administrator is the username of the current Windows system.

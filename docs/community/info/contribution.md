@@ -1,54 +1,54 @@
-# 贡献代码
+# Contributing Code
 
 ---
-## 创建PR
-我们欢迎任何人贡献代码到VeighNa。  
+## Creating a PR
+We welcome anyone to contribute code to VeighNa.
 
-如果希望贡献代码请使用Github的PR(Pull Request)的流程。
+If you wish to contribute code, please use the GitHub PR (Pull Request) process.
 
-PR流程大致如下：
-
----
-1. [创建 Issue][CreateIssue] - 对于较大的改动(如新功能，大型重构等)建议先开issue讨论一下， 较小的improvement(如文档改进，bugfix等)直接发PR即可
-
-2. Fork [VeighNa][#GithubVnpy] - 点击右上角**Fork**按钮
-
-3. Clone你自己的fork: ```git clone https://github.com/$userid/vnpy.git```
-	
-	> 如果你的fork已经过时，需要手动[sync][GithubDocForSync]
-	
-4. 从**dev**创建你自己的branch: ```git checkout -b $my_feature_branch dev```
-
-5. 在$my_feature_branch上修改并将修改push到你Fork之后的仓库上
-
-6. 创建从你的fork的$my_feature_branch分支到主项目的**dev**分支的[Pull Request]:  
- [点开这里][CreatePR] ，再点击**compare across forks**，选择需要的fork和branch创建PR
+The PR process is roughly as follows:
 
 ---
+1. [Create Issue][CreateIssue] - For larger changes (such as new features, major refactoring, etc.), it is recommended to open an issue first for discussion. For smaller improvements (such as documentation improvements, bugfixes, etc.), you can directly submit a PR.
 
-创建完PR之后请耐心等待：我们一旦有空就会检查PR，一旦你的代码有用且[符合要求](#代码风格)，就会被合并！
+2. Fork [VeighNa][#GithubVnpy] - Click the **Fork** button in the upper right corner
+
+3. Clone your fork: ```git clone https://github.com/$userid/vnpy.git```
+
+	> If your fork is out of date, you need to manually [sync][GithubDocForSync]
+
+4. Create your own branch from **dev**: ```git checkout -b $my_feature_branch dev```
+
+5. Make changes on $my_feature_branch and push the changes to your forked repository
+
+6. Create a [Pull Request] from your fork's $my_feature_branch branch to the main project's **dev** branch:
+ [Click here][CreatePR], then click **compare across forks**, select the required fork and branch to create the PR
+
+---
+
+After creating the PR, please wait patiently: we will check the PR as soon as we have time. Once your code is useful and [meets the requirements](#code-style), it will be merged!
 
 
 ---
-## 代码风格
-在为VeighNa写代码的时候，需要遵循一些基本的规则，否则你的代码可能无法被merge。
-这些规则包括：
-- [贡献代码](#贡献代码)
-  - [创建PR](#创建pr)
-  - [代码风格](#代码风格)
-    - [命名规则](#命名规则)
-    - [代码格式](#代码格式)
-    - [代码质量检查](#代码质量检查)
+## Code Style
+When writing code for VeighNa, you need to follow some basic rules, otherwise your code may not be merged.
+These rules include:
+- [Contributing Code](#contributing-code)
+  - [Creating a PR](#creating-a-pr)
+  - [Code Style](#code-style)
+    - [Naming Conventions](#naming-conventions)
+    - [Code Format](#code-format)
+    - [Code Quality Checks](#code-quality-checks)
 
 
-### 命名规则
-我们的代码的命名规则如下：
+### Naming Conventions
+Our code naming rules are as follows:
 
-* 类属性、类方法、参数和变量使用小写加下划线的形式
-* 类名使用驼峰式命名
-* 常量使用大写加下划线的形式
+* Class properties, class methods, parameters, and variables should use lowercase with underscores
+* Class names should use camelCase naming
+* Constants should use uppercase with underscores
 
-例如：
+For example:
 ```python3
 DEFAULT_PATH = "/tmp/VeighNa/"
 class ClassA:
@@ -60,25 +60,25 @@ class ClassA:
 ```
 
 
-### 代码格式
-我们对代码格式没有特别严格的要求，但是至少要符合pep8标准，并且额外要在类和函数下面带上docstring(就是一段"""""")。
+### Code Format
+We don't have particularly strict requirements for code format, but it must at least conform to the pep8 standard, and additionally you must include docstrings (a """ """) under classes and functions.
 
-要让代码符合pep8标准，写完代码之后使用[autopep8](https://github.com/hhatto/autopep8)格式化你的代码就可以了:  
+To make your code conform to the pep8 standard, use [autopep8](https://github.com/hhatto/autopep8) to format your code after writing it:
 ```bash
-autopep8 --in-place --recursive . 
+autopep8 --in-place --recursive .
 ```
 
-### 代码质量检查
-VeighNa项目使用两个工具来保证代码质量：
+### Code Quality Checks
+The VeighNa project uses two tools to ensure code quality:
 
-1. [ruff](https://github.com/astral-sh/ruff) - 用于代码风格和质量检查
-   - 在项目根目录下运行```ruff check .```检查代码中的风格问题
-   - 可以使用```ruff check --fix .```自动修复部分问题
+1. [ruff](https://github.com/astral-sh/ruff) - For code style and quality checks
+   - Run ```ruff check .``` in the project root directory to check for style issues in the code
+   - You can use ```ruff check --fix .``` to automatically fix some issues
 
-2. [mypy](https://github.com/python/mypy) - 用于静态类型检查
-   - 在项目根目录下运行```mypy vnpy```检查代码中的类型注解问题
+2. [mypy](https://github.com/python/mypy) - For static type checking
+   - Run ```mypy vnpy``` in the project root directory to check for type annotation issues in the code
 
-如果检查出error或warning，说明你的代码需要进行修改以符合项目标准。确保在提交PR前解决所有警告和错误。
+If errors or warnings are detected, it means your code needs to be modified to meet the project standards. Make sure to resolve all warnings and errors before submitting a PR.
 
 [GithubVnpy]:https://github.com/vnpy/vnpy
 [GithubDocForSync]:https://help.github.com/articles/syncing-a-fork/

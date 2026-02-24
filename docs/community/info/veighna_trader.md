@@ -1,225 +1,225 @@
 # VeighNa Trader
 
-## 启动程序
+## Starting the Program
 
-### 图形模式
+### Graphical Mode
 
-启动登录VeighNa Station后，用户可通过点击【交易】按钮，勾选所需的交易接口和应用模块，点击【启动】按钮进入VeighNa Trader，如下图所示：
+After starting and logging into VeighNa Station, users can click the [Trading] button, check the required trading interfaces and application modules, and click the [Start] button to enter VeighNa Trader, as shown below:
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/22.png)
 
-### 脚本模式
+### Script Mode
 
-在文件夹examples/veighna_trader中找到run.py文件(不是veighna_studio下的，需要在github上下载源码）。运行run.py即可进入VeighNa Trader。
+Find the run.py file in the examples/veighna_trader folder (not under veighna_studio, you need to download the source code from github). Run run.py to enter VeighNa Trader.
 
-- 以Win10系统为例，用户可在run.py所在文件夹内按住【Shift】，同时点击鼠标右键，选择【在此处打开 powershell 窗口】，在弹出窗口中，输入如下命令，即可启动VeighNa Trader。
+- Taking the Win10 system as an example, users can hold down [Shift] in the folder where run.py is located, and click the right mouse button at the same time, select [Open powershell window here], in the pop-up window, enter the following command to start VeighNa Trader.
    ```bash
         python run.py
    ```
    ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/3.png)
 
-启动成功的VeighNa Trader如下图所示：
+The successfully started VeighNa Trader is shown below:
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/23.png)
 
-## 连接接口
+## Connecting Interface
 
-### SimNow仿真
+### SimNow Simulation
 
-以使用SimNow仿真交易账号登录**CTP**接口为例，在VeighNa Trader上的菜单栏中点击【系统】->【连接CTP】，会弹出账号配置窗口，如下图所示：
+Taking the use of SimNow simulation trading account to log in to the **CTP** interface as an example, click [System] -> [Connect CTP] in the menu bar on VeighNa Trader, and the account configuration window will pop up, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/gateway/1.png)
 
-其中，各字段填写要求如下：
-- 用户名：xxxxxx （6位纯数字账号）
-- 密码：xxxxxx （需要修改一次密码用于盘后测试）
-- 经纪商代码：9999 （SimNow默认经纪商编号）
-- 交易服务器：182.254.243.31:30001 （盘中测试）
-- 行情服务器：182.254.243.31:30011 （盘中测试）
-- 产品名称：simnow_client_test
-- 授权编码：0000000000000000 （16个0）
+Among them, the field filling requirements are as follows:
+- Username: xxxxxx (6-digit pure number account)
+- Password: xxxxxx (need to change the password once for after-hours testing)
+- Broker Code: 9999 (SimNow default broker number)
+- Trading Server: 182.254.243.31:30001 (intraday testing)
+- Market Data Server: 182.254.243.31:30011 (intraday testing)
+- Product Name: simnow_client_test
+- Authorization Code: 0000000000000000 (16 zeros)
 
-请注意：
- - 用户名需填写InvestorID（6位纯数字），而不是Simnow网站注册时的账号（手机号）。此外，Simnow注册的账号需要修改一次密码后才能登录。
- - 如果点击连接接口之后，没有在VeighNa Trader主界面【日志】组件看到任何输出，可以用telnet工具测试一下交易服务器/行情服务器的端口是否开启。
+Please note:
+ - The username needs to be filled with InvestorID (6-digit pure number), not the account (mobile phone number) registered on the Simnow website. In addition, the account registered on Simnow needs to change the password once before logging in.
+ - If after clicking to connect to the interface, there is no output in the [Log] component of the VeighNa Trader main interface, you can use the telnet tool to test whether the trading server/market data server ports are enabled.
 
-连接成功以后，VeighNa Trader主界面【日志】组件会立刻输出登录相关信息，同时用户也可以看到账号信息，持仓信息，合约查询等相关信息。如下图所示：
+After successful connection, the [Log] component of the VeighNa Trader main interface will immediately output login-related information, and users can also see account information, position information, contract query, and other relevant information. As shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_strategy/1.png)
 
 
-## 合约查询
+## Contract Query
 
-成功连接交易接口后，用户可以通过合约查询功能查询合约信息：
-点击菜单栏的【帮助】->【合约查询】，在弹出的对话框中直接点击右上角的【查询】按钮，即可查询合约信息（留空则查询所有合约的价格信息），如下图所示：
+After successfully connecting to the trading interface, users can query contract information through the contract query function:
+Click [Help] -> [Query Contracts] in the menu bar, and directly click the [Query] button in the upper right corner of the dialog box that pops up to query contract information (leave blank to query all contract price information), as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/spread_trading/3.png)
 
-请注意，IB接口因为登录时无法自动获取所有的合约信息，只有在用户手动订阅行情时才能获取。因此需要在主界面上先行手动订阅合约行情，才能查到合约信息。
+Please note that because the IB interface cannot automatically obtain all contract information when logging in, it can only be obtained when the user manually subscribes to market data. Therefore, you need to manually subscribe to contract market data on the main interface before you can query contract information.
 
 
-## 订阅行情
+## Subscribing to Market Data
 
-在交易组件输入交易所和合约代码，按回车键即可订阅行情。如订阅股指期货时，交易所填写CFFEX，代码填写对应合约代码IF2206。
+Enter the exchange and contract code in the trading component, and press the Enter key to subscribe to market data. For example, when subscribing to stock index futures market data, fill in CFFEX for the exchange and fill in the corresponding contract code IF2206 for the code.
 
-订阅成功后，交易组件会显示合约名称，并且在下方显示深度行情报价，如最新价、买一价和卖一价，行情组件会显示最新行情信息，如下图所示：
+After successful subscription, the trading component will display the contract name, and display the depth market data quote below, such as the latest price, bid one price, and ask one price. The market data component will display the latest market data information, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/24.png)
 
-请注意，**输入的合约代码需与在菜单栏的【帮助】->【查询合约】功能中查到的一致**。
+Please note that **the input contract code needs to be consistent with what is queried in the menu bar [Help] -> [Query Contracts] function**.
 
 
-## 委托交易
+## Order Trading
 
-交易组件用于手动发起委托交易，除了填写交易所和合约代码外，还需填写下图中的五个字段（方向、开平、类型、价格和数量）：
+The trading component is used to manually initiate order trading. In addition to filling in the exchange and contract code, you also need to fill in the five fields in the figure below (direction, open/close, type, price, and quantity):
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/5.png)
 
-请注意，若委托类型为市价单，委托价格可不填；若交易接口只支持单向持仓（接口持仓方向支持详见交易接口篇），可不填写开平方向。
+Please note that if the order type is a market order, the order price does not need to be filled; if the trading interface only supports one-way positions (see trading interface section for interface position direction support), the open/close direction does not need to be filled.
 
-发出委托后，本地会缓存委托相关信息，并显示到【委托】组件和【活动】组件，此时委托状态为【提交中】。
+After sending the order, the local will cache the order-related information and display it in the [Order] component and [Active] component. At this time, the order status is [Submitting].
 
-交易所收到用户发送的委托后，会将其插入中央订单簿来进行撮合成交，并推送委托回报给用户：
-- 若委托还未成交，【委托】组件和【活动】组件只会更新时间和委托状态这两个字段，委托状态变成【未成交】；
-- 若委托立刻成交，委托相关信息会从【活动】组件移除，新增至【成交】组件，委托状态变成【全部成交】。
+After the exchange receives the order sent by the user, it will insert it into the central order book for matching and push the order report to the user:
+- If the order has not been executed, the [Order] component and [Active] component will only update the time and order status fields, and the order status becomes [Not Executed];
+- If the order is executed immediately, the order-related information will be removed from the [Active] component and added to the [Transaction] component, and the order status becomes [Fully Executed].
 
 
-## 数据监控
+## Data Monitoring
 
-数据监控由以下组件构成，并附带两个辅助功能：
+Data monitoring consists of the following components and comes with two auxiliary functions:
 
-选定以下任一组件，鼠标右键可以选择【调整列宽】（特别适用于屏幕分辨率较低的情况）或者选择【保存数据】（CSV格式），如下图所示：
+Select any of the following components, right-click to select [Adjust Column Width] (especially suitable for low screen resolution situations) or select [Save Data] (CSV format), as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/12.png)
 
-### 行情组件
+### Market Data Component
 
-行情组件用于对订阅的行情进行实时监控，如下图所示：
+The market data component is used to monitor subscribed market data in real-time, as shown below:
 
 ![](https://vnpy-community.oss-cn-shanghai.aliyuncs.com/forum_experience/yazhang/quick_start/subcribe_contract_module.png)
 
-行情组件监控内容包括以下部分：
+The market data component monitoring content includes the following parts:
 
-- 合约信息：合约代码、交易所、合约名称；
-- 行情信息：最新价、成交量、开盘价、最高价、最低价、收盘价、买1价、买1量、卖1价、卖1量；
-- 其他信息：数据推送时间、接口。
+- Contract information: contract code, exchange, contract name;
+- Market data information: latest price, trading volume, opening price, highest price, lowest price, closing price, bid 1 price, bid 1 volume, ask 1 price, ask 1 volume;
+- Other information: data push time, interface.
 
-### 活动组件
+### Active Component
 
-活动组件用于存放还未成交的委托，如有限价单或者没有立刻成交的市价单，在该组件中鼠标双击任一委托可以完成撤单操作，如下图所示：
+The active component is used to store orders that have not been executed yet, such as limit orders or market orders that were not executed immediately. In this component, double-click any order to complete the cancellation operation, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/15.png)
 
-### 成交组件
+### Transaction Component
 
-成交组件用于存放已成交的委托，在该组件中，价格、数量和时间都是交易所推送过来的成交信息，而不是委托信息，如下图所示：
+The transaction component is used to store executed orders. In this component, price, quantity, and time are all transaction information pushed by the exchange, not order information, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/14.png)
 
-### 委托组件
+### Order Component
 
-委托组件用于存放用户发出的所有委托信息，其委托状态可以是提交中、已撤销、部分成交、全部成交、拒单等，如下图所示：
+The order component is used to store all order information sent by users. Its order status can be submitting, cancelled, partially executed, fully executed, rejected, etc., as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/13.png)
 
-### 持仓组件
+### Position Component
 
-持仓组件用于记录历史持仓，需要注意以下字段信息。
+The position component is used to record historical positions. You need to pay attention to the following field information.
 
-- 方向：期货品种具有多空方向，而股票品种方向为【净】持仓；
-- 数量：总持仓，即今仓 + 昨仓；
-- 昨仓：其出现衍生于上期所特有的平今、平昨模式的需要；
-- 均价：历史成交的平均价格（某些巨型委托，会发生多次部分成交，需要计算平均价格）；
-- 盈亏：持仓盈亏。多仓情况下，盈利 = 当前价格 - 均价，空仓则反之。
+- Direction: Futures varieties have long/short directions, while stock variety direction is [Net] position;
+- Quantity: Total position, i.e., today's position + yesterday's position;
+- Yesterday's Position: Its appearance derives from the need for the SHFE's unique flat today/flat yesterday mode;
+- Average Price: Average price of historical transactions (for some huge orders, multiple partial executions may occur, requiring average price calculation);
+- Profit/Loss: Position profit/loss. In long position, profit = current price - average price, short position is vice versa.
 
-若平仓离场，持仓数量清零，浮动盈亏变成实际盈亏从而影响账号余额变化。故以下字段：数量、昨仓、冻结、均价、盈亏均为0，如下图所示：
+If you close the position and leave the market, the position quantity clears to zero, and floating profit/loss becomes actual profit/loss affecting account balance changes. Therefore, the following fields: quantity, yesterday's position, frozen, average price, profit/loss are all 0, as shown below:
 
 ![](https://vnpy-community.oss-cn-shanghai.aliyuncs.com/forum_experience/yazhang/quick_start/query_position.png)
 
 
-### 资金组件
+### Capital Component
 
-资金组件显示了账号的基础信息，如下图所示：
+The capital component displays the basic information of the account, as shown below:
 
 ![](https://vnpy-community.oss-cn-shanghai.aliyuncs.com/forum_experience/yazhang/quick_start/query_account.png)
 
-需要注意以下三个字段信息：
+You need to pay attention to the following three field information:
 
-- 可用资金：可以用于委托的现金
-- 冻结：委托操作冻结的金额（与保证金不是一个概念）
-- 余额：总资金，即可用资金 + 保证金 + 浮动盈亏
+- Available Capital: Cash that can be used for orders
+- Frozen: Amount frozen by order operations (not the same concept as margin)
+- Balance: Total capital, i.e., available capital + margin + floating profit/loss
 
-若全部平仓，浮动盈亏变成实际盈亏，保证金和浮动盈亏清零，总资金等于可用资金。
+If all positions are closed, floating profit/loss becomes actual profit/loss, margin and floating profit/loss clear to zero, and total capital equals available capital.
 
-### 日志组件
+### Log Component
 
-日志组件用于显示接口登录信息以及委托报错信息，如下图所示：
+The log component is used to display interface login information and order error information, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_strategy/1.png)
 
 
-## 应用模块
+## Application Modules
 
-VeighNa官方提供了开箱即用的量化交易应用模块，在启动VeighNa Trader时勾选所需的功能模块，启动成功后在菜单栏中点击【功能】按钮，即可显示所勾选的功能模块，如下图所示：
+VeighNa officially provides ready-to-use quantitative trading application modules. Check the required functional modules when starting VeighNa Trader. After successful startup, click the [Function] button in the menu bar to display the checked functional modules, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/25.png)
 
 
-## 全局配置
+## Global Configuration
 
-点击VeighNa Trader菜单栏上的【配置】按钮弹出【全局配置】窗口，如下图所示：
+Click the [Configuration] button on the VeighNa Trader menu bar to pop up the [Global Configuration] window, as shown below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/20.png)
 
-### GUI界面
+### GUI Interface
 
-font.family和font.size参数用于配置GUI界面，各参数含义如下所示：
+The font.family and font.size parameters are used to configure the GUI interface. The meanings of each parameter are as follows:
 
-- font.family：设置VeighNa Trader图形界面的字体类型，除了默认的Arial字体，也支持Courier New和System字体；
+- font.family: Sets the font type of the VeighNa Trader graphical interface. In addition to the default Arial font, it also supports Courier New and System fonts;
 
-- font.size：设置VeighNa Trader图形界面的字体大小，用户可以根据自己显示器的实际分辨率对字体大小进行修改。
+- font.size: Sets the font size of the VeighNa Trader graphical interface. Users can modify the font size according to the actual resolution of their display.
 
-### 日志输出
+### Log Output
 
-log.active, log.level, log.console和log.file用于对日志输出进行配置，各参数含义如下所示：
+log.active, log.level, log.console, and log.file are used to configure log output. The meanings of each parameter are as follows:
 
-- log.active：控制是否启动LogEngine，默认为True。如果该项修改为False，则后续几项参数都将失效，同时VeighNa Trader运行时不再输出日志或生成日志文件（可以降低部分系统延时）；
+- log.active: Controls whether to start LogEngine, default is True. If this item is modified to False, the subsequent parameters will become invalid, and VeighNa Trader will no longer output logs or generate log files during operation (can reduce some system latency);
 
-- log.level：控制日志输出的级别，日志可以从轻到严重分成DEBUG、INFO、WARNING、ERROR、CRITICAL五个级别，分别对应10、20、30、40、50的整数值。如果日志等级低于该项设置值，将会被忽略。如果想要记录更详细的系统运行信息，建议将该项整数值调低；
+- log.level: Controls the log output level. Logs can be divided into five levels from light to severe: DEBUG, INFO, WARNING, ERROR, CRITICAL, corresponding to integer values 10, 20, 30, 40, 50 respectively. If the log level is lower than the set value of this item, it will be ignored. If you want to record more detailed system operation information, it is recommended to lower the integer value of this item;
 
-- log.console：console指的是终端，如Windows系统上的cmd和Powershell，以及Linux上的Terminal。当设置为True时，通过终端运行脚本（需要注册日志事件监听）来启动VeighNa Trader，日志信息会输出在终端中；如果通过VeighNa Station来直接启动VeighNa Trader，则无console输出；
+- log.console: console refers to the terminal, such as cmd and Powershell on Windows systems, and Terminal on Linux. When set to True, run the script through the terminal (requires registering log event listener) to start VeighNa Trader, and log information will be output in the terminal; if VeighNa Trader is started directly through VeighNa Station, there is no console output;
 
-- log.file：该参数用于控制是否要将日志输出到文件中，建议设置为True，否则无法记录生成的日志。
+- log.file: This parameter is used to control whether to output logs to a file. It is recommended to set it to True, otherwise generated logs cannot be recorded.
 
-VeighNa Trader的日志文件，默认位于运行时目录的.vntrader\log目录下，完整路径为：
+VeighNa Trader log files are located in the .vntrader\log directory under the run directory by default, with the full path:
 ```
 C:\users\administrator\.vntrader\log
 ```
 
-其中，administrator为当前Windows系统的登录用户名。
+Where administrator is the login username of the current Windows system.
 
-### 邮件通知
+### Email Notification
 
-以email为前缀的参数用于对邮箱进行配置，可以在特定事件发生时（如委托成交，数据异常时）发送邮件实时通知，各参数含义如下：
+Parameters prefixed with email are used to configure the mailbox. Emails can be sent to notify in real-time when specific events occur (such as order execution, data anomalies, etc.). The meanings of each parameter are as follows:
 
-- email.server: SMTP邮件服务器地址，默认填写好了QQ邮箱服务器地址，可以直接用，如果需要使用其他邮箱，需要自行查找一下其他的服务器地址；
-- email.port: SMTP邮件服务器端口号，默认填写好了QQ邮箱服务器端口，可以直接用；
-- email.username: 填写邮箱地址即可，如xxxx@qq.com；
-- email.password: 对于QQ邮箱，此处不是邮箱密码，而是开通SMTP后系统生成的一个授权码；
-- email.sender: 发送邮箱名，与email.username一致；
-- email.receiver: 接受邮件的邮箱地址。
+- email.server: SMTP mail server address, default filled with QQ email server address, can be used directly. If you need to use other email boxes, you need to find other server addresses yourself;
+- email.port: SMTP mail server port number, default filled with QQ email server port, can be used directly;
+- email.username: Fill in the email address, such as xxxx@qq.com;
+- email.password: For QQ email, this is not the email password, but an authorization code generated by the system after enabling SMTP;
+- email.sender: Sending email name, consistent with email.username;
+- email.receiver: Receiving email address.
 
 
-### datafeed数据服务
+### datafeed Data Service
 
-与数据库适配器类似，对于数据服务有一个标准化的接口BaseDatafeed（位于vnpy.trader.datafeed），实现了更加灵活的数据服务支持，具体字段含义如下：
+Similar to database adapters, there is a standardized interface BaseDatafeed for data services (located in vnpy.trader.datafeed), implementing more flexible data service support. The specific field meanings are as follows:
 
-- datafeed.name: 数据服务接口的名称，全称的小写英文字母；
-- datafeed.username: 数据服务的用户名；
-- datafeed.password: 数据服务的密码。
+- datafeed.name: The name of the data service interface, lowercase English letters in full;
+- datafeed.username: The username for the data service;
+- datafeed.password: The password for the data service.
 
-字段如图所示：
+The fields are shown in the figure:
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/quick_start/17.png)
 
-目前支持七种datafeed：
+Currently supports seven datafeeds:
 - [XT]
 - [RQData]
 - [Udata]
@@ -239,6 +239,6 @@ C:\users\administrator\.vntrader\log
 [Tinysoft]: https://github.com/vnpy/vnpy_tinysoft
 
 
-### 数据库
+### Database
 
-以database为前缀的参数用于配置数据库服务。目前，VeighNa支持SQLite、MySQL、PostgreSQL、MongoDB、InfluxDB、DolphinDB、Arctic和LevelDB八种数据库。具体配置方法详见项目文档的数据库配置部分。
+Parameters prefixed with database are used to configure database services. Currently, VeighNa supports eight databases: SQLite, MySQL, PostgreSQL, MongoDB, InfluxDB, DolphinDB, Arctic, and LevelDB. For specific configuration methods, please refer to the database configuration section of the project documentation.

@@ -1,171 +1,171 @@
-# AlgoTrading - 算法委托执行交易模块
+# AlgoTrading - Algorithmic Order Execution Trading Module
 
-## 功能简介
+## Function Overview
 
-AlgoTrading是用于**算法委托执行交易**的模块，用户可以通过其UI界面操作来便捷完成启动算法、保存配置、停止算法等任务。
+AlgoTrading is a module for **algorithmic order execution trading**. Users can conveniently complete tasks such as launching algorithms, saving configurations, and stopping algorithms through its UI interface.
 
-算法交易负责委托订单的具体执行过程。目前，AlgoTrading提供了多种示例算法，用户可以通过把大笔订单自动拆分成合适的小单分批委托，有效降低交易成本和冲击成本（如冰山算法、狙击手算法），也可以在设定的阈值内进行高抛低吸操作（如网格算法、套利算法）。
+Algorithmic trading is responsible for the specific execution process of order placements. Currently, AlgoTrading provides various example algorithms. Users can automatically split large orders into appropriate smaller orders for phased placement, effectively reducing trading costs and impact costs (such as Iceberg algorithm, Sniper algorithm). They can also conduct buy-low-sell-high operations within set thresholds (such as Grid algorithm, Arbitrage algorithm).
 
-## 加载启动
+## Loading and Launching
 
-### VeighNa Station加载
+### Loading via VeighNa Station
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【AlgoTrading】。
+After launching and logging into VeighNa Station, click the [Trading] button. In the configuration dialog, check [AlgoTrading] in the [Application Module] section.
 
-### 脚本加载
+### Loading via Script
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_algotrading import AlgoTradingApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(AlgoTradingApp)
 ```
 
-## 启动模块
+## Starting the Module
 
-对于用户搭建的算法，需要放到algo_trading.algos目录中，才能被识别加载。
+For user-built algorithms, they need to be placed in the algo_trading.algos directory to be recognized and loaded.
 
-在启动模块之前，请先连接交易接口（连接方法详见基本使用篇的连接接口部分）。看到VeighNa Trader主界面【日志】栏输出“合约信息查询成功”之后再启动模块，如下图所示：
+Before starting the module, please connect to the trading interface first (for connection methods, see the Interface Connection section in the Basic Usage chapter). After seeing "Contract information query successful" output in the [Log] section of the VeighNa Trader main interface, start the module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/cta_strategy/1.png)
 
-请注意，IB接口因为登录时无法自动获取所有的合约信息，只有在用户手动订阅行情时才能获取。因此需要在主界面上先行手动订阅合约行情，再启动模块。
+Please note that because the IB interface cannot automatically obtain all contract information upon login, it can only be obtained when the user manually subscribes to market data. Therefore, you need to manually subscribe to contract market data on the main interface before starting the module.
 
-成功连接交易接口后，在菜单栏中点击【功能】-> 【算法交易】，或者点击左侧按钮栏的图标：
+After successfully connecting to the trading interface, click [Function] -> [Algorithmic Trading] in the menu bar, or click the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/1.png)
 
-即可进入算法委托执行交易模块的UI界面，如下图所示：
+You can then enter the UI interface of the algorithmic order execution trading module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/10.png)
 
 
-## 配置算法
+## Configuring Algorithms
 
-配置参数要求如下：
+Algorithm configuration parameter requirements are as follows:
 
-- 算法：在下拉框中选择要执行的交易算法；
-- 本地代码：格式为vt_symbol（合约代码 + 交易所名称）；
-- 方向：多、空；
-- 价格：委托下单的价格；
-- 数量：委托的总数量，需要拆分成小批订单进行交易；
-- 执行时间（秒）：运行该算法交易的总时间，以秒为单位；
-- 每轮间隔（秒）：每隔多少时间进行委托下单操作，以秒为单位；
-- 开平：开、平、平今、平昨。
+- Algorithm: Select the trading algorithm to execute from the dropdown box;
+- Local Code: Format is vt_symbol (contract code + exchange name);
+- Direction: Long, Short;
+- Price: Order placement price;
+- Quantity: Total order quantity, which needs to be split into smaller orders for trading;
+- Execution Time (seconds): Total time to run the algorithmic trading, in seconds;
+- Interval (seconds): How often to place orders, in seconds;
+- Open/Close: Open, Close, Close Today, Close Yesterday.
 
 
-## 启动算法
+## Launching Algorithms
 
-目前VeighNa一共提供了五种常用的示例算法。本文档以时间加权平均算法（TWAP）为例，介绍算法启动过程。
+Currently, VeighNa provides five commonly used example algorithms. This document uses the Time-Weighted Average Price (TWAP) algorithm as an example to introduce the algorithm launching process.
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/3.png)
 
-参数配置完成后（已保存的算法信息，通过在【配置】栏对应的算法下点击【使用】，可切换界面左侧配置的信息内容），点击【启动算法】按钮，即可立刻执行算法交易。
+After configuring the parameters (for saved algorithm information, click [Use] under the corresponding algorithm in the [Configuration] section to switch the information content on the left side of the interface), click the [Start Algorithm] button to immediately execute algorithmic trading.
 
-若启动成功，则可在右上角【执行中】界面观测到该算法的执行状态。
+If launched successfully, you can observe the algorithm's execution status in the [Executing] interface in the upper right corner.
 
-图中算法执行的任务具体为：使用时间加权平均算法，买入10000手豆油2109合约（y2409），执行价格为7420元，执行时间为600秒，每轮间隔为6秒；即每隔6秒钟，当合约卖一价小于等于7420时，以7420的价格买入100手豆油2409合约，将买入操作分割成100次。
+The specific task executed by the algorithm in the figure is: Use the Time-Weighted Average Price algorithm to buy 10,000 lots of Soybean Meal 2409 contract (y2409), execution price is 7420 yuan, execution time is 600 seconds, interval is 6 seconds; that is, every 6 seconds, when the contract's ask price is less than or equal to 7420, buy 100 lots of Soybean Meal 2409 contract at 7420, dividing the buy operation into 100 times.
 
-## CSV启动
+## CSV Launch
 
-当有较多算法需要启动时，可以通过CSV文件来一次性批量启动。点击图形界面左侧的【CSV启动】按钮，在弹出的对话框中找到要导入的CSV文件后打开即可快速启动算法。
+When there are many algorithms to launch, you can batch launch them at once through a CSV file. Click the [CSV Launch] button on the left side of the GUI, find the CSV file to import in the pop-up dialog, and open it to quickly launch the algorithms.
 
-请注意，CSV文件的格式应如下图所示，和左侧编辑区的各字段一致：
+Please note that the CSV file format should be as shown in the figure below, consistent with the fields in the left editing area:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/12.png)
 
-结合Excel的表格快速编辑功能，批量添加算法较为方便。启动成功后，CSV文件中所有算法的执行情况均会显示在【执行中】界面下。
+Combined with Excel's quick table editing features, batch adding algorithms is more convenient. After successful launch, the execution status of all algorithms in the CSV file will be displayed in the [Executing] interface.
 
 
-## 停止算法
+## Stopping Algorithms
 
-当用户需要暂停正在执行的交易算法时，可以在【执行中】界面点击【暂停】按钮，暂停某个正在执行的算法交易，如下图所示：
+When users need to pause a trading algorithm that is currently executing, they can click the [Pause] button in the [Executing] interface to pause a certain executing algorithmic trading, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/6.png)
 
-当用户需要恢复已经暂停的交易算法时，可以在【执行中】界面点击【恢复】按钮，恢复某个已经暂停的算法交易，如下图所示：
+When users need to resume a paused trading algorithm, they can click the [Resume] button in the [Executing] interface to resume a certain paused algorithmic trading, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/15.png)
 
-当用户需要停止正在执行的交易算法时，可以在【执行中】界面点击【停止】按钮，停止某个正在执行的算法交易，如下图所示：
+When users need to stop a trading algorithm that is currently executing, they can click the [Stop] button in the [Executing] interface to stop a certain executing algorithmic trading, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/6.png)
 
-用户也可以在委托交易界面点击最下方的【全部停止】按钮，一键停止所有执行中的算法交易，如下图所示：
+Users can also click the [Stop All] button at the bottom of the order trading interface to stop all executing algorithmic trading with one click, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/7.png)
 
 
-## 数据监控
+## Data Monitoring
 
-数据监控界面由四个部分构成：
+The data monitoring interface consists of four parts:
 
-执行中组件：显示正在执行的算法交易，包括：算法、参数、变量和状态。成功启动算法之后，切换到右上角【执行中】界面，会显示该算法的执行状态，如下图所示：
+Executing Component: Displays algorithmic trading that is currently executing, including: algorithm, parameters, variables, and status. After successfully launching the algorithm, switch to the [Executing] interface in the upper right corner to display the algorithm's execution status, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/6.png)
 
-已结束组件：显示已完成的算法交易，同样包括：算法、参数、变量和状态。算法结束或者停止之后，切换到右上角【已结束】界面，会显示该算法的执行状态，如下图所示：
+Finished Component: Displays completed algorithmic trading, also including: algorithm, parameters, variables, and status. After the algorithm ends or stops, switch to the [Finished] interface in the upper right corner to display the algorithm's execution status, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/9.png)
 
-日志组件：显示启动、停止、完成算法的相关日志信息。在打开算法交易模块后，会进行初始化，故【日志】组件会首先输出“算法交易引擎启动”，如下图所示：
+Log Component: Displays relevant log information for launching, stopping, and completing algorithms. After opening the algorithmic trading module, initialization is performed, so the [Log] component will first output "Algorithmic trading engine started", as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/algo_trading/11.png)
 
 
-## 示例算法
+## Example Algorithms
 
-示例算法路径位于vnpy_algotrading.algos文件夹下（请注意，个别算法是没有写开平方向的，若有需要，可基于自身需求进行个性化修改）。目前，算法交易模块提供了以下五种内置算法：
+Example algorithm paths are located in the vnpy_algotrading.algos folder (please note that some algorithms do not have open/close direction written. If needed, you can make personalized modifications based on your own requirements). Currently, the algorithmic trading module provides the following five built-in algorithms:
 
-### TWAP - 时间加权平均算法
+### TWAP - Time-Weighted Average Price Algorithm
 
-时间加权平均算法（TWAP）具体执行步骤如下：
+The Time-Weighted Average Price (TWAP) algorithm execution steps are as follows:
 
-- 将委托数量平均分布在某个时间区域内，每隔一段时间用指定的价格挂出买单（或者卖单）。
+- Distribute the order quantity evenly over a certain time period, placing buy (or sell) orders at specified prices at regular intervals.
 
-- 买入情况：卖一价低于目标价格时，发出委托，委托数量在剩余委托量与委托分割量中取最小值。
+- Buy situation: When the ask price is lower than the target price, send an order. The order quantity is the minimum of the remaining order quantity and the order split quantity.
 
-- 卖出情况：买一价高于目标价格时，发出委托，委托数量在剩余委托量与委托分割量中取最小值。
+- Sell situation: When the bid price is higher than the target price, send an order. The order quantity is the minimum of the remaining order quantity and the order split quantity.
 
-### Iceberg - 冰山算法
+### Iceberg - Iceberg Algorithm
 
-冰山算法（Iceberg）具体执行步骤如下：
+The Iceberg algorithm execution steps are as follows:
 
-- 在某个价位挂单，但是只挂一部分，直到全部成交。
+- Place an order at a certain price level, but only for a portion, until all are filled.
 
-- 买入情况：先检查撤单，最新Tick卖一价低于目标价格，执行撤单；若无活动委托，发出委托，委托数量在剩余委托量与挂出委托量中取最小值。
+- Buy situation: First check for order cancellation. If the latest Tick ask price is lower than the target price, execute cancellation. If there is no active order, send an order. The order quantity is the minimum of the remaining order quantity and the displayed order quantity.
 
-- 卖出情况：先检查撤单，最新Tick买一价高于目标价格，执行撤单；若无活动委托，发出委托，委托数量在剩余委托量与挂出委托量中取最小值。
+- Sell situation: First check for order cancellation. If the latest Tick bid price is higher than the target price, execute cancellation. If there is no active order, send an order. The order quantity is the minimum of the remaining order quantity and the displayed order quantity.
 
-### Sniper - 狙击手算法
+### Sniper - Sniper Algorithm
 
-狙击手算法（Sniper）具体执行步骤如下：
+The Sniper algorithm execution steps are as follows:
 
-- 监控最新Tick推送的行情，发现好的价格立刻报价成交。
+- Monitor the latest Tick market data push, and immediately quote when good prices are discovered.
 
-- 买入情况：最新Tick卖一价低于目标价格时，发出委托，委托数量在剩余委托量与卖一量中取最小值。
+- Buy situation: When the latest Tick ask price is lower than the target price, send an order. The order quantity is the minimum of the remaining order quantity and the ask quantity.
 
-- 卖出情况：最新Tick买一价高于目标价格时，发出委托，委托数量在剩余委托量与买一量中取最小值。
+- Sell situation: When the latest Tick bid price is higher than the target price, send an order. The order quantity is the minimum of the remaining order quantity and the bid quantity.
 
-### Stop - 条件委托算法
+### Stop - Conditional Order Algorithm
 
-条件委托算法（Stop）具体执行步骤如下：
+The Conditional Order (Stop) algorithm execution steps are as follows:
 
-- 监控最新Tick推送的行情，发现行情突破立刻报价成交。
+- Monitor the latest Tick market data push, and immediately quote when a price breakout is discovered.
 
-- 买入情况：Tick最新价高于目标价格时，发出委托，委托价为目标价格加上超价。
+- Buy situation: When the Tick latest price is higher than the target price, send an order. The order price is the target price plus the price improvement.
 
-- 卖出情况：Tick最新价低于目标价格时，发出委托，委托价为目标价格减去超价。
+- Sell situation: When the Tick latest price is lower than the target price, send an order. The order price is the target price minus the price improvement.
 
-### BestLimit - 最优限价算法
+### BestLimit - Best Limit Algorithm
 
-最优限价算法（BestLimit）具体执行步骤如下：
+The Best Limit algorithm execution steps are as follows:
 
-- 监控最新Tick推送的行情，发现好的价格立刻报价成交。
+- Monitor the latest Tick market data push, and immediately quote when good prices are discovered.
 
-- 买入情况：先检查撤单：最新Tick买一价不等于目标价格时，执行撤单；若无活动委托，发出委托，委托价格为最新Tick买一价，委托数量为剩余委托量。
+- Buy situation: First check for order cancellation: When the latest Tick bid price is not equal to the target price, execute cancellation. If there is no active order, send an order. The order price is the latest Tick bid price, and the order quantity is the remaining order quantity.
 
-- 卖出情况：先检查撤单：最新Tick买一价不等于目标价格时，执行撤单；若无活动委托，发出委托，委托价格为最新Tick卖一价，委托数量为剩余委托量。
+- Sell situation: First check for order cancellation: When the latest Tick ask price is not equal to the target price, execute cancellation. If there is no active order, send an order. The order price is the latest Tick ask price, and the order quantity is the remaining order quantity.

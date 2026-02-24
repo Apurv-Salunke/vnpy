@@ -1,71 +1,71 @@
-# RiskManager - 事前风控管理模块
+# RiskManager - Pre-trade Risk Control Management Module
 
-## 功能简介
+## Function Overview
 
-RiskManager模块是用于**事前风控管理**的功能模块，用户可以通过其UI界面操作来便捷完成启动风控，参数修改和停止风控等任务。
+The RiskManager module is a functional module for **pre-trade risk control management**. Users can conveniently complete tasks such as starting risk control, modifying parameters, and stopping risk control through its UI interface.
 
-## 加载启动
+## Loading and Launching
 
-### VeighNa Station加载
+### Loading via VeighNa Station
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【RiskManager】。
+After launching and logging into VeighNa Station, click the [Trading] button. In the configuration dialog, check [RiskManager] in the [Application Module] section.
 
-### 脚本加载
+### Loading via Script
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_riskmanager import RiskManagerApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(RiskManagerApp)
 ```
 
-## 启动模块
+## Starting the Module
 
-在菜单栏中点击【功能】-> 【交易风控】，或者点击左侧按钮栏的图标：
+Click [Function] -> [Trading Risk Control] in the menu bar, or click the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/risk_manager/1-1.png)
 
-即可进入事前风控模块的UI界面，如下图所示：
+You can then enter the UI interface of the pre-trade risk control module, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/risk_manager/1-2.png)
 
 
-## 启动风控
+## Starting Risk Control
 
-事前风控模块负责在委托通过交易API接口发出前，检查其状态是否符合各种风控规则。风控规则包括交易流控、下单数量、活动委托、撤单总数等，具体如下：
+The pre-trade risk control module is responsible for checking whether the status of orders meets various risk control rules before they are sent through the trading API interface. Risk control rules include trading flow control, order quantity, active orders, total cancellation count, etc., as follows:
 
- - 委托流控相关：
-   - 委托流控上限：给定时间窗口内最多允许发出的委托笔数
-   - 委托流控清空：每隔多少秒清零上述统计的委托笔数
- - 单笔委托上限：每一笔委托允许的最大下单量
- - 总成交上限：今天日内允许的最大总成交笔数（注意不是委托笔数）
- - 活动委托上限：允许的处于活动状态（提交中、未成交、部分成交）最大委托数量
- - 合约撤单上限：今天日内允许的单合约撤单次数上限（每个合约独立统计）
+ - Order Flow Control Related:
+   - Order Flow Control Upper Limit: Maximum number of orders allowed to be sent within a given time window
+   - Order Flow Control Clear: How many seconds to clear the above statistics of order count
+ - Single Order Upper Limit: Maximum order quantity allowed for each order
+ - Total Trade Upper Limit: Maximum total number of trades allowed today (note not number of orders)
+ - Active Order Upper Limit: Maximum number of orders allowed to be in active state (submitted, not filled, partially filled)
+ - Contract Cancellation Upper Limit: Maximum number of cancellations allowed per contract today (each contract is counted independently)
 
-推荐每天在运行自动交易前启动事前风控，以检查每一笔发出的委托是否符合风控要求：
+It is recommended to start pre-trade risk control before running automatic trading every day to check whether each order sent meets risk control requirements:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/risk_manager/1-3.png)
 
-1. 在【风控运行状态】一栏的下拉框中选择【启动】；
-2. 设定各种风控规则的参数后，点击下方的【保存】按钮，即可开始运行风控；
-3. 此时系统内的每一笔委托，都需要满足全部风控要求（不超过限制）后，才能通过底层接口发出。
+1. Select [Start] from the dropdown box in the [Risk Control Running Status] section;
+2. After setting various risk control rule parameters, click the [Save] button below to start running risk control;
+3. At this time, every order in the system needs to meet all risk control requirements (not exceeding limits) before it can be sent through the underlying interface.
 
 
-## 参数修改
+## Parameter Modification
 
-事前风控模块允许用户自定义风控参数：
+The pre-trade risk control module allows users to customize risk control parameters:
 
-* 用户可以点击输入框右侧的上下箭头来修改参数，也可以直接输入数字来修改，如下图所示。
+* Users can click the up and down arrows on the right side of the input box to modify parameters, or directly enter numbers to modify, as shown in the figure below.
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/risk_manager/1-4.png)
-* 修改后请点击【保存】按钮生效。
+* After modification, please click the [Save] button to take effect.
 
-## 停止风控
+## Stopping Risk Control
 
-不需要运行风控时，用户可以停止风控：
+When risk control is not needed, users can stop risk control:
 
-* 在【风控运行状态】的下拉框中选择【停止】，如下图所示：
+* Select [Stop] from the dropdown box in the [Risk Control Running Status], as shown in the figure below:
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/risk_manager/1-5.png)
-* 点击下方的【保存】按钮即可停止对委托的风控检查。
+* Click the [Save] button below to stop risk control checking for orders.

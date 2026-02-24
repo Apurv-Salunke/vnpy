@@ -1,283 +1,284 @@
-# OptionMaster - 期权波动率交易模块
+# OptionMaster - Option Volatility Trading Module
 
-## 功能简介
+## Function Overview
 
-OptionMaster是用于**期权波动率交易**的功能模块，用户可以通过OptionMaster完成期权实时定价、波动率曲面跟踪、持仓希腊值监控、组合压力测试、电子眼自动交易等功能。
+OptionMaster is a functional module for **option volatility trading**. Users can complete functions such as option real-time pricing, volatility surface tracking, position Greek value monitoring, portfolio stress testing, and electronic eye automatic trading through OptionMaster.
 
 
-## 加载启动
+## Loading and Launching
 
-### VeighNa Station加载
+### Loading via VeighNa Station
 
-启动登录VeighNa Station后，点击【交易】按钮，在配置对话框中的【应用模块】栏勾选【OptionMaster】。
+After launching and logging into VeighNa Station, click the [Trading] button. In the configuration dialog, check [OptionMaster] in the [Application Module] section.
 
-### 脚本加载
+### Loading via Script
 
-在启动脚本中添加如下代码：
+Add the following code to the startup script:
 
 ```python3
-# 写在顶部
+# Write at the top
 from vnpy_optionmaster import OptionMasterApp
 
-# 写在创建main_engine对象后
+# Write after creating the main_engine object
 main_engine.add_app(OptionMasterApp)
 ```
 
 
-## 启动模块
+## Starting the Module
 
-启动VeighNa Trader后，在菜单栏中点击【功能】-> 【期权交易】，或者点击左侧按钮栏的图标：
+After launching VeighNa Trader, click [Function] -> [Option Trading] in the menu bar, or click the icon in the left button bar:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/1.png)
 
-即可进入OptionMaster管理界面（下称管理界面），如下图所示：
+You can then enter the OptionMaster management interface (hereinafter referred to as the management interface), as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/2.png)
 
 
-## 配置组合
+## Configuring Portfolio
 
-在管理界面上，选择要交易的期权产品，点击【配置】按钮打开如下图所示的组合配置对话框：
+On the management interface, select the option product to trade and click the [Configure] button to open the portfolio configuration dialog as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/3.png)
 
 
-配置参数如下：
+Configuration parameters are as follows:
 
-* 定价模型
-  * Black-76模型：针对欧式期货期权（股指期权）；
-  * Black-Scholes模型：针对欧式股票期权（ETF期权）；
-  * Binomial-Tree模型：针对美式期货期权（商品期权）；
-* 年化利率
-  * 定价模型中用到的无风险折现利率；
-* 合约模式
-  * 正向：包括ETF期权、期货期权、股指期权等大多数产品；
-* Greeks小数位
-  * 显示希腊值时保留的小数位数；
-* 期权链对应的定价标的
-  * 注意只有选择了标的物的期权链，才会被加入交易组合；
-  * 定价标的物支持
-    * 期货合约：交易所本身提供的期货价格；
-    * 合成期货：基于期权价格算出的合成期货价格；
-    * OptionMaster在定价计算过程中会对标的物价格相对期权链的升贴水进行自动修正，因此推荐选择交易最活跃的合约作为标的物。
+* Pricing Model
+  * Black-76 Model: For European futures options (stock index options);
+  * Black-Scholes Model: For European stock options (ETF options);
+  * Binomial-Tree Model: For American futures options (commodity options);
+* Annual Interest Rate
+  * Risk-free discount rate used in the pricing model;
+* Contract Mode
+  * Forward: Includes most products such as ETF options, futures options, stock index options, etc.;
+* Greeks Decimal Places
+  * Number of decimal places retained when displaying Greek values;
+* Pricing Underlying for Option Chain
+  * Note that only option chains with underlying selected will be added to the trading portfolio;
+  * Pricing underlying supports
+    * Futures Contracts: Futures prices provided by the exchange itself;
+    * Synthetic Futures: Synthetic futures prices calculated based on option prices;
+    * OptionMaster will automatically adjust the premium/discount of the underlying price relative to the option chain during pricing calculation, so it is recommended to select the most actively traded contract as the underlying.
 
-点击底部的【确认】按钮，完成期权组合的初始化，此时管理界面上的【配置】按钮会被锁定，而其他按钮则会被激活。
+Click the [Confirm] button at the bottom to complete option portfolio initialization. At this time, the [Configure] button on the management interface will be locked, and other buttons will be activated.
 
 
-## 行情监控
+## Market Monitoring
 
-点击管理界面的【T型报价】按钮，打开T型报价窗口：
+Click the [T-type Quote] button on the management interface to open the T-type quote window:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/4.png)
 
-窗口整体分为左右区域，中间白色列为行权价，左侧为看涨期权，右侧为看跌期权。
+The window is divided into left and right areas overall, with the middle white column being the strike price, left side being call options, and right side being put options.
 
-每行显示的为某一行权价期权对应的信息，从外向内显示的信息包括：
+Each row displays information corresponding to an option with a certain strike price. From outside to inside, the displayed information includes:
 
-* 合约代码
-* 期权的实时现金希腊值
+* Contract Code
+* Option's real-time cash Greek values
   * Vega
   * Theta
   * Gamma
   * Delta
-* 交易信息
-  * 持仓量
-  * 成交量
-* 1档盘口信息
-  * 买隐波
-  * 买量
-  * 买价
-  * 卖价
-  * 卖量
-  * 卖隐波
-* 净持仓
+* Trading Information
+  * Open Interest
+  * Volume
+* Level 1 Order Book Information
+  * Bid IV
+  * Bid Quantity
+  * Bid Price
+  * Ask Price
+  * Ask Quantity
+  * Ask IV
+* Net Position
 
 
-## 快速交易
+## Quick Trading
 
-点击管理界面的【快速交易】按钮，打开手动下单窗口：
+Click the [Quick Trading] button on the management interface to open the manual order window:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/5.png)
 
-整体使用方法和VeighNa Trader主界面的交易组件相似，输入合约代码、买卖方向、开平方向、交易价格和数量后，点击【委托】按钮即可发出限价委托，点击【全撤】按钮即可一键全撤当前的全部活动委托。
+The overall usage method is similar to the trading component on the VeighNa Trader main interface. After entering the contract code, buy/sell direction, open/close direction, trading price, and quantity, click the [Order] button to send a limit order, or click the [Cancel All] button to cancel all current active orders with one click.
 
-双击T型报价中某一期权的单元格，可以快速填充本窗口的【代码】编辑框。
+Double-clicking a cell of an option in the T-type quote can quickly fill in the [Code] edit box of this window.
 
 
-## 持仓希腊值
+## Position Greek Values
 
-点击管理界面的【持仓希腊值】按钮，打开希腊值风险监控窗口：
+Click the [Position Greek Values] button on the management interface to open the Greek value risk monitoring window:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/16.png)
 
-窗口中的监控信息分为四个维度：
+Monitoring information in the window is divided into four dimensions:
 
-* 交易组合（包括所有下属期权链和标的物汇总数据）
-* 标的物合约
-* 期权链（包括所有下属期权汇总数据）
-* 期权合约
+* Trading Portfolio (including all subordinate option chains and underlying aggregated data)
+* Underlying Contract
+* Option Chain (including all subordinate option aggregated data)
+* Option Contract
 
-每个维度的监控信息包括：
+Monitoring information for each dimension includes:
 
-* 持仓相关
-  * 多仓：当前的多头持仓
-  * 空仓：当前的空头持仓
-  * 净仓：多仓 - 空仓
-* 总希腊值
-  * Delta：标的价格涨跌1%对应的该维度盈亏金额
-  * Gamma：标的价格涨跌1%对应的该维度的Delta变动
-  * Theta：每过去一个交易日，该维度的盈亏金额
-  * Vega：隐含波动率涨跌1%对应的该维度的盈亏金额
+* Position Related
+  * Long: Current long position
+  * Short: Current short position
+  * Net: Long - Short
+* Total Greek Values
+  * Delta: P&L amount corresponding to 1% change in underlying price
+  * Gamma: Delta change of this dimension corresponding to 1% change in underlying price
+  * Theta: P&L amount of this dimension per trading day passed
+  * Vega: P&L amount of this dimension corresponding to 1% change in implied volatility
 
-## 升贴水监控
+## Premium/Discount Monitoring
 
-点击管理界面的【升贴水监控】按钮，打开期权链定价升贴水校准幅度的监控窗口：
+Click the [Premium/Discount Monitoring] button on the management interface to open the option chain pricing premium/discount calibration amplitude monitoring window:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/6.png)
 
-以上图为例，可以看到：
+Taking the figure above as an example, you can see:
 
-* IO2104，以对应月份期货IF2104定价，升贴水接近0；
-* IO2105、IO2106、IO2109，以活跃合约IF2104定价，贴水依次增加；
-* IO2112、IO2203，以对应月份的合成期货定价，升贴水为0。
+* IO2104, priced with corresponding month futures IF2104, premium/discount is close to 0;
+* IO2105, IO2106, IO2109, priced with active contract IF2104, discount increases sequentially;
+* IO2112, IO2203, priced with synthetic futures of corresponding months, premium/discount is 0.
 
 
-## 波动率曲线
+## Volatility Curve
 
-点击管理界面的【波动率曲线】按钮，打开当前的市场波动率曲线监控图表：
+Click the [Volatility Curve] button on the management interface to open the current market volatility curve monitoring chart:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/7.png)
 
-图表中每个期权链的波动率曲线采用不同颜色显示，具体颜色对应期权链的图例在左侧。
+The volatility curve of each option chain in the chart is displayed in different colors, with the legend corresponding to the option chain on the left.
 
-每个期权链会包括三条曲线：
+Each option chain will include three curves:
 
-* 向上箭头：该月份看涨期权的1档盘口隐含波动率中值，即买1价和卖1价盘口波动率的均值；
-* 向下箭头：该月份看跌期权的1档盘口隐含波动率中值；
-* 小圆点：该月份定价波动率的数值，定价波动率用于希腊值计算和电子眼交易，通过后面的【波动率管理】组件设置。
+* Upward Arrow: Median of level 1 order book implied volatility for call options of that month, i.e., the mean of bid 1 price and ask 1 price volatility;
+* Downward Arrow: Median of level 1 order book implied volatility for put options of that month;
+* Small Dots: Pricing volatility value for that month, pricing volatility is used for Greek value calculation and electronic eye trading, set through the [Volatility Management] component below.
 
-图表中显示的曲线通过窗口顶部每个期权链对应的勾选框来控制，可以根据需求进行调整，如下图中只显示了IO2109这一个期权链：
+The curves displayed in the chart are controlled by the checkbox corresponding to each option chain at the top of the window and can be adjusted according to needs, as shown in the figure below which only displays the IO2109 option chain:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/17.png)
 
 
-## Delta对冲
+## Delta Hedging
 
-点击管理界面的【Delta对冲】按钮，打开交易组合的Delta自动对冲功能：
+Click the [Delta Hedging] button on the management interface to open the portfolio's Delta automatic hedging function:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/8.png)
 
-* 对冲标的：可以选择投资组合内的任意一个标的物合约；
-* 执行频率：多久执行一次检查，判断是否要执行对冲；
-* Delta目标：如果触发对冲，将Delta值对冲到多少；
-  * 选择0，即为保持整体组合的Delta中性；
-  * 选择正数，即为保持整体组合的Delta多头敞口；
-  * 选择负数，即为保持整体组合的Delta空头敞口；
-* Delta范围：当仓位类型的Delta值偏离上述Delta目标超过多少时，触发对冲任务；
-* 委托超价：发出对冲委托时，价格相对于对面盘口的超价；
+* Hedging Underlying: You can choose any underlying contract in the investment portfolio;
+* Execution Frequency: How often to execute a check to judge whether to execute hedging;
+* Delta Target: If hedging is triggered, what value to hedge the Delta to;
+  * Select 0, i.e., maintain overall portfolio Delta neutrality;
+  * Select a positive number, i.e., maintain overall portfolio Delta long exposure;
+  * Select a negative number, i.e., maintain overall portfolio Delta short exposure;
+* Delta Range: When the Delta value of the position type deviates from the above Delta target by more than how much, trigger hedging tasks;
+* Order Price Improvement: Price improvement relative to the opposite side of the order book when sending hedging orders;
 
-点击【启动】按钮即可启动自动对冲功能，当读秒达到执行间隔时即会执行一次检查，如果满足条件则会启动TWAP算法执行对冲操作。
+Click the [Start] button to start the automatic hedging function. When the countdown reaches the execution interval, a check will be executed. If conditions are met, the TWAP algorithm will be started to execute hedging operations.
 
-点击【停止】按钮即可停止自动对冲功能的运行。
+Click the [Stop] button to stop the automatic hedging function from running.
 
-## 情景分析
+## Scenario Analysis
 
-点击管理界面的【情景分析】按钮，打开交易组合整体持仓风险的压力测试和情景分析功能：
+Click the [Scenario Analysis] button on the management interface to open the portfolio overall position risk stress testing and scenario analysis function:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/9.png)
 
-首先配置执行的分析任务：
+First configure the analysis tasks to execute:
 
-* 目标数据：支持盈亏、Delta、Gamma、Theta、Vega；
-* 时间衰减：交易日的衰减天数；
-* 价格变动：
-  * 分析中价格的涨跌变动范围；
-  * 假设单前价格为100，变动为10%，则范围为90~110；
-* 波动率变动：
-  * 分析中波动率的涨跌变动范围；
-  * 假设当前波动率为20%，变动为10%，则范围为10%~30%。
+* Target Data: Supports P&L, Delta, Gamma, Theta, Vega;
+* Time Decay: Number of days of trading day decay;
+* Price Change:
+  * Price rise and fall change range in analysis;
+  * Assuming current price is 100, change is 10%, then the range is 90~110;
+* Volatility Change:
+  * Volatility rise and fall change range in analysis;
+  * Assuming current volatility is 20%, change is 10%, then the range is 10%~30%.
 
-点击执行分析按钮后，压力测试引擎会根据当前的交易组合持仓，以及每个情景下的价格和隐含波动率情况，来计算对应的目标数据，并将结果绘制为3D曲面。
+After clicking the execute analysis button, the stress testing engine will calculate the corresponding target data based on the current trading portfolio positions and the price and implied volatility situation under each scenario, and draw the results as a 3D surface.
 
-下图显示的是以Gamma值为计算目标，10%价格变动，15%波动率变动的结果：
+The figure below shows the results with Gamma value as the calculation target, 10% price change, and 15% volatility change:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/18.png)
 
-该3D图中的垂直轴为计算目标的数值，水平的两轴分别为价格和波动率的变动数值。
+The vertical axis in the 3D graph is the calculation target value, and the two horizontal axes are the price and volatility change values respectively.
 
 
-## 波动率管理
+## Volatility Management
 
-点击管理界面的【波动率管理】按钮，打开定价波动率管理界面：
+Click the [Volatility Management] button on the management interface to open the pricing volatility management interface:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/11.png)
 
-点击顶部的期权链标签切换对应期权链的定价波动率管理组件，第一次打开时下方表格中的【定价隐波】数值均为0。
+Click the option chain label at the top to switch the pricing volatility management component of the corresponding option chain. When opened for the first time, the [Pricing IV] values in the table below are all 0.
 
-首先进行定价曲线的初始化，点击顶部的【重置】按钮，将当前该行权价的虚值期权的中值隐波，映射到定价隐波上。
+First, perform pricing curve initialization. Click the [Reset] button at the top to map the median IV of out-of-the-money options at the current strike price to the pricing IV.
 
-映射完成后可以在波动率图表中查看当前的定价波动率曲线形状，如果某一行权价的定价隐波和整体曲线相比存在不平滑的情况，则可以基于相对平滑的行权价的定价隐波对其进行拟合。
+After mapping is completed, you can view the current pricing volatility curve shape in the volatility chart. If the pricing IV of a certain strike price is not smooth compared to the overall curve, you can fit it based on the relatively smooth pricing IV of the strike price.
 
-在组件表格中的【执行拟合】列，勾选要执行拟合的行权价勾选框，勾选完成后点击顶部的【拟合】按钮，即可基于OptionMaster内置的Cubic Spline（三项式差值）算法来执行波动率曲线的拟合。
+In the [Execute Fit] column of the component table, check the strike price checkbox to be fitted. After checking is completed, click the [Fit] button at the top to execute volatility curve fitting based on OptionMaster's built-in Cubic Spline (cubic interpolation) algorithm.
 
-拟合完成后如果还存在不满意的部分，则可以通过【定价隐波】列的滚动框来进行手动微调，点击上下箭头每次上升或者下跌0.1%，或者也可以直接输入想要修改的数值。
+After fitting is completed, if there are still unsatisfactory parts, you can manually fine-tune through the scroll box in the [Pricing IV] column. Click the up and down arrows to rise or fall by 0.1% each time, or you can directly enter the value you want to modify.
 
-当因为对波动率曲线高低的整体观点，需要对曲线进行整体平移时，可以通过组件顶部的【+0.1%】和【-0.1%】按钮，来对所有行权价的定价波动率进行平移调整。
+When the overall view of the volatility curve height needs to be shifted due to overall view of the volatility curve height, you can use the [+0.1%] and [-0.1%] buttons at the top of the component to shift and adjust the pricing volatility of all strike prices.
 
-## 电子眼
+## Electronic Eye
 
-点击管理界面的【电子眼】按钮，打开交易组合的电子眼自动套利算法功能：
+Click the [Electronic Eye] button on the management interface to open the portfolio's electronic eye automatic arbitrage algorithm function:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/12.png)
 
-电子眼算法可以基于交易员预设的定价波动率曲线，在允许的持仓范围内自动捕捉市场上出现的瞬时交易执行机会，同时结合Delta自动对冲功能来保证投资组合的整体Delta中性。
+The electronic eye algorithm can automatically capture instantaneous trading execution opportunities appearing in the market within the allowed position range based on the pricing volatility curve preset by the trader, and combine with the Delta automatic hedging function to ensure the overall Delta neutrality of the investment portfolio.
 
-电子眼界面类似T型报价分为左右区域，中间的白色为行权价，左侧为看涨期权，右侧为看跌期权。每个期权上对应存在一个独立的电子眼交易算法，交易员可以同时启动数百个交易算法（具体数量取决于CPU性能）而互不干扰。
+The electronic eye interface is similar to T-type quote, divided into left and right areas, with the middle white being the strike price, left side being call options, and right side being put options. Each option corresponds to an independent electronic eye trading algorithm. Traders can start hundreds of trading algorithms simultaneously (specific number depends on CPU performance) without interfering with each other.
 
-每个电子眼算法的配置参数包括：
+Configuration parameters for each electronic eye algorithm include:
 
-* 交易价差相关
-  * 价格价差
-  * 隐波价差
-* 仓位限制相关
-  * 持仓范围
-  * 目标持仓
-* 最大委托
-  * 单笔最大的委托数量
-* 方向
-  * 算法允许的交易方向
-  * 包括只允许做多、只允许做空、允许双向交易
+* Trading Spread Related
+  * Price Spread
+  * IV Spread
+* Position Limit Related
+  * Position Range
+  * Target Position
+* Maximum Order
+  * Maximum order quantity per single order
+* Direction
+  * Trading direction allowed by the algorithm
+  * Including only allowed to go long, only allowed to go short, allowed to trade in both directions
 
-电子眼算法的执行流程如下：
+The execution flow of the electronic eye algorithm is as follows:
 
-1. 基于定价波动率，计算期权的**理论价**
-2. 计算目标买卖的价差：
-   1. 隐波价差的价格值 = 隐波价差 * 期权理论Vega值
-   2. 交易价差 = max(价格价差, 隐波价差的价格值)
-3. 计算目标买卖价：
-   1. 目标买价 = 理论价 - 交易价差 / 2
-   2. 目标卖价 = 理论价 + 交易价差 / 2
-4. 以做多交易为例，当盘口卖1价格低于目标买价时，触发买入信号
-5. 计算本轮委托量：
-   1. 算法持仓上限 = 目标持仓 + 持仓范围
-   2. 剩余多头可交易量 = 算法多头持仓上限 - 当前净持仓
-   3. 本轮委托量 = min(剩余多头可交易量，卖1量，最大委托量)
-6. 使用目标买价和本轮委托量，发出对应的交易委托
+1. Based on pricing volatility, calculate the option's **theoretical price**
+2. Calculate the target buy/sell spread:
+   1. IV spread price value = IV spread * option theoretical Vega value
+   2. Trading spread = max(price spread, IV spread price value)
+3. Calculate target buy/sell prices:
+   1. Target bid = theoretical price - trading spread / 2
+   2. Target ask = theoretical price + trading spread / 2
+4. Taking long trading as an example, when the order book ask 1 price is lower than the target bid, trigger a buy signal
+5. Calculate this round's order quantity:
+   1. Algorithm position upper limit = target position + position range
+   2. Remaining long tradable quantity = algorithm long position upper limit - current net position
+   3. This round's order quantity = min(remaining long tradable quantity, ask 1 quantity, maximum order quantity)
+6. Use the target bid and this round's order quantity to send the corresponding trading order
 
-配置好算法参数后，点击该行的【定价】列的按钮启动算法的定价计算，如下图所示：
+After configuring the algorithm parameters, click the button in the [Pricing] column of that row to start the algorithm's pricing calculation, as shown in the figure below:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/13.png)
 
-【定价】和【交易】按钮的状态显示：
+[Pricing] and [Trading] button status display:
 
-* 为N时，代表算法当前未启动该任务
-* 为Y时，代表算法已在执行对应的任务
+* When N, it means the algorithm has not started the task currently
+* When Y, it means the algorithm is already executing the corresponding task
 
-启动定价的4个期权算法，会开始实时更新目标买卖价等相关数值。
+Starting pricing for the 4 option algorithms will start updating target buy/sell prices and related values in real-time.
 
-此时点击【交易】列的按钮，即可启动算法的交易执行，当价格和持仓满足条件时就会自动发出交易委托，详细的算法运行状态日志信息可以通过右侧日志区域监控：
+At this time, click the button in the [Trading] column to start the algorithm's trading execution. When price and position conditions are met, trading orders will be automatically sent. Detailed algorithm running status log information can be monitored through the log area on the right:
 
 ![](https://vnpy-doc.oss-cn-shanghai.aliyuncs.com/option_master/14.png)
 
-当需要对算法配置进行批量修改时，可以通过电子眼窗口的右上角的全局修改功能进行操作，更加方便快捷。
+When batch modification of algorithm configuration is needed, it can be operated through the global modification function in the upper right corner of the electronic eye window, which is more convenient and quick.
+
 

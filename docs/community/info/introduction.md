@@ -1,128 +1,128 @@
-# 功能介绍
+# Feature Introduction
 
-作为一套基于Python的量化交易程序开发框架，VeighNa致力于提供从交易API对接到策略自动交易的量化解决方案。
+As a Python-based quantitative trading program development framework, VeighNa is committed to providing quantitative solutions from trading API integration to automated strategy trading.
 
-## 目标用户
+## Target Users
 
-如果有以下需求，不妨试试看VeighNa：
+If you have the following needs, consider trying VeighNa:
 
-* 基于Python语言来开发自己的量化交易程序，充分利用Python社区强大的数据研究和机器学习生态
-* 通过一套标准化的交易平台体系，对接国内外诸多不同类型的金融市场：证券、期货、期权、外盘等
-* 使用经过充分实盘检验的量化策略引擎，来完成从数据维护、策略开发、回测研究到实盘自动交易的整个业务流程
-* 对平台进行各种定制扩展，满足个性化的交易需求：增加交易接口，修改GUI图形界面，基于事件驱动引擎开发复杂策略应用
-* 掌控交易程序的源代码细节，杜绝各种程序后门，避免被窃取策略、截获交易信号、偷盗账号密码等风险
-* 节约为量化交易平台付出的资金成本，不必再支出上万每年的软件授权费或者每笔成交的额外加点
-
-
-## 应用场景
-
-从专业个人投资者、创业型私募，到券商资管部门，都能找到VeighNa的应用场景。
-
-* 专业个人投资者：使用VeighNa Trader直连期货公司的CTP期货柜台，实现从策略开发到实盘自动交易的CTA业务流程
-* 创业型私募：基于RpcService构建服务器端的统一报盘通道，允许交易员在自己的本地电脑自行开发各类交易策略应用
-* 券商资管部门：对接证券公司统一部署的O32资管系统，基于事件驱动引擎定制开发多策略复杂系统
+* Develop your own quantitative trading programs based on the Python language, fully utilizing Python's powerful data research and machine learning ecosystem
+* Connect to many different types of financial markets at home and abroad through a standardized trading platform system: securities, futures, options, foreign markets, etc.
+* Use a fully tested quantitative strategy engine to complete the entire business process from data maintenance, strategy development, backtesting research to automated live trading
+* Customize and extend the platform with various customizations to meet personalized trading needs: add trading interfaces, modify GUI graphical interfaces, develop complex strategy applications based on event-driven engines
+* Control the source code details of trading programs, eliminate various program backdoors, and avoid risks such as strategy theft, trading signal interception, account password theft, etc.
+* Save capital costs for quantitative trading platforms, no longer need to pay software licensing fees of tens of thousands per year or additional point additions per transaction
 
 
-## 支持的接口
+## Application Scenarios
 
-**vnpy.gateway**，覆盖国内外所有交易品种的交易接口：
+From professional individual investors, startup private equity firms, to securities company asset management departments, all can find application scenarios for VeighNa.
 
-* 国内市场
-
-  * CTP（ctp）：期货、期货期权
-
-  * CTP测试（ctptest）：期货、期货期权
-
-  * CTP Mini（mini）：期货、期货期权
-
-  * 飞马（femas）：期货
-
-  * CTP期权（sopt）：ETF期权
-
-  * 顶点飞创（sec）：ETF期权
-
-  * 顶点HTS（hts）：ETF期权
-
-  * 恒生UFT（uft）：期货、ETF期权
-
-  * 易盛（esunny）：期货、黄金TD
-
-  * 中泰XTP（xtp）：A股、两融、ETF期权
-
-  * 国泰君安统一交易网关（hft）：A股、两融
-
-  * 华鑫奇点股票（torastock）：A股
-
-  * 华鑫奇点期权（toraoption）：ETF期权
-
-  * 中亿汇达Comstar（comstar）：银行间市场
-
-  * 东方证券OST（ost）：A股
-
-  * 融航（rohon）：期货资管
-
-  * TTS（tts）：期货
-
-  * 飞鼠（sgit）：黄金TD
-
-  * 金仕达黄金（ksgold）：黄金TD
-
-* 海外市场
-
-  * 盈透证券（ib）：海外多品种
-
-  * 易盛9.0外盘（tap）：外盘期货
-
-  * 直达期货（da）：外盘期货
-
-* 特殊应用
-
-  * RPC服务（rpc）：跨进程通讯接口，用于分布式架构
+* Professional individual investors: Use VeighNa Trader to directly connect to the futures company's CTP futures counter, implementing the CTA business process from strategy development to automated live trading
+* Startup private equity firms: Build a unified order placement channel on the server side based on RpcService, allowing traders to develop various trading strategy applications on their local computers
+* Securities company asset management departments: Connect to the O32 asset management system uniformly deployed by securities companies, customize and develop multi-strategy complex systems based on event-driven engines
 
 
-## 支持的应用
+## Supported Interfaces
 
-**vnpy.app**，开箱即用的各类量化策略交易应用：
+**vnpy.gateway**, covering trading interfaces for all domestic and international trading varieties:
 
-* cta_strategy：CTA策略引擎模块，在保持易用性的同时，允许用户针对CTA类策略运行过程中委托的报撤行为进行细粒度控制（降低交易滑点、实现高频策略）
+* Domestic Market
 
-* cta_backtester：CTA策略回测模块，无需使用Jupyter Notebook，直接使用图形界面直接进行策略回测分析、参数优化等相关工作
+  * CTP (ctp): Futures, Futures Options
 
-* spread_trading：多合约价差套利模块，除了允许用户通过手动的方式来启动算法买卖价差外，也同样支持用户使用策略模板SpreadStrategyTemplate来开发各种价差类的量化交易策略
+  * CTP Test (ctptest): Futures, Futures Options
 
-* algo_trading：算法交易模块，提供多种常用的智能交易算法：TWAP、Sniper、Iceberg、BestLimit等等。支持常用算法配置保存
+  * CTP Mini (mini): Futures, Futures Options
 
-* option_master：期权波动率交易模块，提供波动率曲线图表，允许用户作出相应的判断分析，进而使用波动率管理组件设置定价参考波动率，然后就可以通过期权电子眼算法自动扫描市场上的交易机会并瞬时完成交易
+  * Femas (femas): Futures
 
-* portfolio_strategy：多合约组合策略模块，专门针对需要同时交易多合约的量化策略设计，满足其历史数据回测和实盘自动交易的需求
+  * CTP Option (sopt): ETF Options
 
-* script_trader：脚本策略模块，针对多标的组合类交易策略设计，同时也可以直接在命令行中实现REPL指令形式的交易，不支持回测功能
+  * Vertex Feichuang (sec): ETF Options
 
-* chart_wizard：实时K线图表模块，可以实现简单的实时K线行情显示，直接在本地合约代码的编辑框中输入vt_symbol，点击【新建图表】的按钮就会打开对应合约的图表
+  * Vertex HTS (hts): ETF Options
 
-* rpc_service：RPC服务模块，允许将某一VeighNa Trader进程启动为服务端，作为统一的行情和交易路由通道，允许多客户端同时连接，实现多进程分布式系统
+  * Hundsun UFT (uft): Futures, ETF Options
 
-* excel_rtd：EXCEL RTD模块，RTD全称是RealTimeData，是微软主要为金融行业的实时数据需求设计的Excel数据对接方案。该模块用于实现在Excel中访问VeighNa程序内任意数据信息的功能
+  * Esunny (esunny): Futures, Gold TD
 
-* data_manager：历史数据管理模块，是VeighNa Trader内部针对历史数据的多功能管理工具。可以支持数据导入、数据查看以及数据导出等功能，支持自定义数据表头格式
+  * Zhongtai XTP (xtp): A-shares, Margin Trading, ETF Options
 
-* data_recorder：行情记录模块，基于图形界面进行配置，根据需求实时录制Tick或者K线行情到数据库中，用于策略回测或者实盘初始化
+  * Guotai Junan Unified Trading Gateway (hft): A-shares, Margin Trading
 
-* risk_manager：风险管理模块，提供包括交易流控、下单数量、活动委托、撤单总数等规则的统计和限制，有效实现前端风控功能
+  * Huaxin Qidian Stock (torastock): A-shares
 
-* web_trader：Web服务模块，针对B-S架构需求设计，实现了提供主动函数调用（REST）和被动数据推送（Websocket）的Web服务器
+  * Huaxin Qidian Option (toraoption): ETF Options
 
-* portfolio_manager：投资组合管理模块，该模块主要面向各种采用基本面策略的投资者，针对每个投资策略，创建一个独立的投资组合策略对象
+  * Comstar (comstar): Interbank Market
 
-* paper_account：模拟交易账户模块，是为了解决目前各类需要依赖服务端功能的仿真交易账户的问题，直接在交易客户端内部提供一套本地化的模拟交易环境，同时基于实盘行情的盘口数据进行委托撮合
+  * Oriental Securities OST (ost): A-shares
+
+  * Ronghang (rohon): Futures Asset Management
+
+  * TTS (tts): Futures
+
+  * Feishu (sgit): Gold TD
+
+  * Kingstar Gold (ksgold): Gold TD
+
+* Overseas Market
+
+  * Interactive Brokers (ib): Overseas Multi-variety
+
+  * Esunny 9.0 Foreign (tap): Foreign Futures
+
+  * Direct Futures (da): Foreign Futures
+
+* Special Applications
+
+  * RPC Service (rpc): Cross-process communication interface for distributed architecture
 
 
-## 通用类组件
+## Supported Applications
 
-**vnpy.event**，简洁易用的事件驱动引擎，作为事件驱动型交易程序的核心。
+**vnpy.app**, ready-to-use quantitative strategy trading applications:
 
-**vnpy.chart**，Python高性能K线图表，支持大数据量图表显示以及实时数据更新功能。
+* cta_strategy: CTA strategy engine module, while maintaining ease of use, allows users to finely control the order placement and cancellation behavior during CTA strategy operation (reduce trading slippage, implement high-frequency strategies)
 
-**vnpy.trader.database**，集成了几大数据库管理端模块，以支持数据库读写性能和未来的新数据库扩展。
+* cta_backtester: CTA strategy backtesting module, without using Jupyter Notebook, directly use the graphical interface to perform strategy backtesting analysis, parameter optimization, and related work
 
-**vnpy.trader.datafeed**，提供标准化接口BaseDataFeed，带来了更加灵活的数据服务支持。
+* spread_trading: Multi-contract spread arbitrage module, in addition to allowing users to manually start algorithm spread trading, also supports users to use the SpreadStrategyTemplate strategy template to develop various spread quantitative trading strategies
+
+* algo_trading: Algorithm trading module, providing multiple commonly used intelligent trading algorithms: TWAP, Sniper, Iceberg, BestLimit, etc. Supports saving common algorithm configurations
+
+* option_master: Option volatility trading module, providing volatility curve charts, allowing users to make corresponding judgment analysis, and then use volatility management components to set pricing reference volatility, and then automatically scan market trading opportunities through option electronic eye algorithm and complete transactions instantly
+
+* portfolio_strategy: Multi-contract portfolio strategy module, specifically designed for quantitative strategies that need to trade multiple contracts simultaneously, meeting their historical data backtesting and automated live trading needs
+
+* script_trader: Script strategy module, designed for multi-instrument portfolio trading strategies, can also directly implement trading in the form of REPL commands in the command line, does not support backtesting functionality
+
+* chart_wizard: Real-time K-line chart module, can achieve simple real-time K-line market display, directly enter the vt_symbol in the local contract code edit box, click the [New Chart] button to open the chart for the corresponding contract
+
+* rpc_service: RPC service module, allows a VeighNa Trader process to be started as a server, as a unified market data and trading routing channel, allowing multiple clients to connect simultaneously, implementing a multi-process distributed system
+
+* excel_rtd: EXCEL RTD module, RTD stands for RealTimeData, is an Excel data docking solution designed by Microsoft mainly for real-time data needs in the financial industry. This module is used to implement the function of accessing any data information in the VeighNa program in Excel
+
+* data_manager: Historical data management module, is a multi-functional management tool for historical data inside VeighNa Trader. Can support data import, data viewing, and data export functions, supports custom data table header formats
+
+* data_recorder: Market recording module, configured through the graphical interface, records Tick or K-line market data to the database in real-time according to requirements, used for strategy backtesting or live initialization
+
+* risk_manager: Risk management module, providing statistics and limits on rules including trading flow control, order quantity, active orders, total cancelled orders, etc., effectively implementing front-end risk control functions
+
+* web_trader: Web service module, designed for B-S architecture requirements, implements a web server that provides active function calls (REST) and passive data push (Websocket)
+
+* portfolio_manager: Investment portfolio management module, this module is mainly oriented to investors using fundamental strategies, for each investment strategy, creates an independent portfolio strategy object
+
+* paper_account: Simulated trading account module, is designed to solve the current problem of various simulation trading accounts that need to rely on server-side functions, directly provides a localized simulated trading environment inside the trading client, and matches orders based on actual market tick data
+
+
+## General Components
+
+**vnpy.event**, a concise and easy-to-use event-driven engine, as the core of event-driven trading programs.
+
+**vnpy.chart**, Python high-performance K-line chart, supporting large data volume chart display and real-time data update functions.
+
+**vnpy.trader.database**, integrates several major database management modules to support database read/write performance and future new database extensions.
+
+**vnpy.trader.datafeed**, provides a standardized interface BaseDataFeed, bringing more flexible data service support.
